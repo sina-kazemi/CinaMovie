@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CinaMovie</string>
+    <string name="str_hello">Hello</string>
+    <string name="str_main_appbar_desc">Check for latest movies</string>
+    <string name="str_user">User</string>
+    <string name="str_avatar">Avatar</string>
+    <string name="str_search">Search</string>
+    <string name="str_more">more</string>
+    <string name="str_chevron_right">ChevronRight</string>
+</resources>
