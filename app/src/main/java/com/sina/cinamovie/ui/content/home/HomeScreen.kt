@@ -1,6 +1,5 @@
-package com.sina.cinamovie.ui.home
+package com.sina.cinamovie.ui.content.home
 
-import android.widget.Space
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,28 +19,22 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sina.cinamovie.R
+import com.sina.cinamovie.model.TrailerModel
 import com.sina.cinamovie.model.UserModel
 import com.sina.cinamovie.ui.theme.*
 
 @Composable
-fun AllContentHome() {
+fun HomeScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(color = colorBlack)
-            .statusBarsPadding()
     ) {
-
-        val systemUiController = rememberSystemUiController()
-
-        systemUiController.setSystemBarsColor(
-            color = Color.Transparent,
-            darkIcons = false
-        )
 
         Spacer(modifier = Modifier.size(32.dp))
         HomeAppbar(userModel = UserModel(firstName = "Sina"))
@@ -186,13 +179,16 @@ private fun ListHeader(title: String , showMore: Boolean = false) {
             verticalAlignment = Alignment.CenterVertically ,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Text(text = stringResource(R.string.str_more) , style = regularFont(16.sp , colorYellow))
+            Text(
+                text = stringResource(R.string.str_more) ,
+                style = regularFont(16.sp , colorYellow)
+            )
             Spacer(modifier = Modifier.size(4.dp))
             Image(
                 modifier = Modifier
                     .width(16.dp)
                     .height(16.dp)
-                    .offset(y = 1.dp),
+                    .offset(y = (1.5).dp),
                 painter = painterResource(id = R.drawable.ic_chevron_right),
                 contentDescription = stringResource(R.string.str_chevron_right),
                 contentScale = ContentScale.FillHeight ,
@@ -200,5 +196,10 @@ private fun ListHeader(title: String , showMore: Boolean = false) {
             )
         }
     }
+
+}
+
+@Composable
+private fun TrailerList(trailerList: List<TrailerModel>) {
 
 }

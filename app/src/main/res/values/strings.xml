@@ -7,4 +7,6 @@
     <string name="str_search">Search</string>
     <string name="str_more">more</string>
     <string name="str_chevron_right">ChevronRight</string>
+    <string name="str_home">Home</string>
+    <string name="str_chart">Chart</string>
 </resources>
