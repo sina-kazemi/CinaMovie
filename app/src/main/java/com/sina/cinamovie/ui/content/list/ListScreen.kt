@@ -1,13 +1,16 @@
 package com.sina.cinamovie.ui.content.list
 
 import android.text.Layout
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -42,6 +45,7 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.sina.cinamovie.R
 import com.sina.cinamovie.model.MovieModel
+import com.sina.cinamovie.model.NewsModel
 import com.sina.cinamovie.model.TrailerModel
 import com.sina.cinamovie.ui.theme.*
 import timber.log.Timber
@@ -231,7 +235,7 @@ fun MovieList(movieList: List<MovieModel>) {
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
 
-        items(movieList.size) { position ->
+        items(movieList) { item ->
 
             ConstraintLayout {
 
@@ -253,7 +257,7 @@ fun MovieList(movieList: List<MovieModel>) {
                             .clip(shape = RoundedCornerShape(16.dp)),
                         model = ImageRequest
                             .Builder(LocalContext.current)
-                            .data(movieList[position].cover)
+                            .data(item.cover)
                             .crossfade(true)
                             .build(),
                         contentDescription = "" ,
@@ -278,14 +282,14 @@ fun MovieList(movieList: List<MovieModel>) {
                             end.linkTo(imageParent.end)
                             width = Dimension.fillToConstraints
                         },
-                    text = movieList[position].title ,
+                    text = item.title ,
                     style = regularFont(12.sp) ,
                     maxLines = 1 ,
                     overflow = TextOverflow.Ellipsis ,
                     textAlign = TextAlign.Center
                 )
 
-                if (movieList[position].rate != null) {
+                if (item.rate != null) {
 
                     Spacer(
                         modifier = Modifier
@@ -309,7 +313,7 @@ fun MovieList(movieList: List<MovieModel>) {
 
                         Text(
                             modifier = Modifier.offset(y = (0.75).dp) ,
-                            text = movieList[position].rate.toString() ,
+                            text = item.rate.toString() ,
                             style = boldFont(12.sp , colorYellow) ,
                         )
 
@@ -344,57 +348,81 @@ fun IMDbOriginalsList(trailerList: List<TrailerModel>) {
     var titleParentSize by remember {
         mutableStateOf(IntSize.Zero)
     }
+    val widthInDp = with(LocalDensity.current) { titleParentSize.width.toDp() }
+    var offset by remember { mutableStateOf(0f) }
+    val listState = rememberLazyListState()
+    val showTitle by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex == 0
+        }
+    }
+
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
+            .background(colorGray)
     ) {
 
-        Box(
+        AnimatedVisibility(
             modifier = Modifier
-                .onSizeChanged { titleParentSize = it }
-                .align(Alignment.CenterStart)
+                .align(Alignment.CenterStart),
+            visible = showTitle ,
+            enter = fadeIn() ,
+            exit = fadeOut()
         ) {
 
-            Column(
+            Box(
                 modifier = Modifier
-                    .padding(horizontal = 32.dp),
-                verticalArrangement = Arrangement.Center ,
-                horizontalAlignment = Alignment.Start
+                    .onSizeChanged { titleParentSize = it }
+                    .align(Alignment.CenterStart) ,
             ) {
 
-                Text(text = stringResource(R.string.str_imdb), style = mediumFont(16.sp))
-                Text(text = stringResource(R.string.str_originals), style = extraLightFont(16.sp))
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 32.dp),
+                    verticalArrangement = Arrangement.Center ,
+                    horizontalAlignment = Alignment.Start
+                ) {
+
+                    Text(text = stringResource(R.string.str_imdb), style = mediumFont(16.sp))
+                    Text(text = stringResource(R.string.str_originals), style = extraLightFont(16.sp))
+
+                }
 
             }
 
         }
 
-        val widthInDp = with(LocalDensity.current) { titleParentSize.width.toDp() }
-        var offset by remember { mutableStateOf(0f) }
-
         LazyRow(
-            modifier = Modifier.scrollable(
-                orientation = Orientation.Horizontal ,
-                state = ScrollableState {
-                    offset += it
-                    Timber.d("ScrollableState:: $offset")
-                    it
-                }
-            ) ,
+            modifier = Modifier
+                .scrollable(
+                    orientation = Orientation.Horizontal,
+                    state = ScrollableState {
+                        offset += it
+                        Timber.d("ScrollableState:: $offset")
+                        it
+                    }
+                )
+                .padding(vertical = 24.dp) ,
             horizontalArrangement = Arrangement.spacedBy(16.dp) ,
-            contentPadding = PaddingValues(start = widthInDp , end = 16.dp)
+            contentPadding = PaddingValues(start = widthInDp , end = 16.dp) ,
+            state = listState
         ) {
 
-            items(trailerList.size) { position ->
+            items(trailerList) { item ->
 
-                TrailerRow(model = trailerList[position] , parentWidth = 320.dp, horizontalPadding = 0.dp)
+                TrailerRow(model = item , parentWidth = 320.dp, horizontalPadding = 0.dp)
 
             }
 
         }
 
     }
+
+}
+
+@Composable
+fun NewsList(newsList: List<NewsModel>) {
 
 }

@@ -200,6 +200,12 @@ fun HomeScreen() {
             )
         ))
 
+        Spacer(modifier = Modifier.size(48.dp))
+
+        ListHeader(title = stringResource(R.string.str_news) , true)
+        Spacer(modifier = Modifier.size(24.dp))
+
+
         Spacer(modifier = Modifier.size(88.dp))
 
     }
