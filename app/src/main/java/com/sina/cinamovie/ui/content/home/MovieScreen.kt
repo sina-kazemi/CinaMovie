@@ -59,7 +59,6 @@ fun MovieScreen() {
                             end.linkTo(guideline)
                             top.linkTo(parent.top)
                             width = Dimension.fillToConstraints
-//                            height = Dimension.fillToConstraints
                         }
                         .aspectRatio(2f / 3f)
                         .background(shape = RoundedCornerShape(16.dp), color = Color.Cyan)
@@ -77,7 +76,6 @@ fun MovieScreen() {
                             start.linkTo(guideline)
                             bottom.linkTo(imageParent.bottom)
                             width = Dimension.fillToConstraints
-//                            height = Dimension.fillToConstraints
                         }
                         .aspectRatio(1f / 3f)
                 ) {
