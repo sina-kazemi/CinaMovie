@@ -32,7 +32,7 @@ fun MovieScreen() {
 
         AppBar(
             model = AppBarModel(
-                title = "BlackPanther" ,
+                title = "Black Panther" ,
                 subTitle = "2022"
             )
         )
@@ -43,19 +43,42 @@ fun MovieScreen() {
                 .verticalScroll(rememberScrollState())
         ) {
 
-            ConstraintLayout {
+            ConstraintLayout (
+                modifier = Modifier
+//                    .fillMaxWidth()
+                    .padding(bottom = 88.dp)
+            ) {
 
                 val (imageParent , detailParent) = createRefs()
 
+                Box(
+                    modifier = Modifier
+                        .constrainAs(imageParent) {
+                            start.linkTo(parent.start)
+                            end.linkTo(detailParent.start)
+                            top.linkTo(parent.top)
+//                            width = Dimension.fillToConstraints
+//                            height = Dimension.fillToConstraints
+                        }
+                        .aspectRatio(2f / 3f)
+                        .background(shape = RoundedCornerShape(16.dp), color = Color.Cyan)
+                ) {
+
+
+
+                }
+
                 ConstraintLayout (
                     modifier = Modifier
-                        .fillMaxWidth(0.4f)
-                        .fillMaxHeight(0.4f)
                         .constrainAs(detailParent) {
-                            start.linkTo(imageParent.end)
                             end.linkTo(parent.end)
                             top.linkTo(imageParent.top)
+                            start.linkTo(imageParent.end)
+                            bottom.linkTo(imageParent.bottom)
+//                            width = Dimension.fillToConstraints
+//                            height = Dimension.fillToConstraints
                         }
+                        .aspectRatio(1f / 3f)
                 ) {
 
                     val (genreParent , durationParent , rateParent) = createRefs()
@@ -98,27 +121,16 @@ fun MovieScreen() {
 
                 }
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.3f)
-                        .aspectRatio(2f / 3f)
-                        .background(shape = RoundedCornerShape(16.dp), color = Color.Cyan)
-                        .constrainAs(imageParent) {
-                            start.linkTo(parent.start)
-                            end.linkTo(detailParent.start)
-                            top.linkTo(detailParent.top)
-                            bottom.linkTo(detailParent.bottom)
-                        }
-                ) {
-
-
-
-                }
-
             }
 
         }
 
     }
 
+}
+
+@Preview
+@Composable
+fun preview() {
+    MovieScreen()
 }

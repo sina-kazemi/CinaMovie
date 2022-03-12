@@ -32,7 +32,7 @@ fun AppBar(model: AppBarModel) {
         ) {
 
             if (model.backIcon == null) {
-                model.backIcon = MenuModel(painter = painterResource(id = R.drawable.ic_left_arrow)) {
+                model.backIcon = MenuModel(painter = painterResource(id = R.drawable.ic_chevron_left)) {
 
                 }
             }
@@ -45,9 +45,10 @@ fun AppBar(model: AppBarModel) {
                 horizontalAlignment = Alignment.Start
             ) {
 
-                Text(text = model.title, style = mediumFont(14.sp))
-                Spacer(modifier = Modifier.size(2.dp))
-                Text(text = model.subTitle, style = lightFont(12.sp , colorTextGray))
+                Text(text = model.title, style = mediumFont(16.sp))
+                if (model.subTitle.trim() != "") {
+                    Text(text = model.subTitle, style = lightFont(12.sp , colorTextGray))
+                }
 
             }
 
