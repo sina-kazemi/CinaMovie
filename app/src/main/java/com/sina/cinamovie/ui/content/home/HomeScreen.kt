@@ -4,7 +4,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -18,6 +18,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
+import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.shimmer
 import com.sina.cinamovie.R
 import com.sina.cinamovie.model.MovieModel
 import com.sina.cinamovie.model.TrailerModel
@@ -286,6 +291,7 @@ private fun SearchComponent() {
             )
             .clickable {
 
+
             }
     ) {
 
@@ -334,7 +340,7 @@ private fun ListHeader(title: String , showMore: Boolean = false) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 32.dp) ,
+            .padding(horizontal = 32.dp),
         verticalAlignment = Alignment.CenterVertically ,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
