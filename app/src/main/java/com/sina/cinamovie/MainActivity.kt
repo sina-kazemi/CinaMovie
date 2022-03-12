@@ -26,6 +26,7 @@ import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sina.cinamovie.ui.content.chart.ChartScreen
 import com.sina.cinamovie.ui.content.home.HomeScreen
+import com.sina.cinamovie.ui.content.home.MovieScreen
 import com.sina.cinamovie.ui.content.search.SearchScreen
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.*
@@ -79,7 +80,7 @@ class MainActivity : ComponentActivity() {
     fun NavigationGraph(navController: NavHostController) {
         NavHost(navController, startDestination = BottomNavItem.Home.screen_route) {
             composable(BottomNavItem.Home.screen_route) {
-                HomeScreen()
+                MovieScreen()
             }
             composable(BottomNavItem.Search.screen_route) {
                 SearchScreen()
