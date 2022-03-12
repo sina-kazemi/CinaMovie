@@ -45,19 +45,20 @@ fun MovieScreen() {
 
             ConstraintLayout (
                 modifier = Modifier
-//                    .fillMaxWidth()
+                    .fillMaxWidth()
                     .padding(bottom = 88.dp)
             ) {
 
+                val guideline = createGuidelineFromStart(fraction = 0.666f)
                 val (imageParent , detailParent) = createRefs()
 
                 Box(
                     modifier = Modifier
                         .constrainAs(imageParent) {
                             start.linkTo(parent.start)
-                            end.linkTo(detailParent.start)
+                            end.linkTo(guideline)
                             top.linkTo(parent.top)
-//                            width = Dimension.fillToConstraints
+                            width = Dimension.fillToConstraints
 //                            height = Dimension.fillToConstraints
                         }
                         .aspectRatio(2f / 3f)
@@ -73,9 +74,9 @@ fun MovieScreen() {
                         .constrainAs(detailParent) {
                             end.linkTo(parent.end)
                             top.linkTo(imageParent.top)
-                            start.linkTo(imageParent.end)
+                            start.linkTo(guideline)
                             bottom.linkTo(imageParent.bottom)
-//                            width = Dimension.fillToConstraints
+                            width = Dimension.fillToConstraints
 //                            height = Dimension.fillToConstraints
                         }
                         .aspectRatio(1f / 3f)
