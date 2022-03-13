@@ -41,12 +41,13 @@ fun MovieScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .padding(bottom = 88.dp)
         ) {
 
             ConstraintLayout (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 88.dp)
+                    .padding(start = 16.dp , end = 16.dp , top = 8.dp)
             ) {
 
                 val guideline = createGuidelineFromStart(fraction = 0.666f)
@@ -61,7 +62,8 @@ fun MovieScreen() {
                             width = Dimension.fillToConstraints
                         }
                         .aspectRatio(2f / 3f)
-                        .background(shape = RoundedCornerShape(16.dp), color = Color.Cyan)
+                        .padding(8.dp)
+                        .background(shape = RoundedCornerShape(16.dp), color = colorGray)
                 ) {
 
 
@@ -85,11 +87,12 @@ fun MovieScreen() {
                     Box(
                         modifier = Modifier
                             .wrapContentWidth()
-                            .background(shape = RoundedCornerShape(16.dp), color = colorGray)
                             .aspectRatio(1f / 1f)
                             .constrainAs(genreParent) {
                                 top.linkTo(parent.top)
                             }
+                            .padding(8.dp)
+                            .background(shape = RoundedCornerShape(16.dp), color = colorGray)
                     ) {
 
                     }
@@ -97,11 +100,12 @@ fun MovieScreen() {
                     Box(
                         modifier = Modifier
                             .wrapContentWidth()
-                            .background(shape = RoundedCornerShape(16.dp), color = colorGray)
                             .aspectRatio(1f / 1f)
                             .constrainAs(durationParent) {
                                 top.linkTo(genreParent.bottom)
                             }
+                            .padding(8.dp)
+                            .background(shape = RoundedCornerShape(16.dp), color = colorGray)
                     ) {
 
                     }
@@ -109,11 +113,12 @@ fun MovieScreen() {
                     Box(
                         modifier = Modifier
                             .wrapContentWidth()
-                            .background(shape = RoundedCornerShape(16.dp), color = colorGray)
                             .aspectRatio(1f / 1f)
                             .constrainAs(rateParent) {
                                 top.linkTo(durationParent.bottom)
                             }
+                            .padding(8.dp)
+                            .background(shape = RoundedCornerShape(16.dp), color = colorGray)
                     ) {
 
                     }
@@ -126,10 +131,4 @@ fun MovieScreen() {
 
     }
 
-}
-
-@Preview
-@Composable
-fun preview() {
-    MovieScreen()
 }
