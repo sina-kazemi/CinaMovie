@@ -14,4 +14,7 @@
     <string name="str_imdb">IMDb</string>
     <string name="str_originals">Originals</string>
     <string name="str_news">News</string>
+    <string name="str_genre">Genre</string>
+    <string name="str_duration">Duration</string>
+    <string name="str_rating">Rating</string>
 </resources>
