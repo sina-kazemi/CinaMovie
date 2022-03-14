@@ -1,14 +1,11 @@
 package com.sina.cinamovie.ui.content.home
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,21 +13,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import coil.size.Scale
 import com.sina.cinamovie.R
 import com.sina.cinamovie.model.AppBarModel
-import com.sina.cinamovie.model.MenuModel
+import com.sina.cinamovie.model.GenreModel
+import com.sina.cinamovie.model.ImageModel
+import com.sina.cinamovie.model.VideoModel
 import com.sina.cinamovie.ui.content.common.AppBar
+import com.sina.cinamovie.ui.content.common.ListHeader
+import com.sina.cinamovie.ui.content.list.*
 import com.sina.cinamovie.ui.theme.*
 
 @Composable
@@ -44,8 +49,8 @@ fun MovieScreen() {
 
         AppBar(
             model = AppBarModel(
-                title = "Black Panther" ,
-                subTitle = "2022"
+                title = "Money Heist" ,
+                subTitle = "2017 - 2022"
             )
         )
 
@@ -123,7 +128,7 @@ fun MovieScreen() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
-                        DetailMovieScreen(
+                        DetailMovie(
                             painter = painterResource(id = R.drawable.ic_camera_movie),
                             title = stringResource(id = R.string.str_genre),
                             desc = "Action"
@@ -146,7 +151,7 @@ fun MovieScreen() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
-                        DetailMovieScreen(
+                        DetailMovie(
                             painter = painterResource(id = R.drawable.ic_time_five),
                             title = stringResource(R.string.str_duration),
                             desc = "1h 53m"
@@ -169,7 +174,7 @@ fun MovieScreen() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
-                        DetailMovieScreen(
+                        DetailMovie(
                             painter = painterResource(id = R.drawable.ic_star),
                             title = stringResource(R.string.str_rating),
                             desc = "8.2/10"
@@ -181,6 +186,144 @@ fun MovieScreen() {
 
             }
 
+            Spacer(modifier = Modifier.size(40.dp))
+
+            Text(
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(horizontal = 24.dp) ,
+                text = "Money Heist" ,
+                style = mediumFont(24.sp)
+            )
+
+            Spacer(modifier = Modifier.size(12.dp))
+            
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Start)
+                    .padding(horizontal = 24.dp) ,
+                text = "An unusual group of robbers attempt to carry out the most perfect robbery in Spanish history - stealing 2.4 billion euros from the Royal Mint of Spain.An unusual group of robbers attempt to carry out the most perfect robbery in Spanish history - stealing 2.4 billion euros from the Royal Mint of Spain.An unusual group of robbers attempt to carry out the most perfect robbery in Spanish history - stealing 2.4 billion euros from the Royal Mint of Spain." ,
+                style = regularFont(textColor = colorTextGray3) ,
+                lineHeight = 24.sp
+            )
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            GenreList(genreList = listOf(
+                GenreModel(title = "Action") ,
+                GenreModel(title = "Crime") ,
+                GenreModel(title = "Drama")
+            ))
+
+            Spacer(modifier = Modifier.size(48.dp))
+
+            ListHeader(title = stringResource(R.string.str_photos_and_videos) , true)
+
+            Spacer(modifier = Modifier.size(24.dp))
+
+            val configuration = LocalConfiguration.current
+            val screenWidth = configuration.screenWidthDp.dp
+            var heightSize by remember { mutableStateOf(IntSize.Zero) }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()) ,
+                verticalAlignment = Alignment.CenterVertically ,
+                horizontalArrangement = Arrangement.Start
+            ) {
+
+                Spacer(modifier = Modifier.size(24.dp))
+
+                ConstraintLayout (
+                    modifier = Modifier
+                        .onSizeChanged {
+                            heightSize = it
+                        }
+                ) {
+
+                    val (trailerParent , photosList , videosList) = createRefs()
+                    val guideLine = createGuidelineFromTop(0.5f)
+
+                    Box(
+                        modifier = Modifier
+                            .width(screenWidth / 3)
+                            .aspectRatio(2f / 3f)
+                            .background(
+                                shape = RoundedCornerShape(16.dp),
+                                color = colorGray.copy(alpha = 0.75f)
+                            )
+                    ) {
+
+                        AsyncImage(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(shape = RoundedCornerShape(16.dp)) ,
+                            model = ImageRequest
+                                .Builder(LocalContext.current)
+                                .data("https://m.media-amazon.com/images/M/MV5BNDJkYzY3MzMtMGFhYi00MmQ4LWJkNTgtZGNiZWZmMTMxNzdlXkEyXkFqcGdeQXVyMTEyMjM2NDc2._V1_.jpg")
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = "" ,
+                            contentScale = ContentScale.Crop
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(
+                                    shape = RoundedCornerShape(16.dp),
+                                    color = colorBlack.copy(alpha = 0.75f)
+                                ) ,
+                            contentAlignment = Alignment.Center
+                        ) {
+
+                            Text(text = "Play Trailer" , style = mediumFont(16.sp))
+
+                        }
+
+                    }
+
+                }
+
+                Spacer(modifier = Modifier.size(16.dp))
+
+                Column (
+                    modifier = Modifier.height(with(LocalDensity.current) { heightSize.height.toDp() }) ,
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+
+                    ImageList(
+                        modifier = Modifier.height(with(LocalDensity.current) { heightSize.height.toDp() } / 2 - 8.dp) ,
+                        itemSizeDp =  with(LocalDensity.current) { heightSize.height.toDp() } / 2 - 8.dp,
+                        imageList = listOf(
+                            ImageModel(original = "https://m.media-amazon.com/images/M/MV5BMTM0NjUxMDk5MF5BMl5BanBnXkFtZTcwNDMxNDY3Mw@@._V1_.jpg") ,
+                            ImageModel(original = "https://m.media-amazon.com/images/M/MV5BMTk3NDE2Nzg3Nl5BMl5BanBnXkFtZTcwNTMxNDY3Mw@@._V1_.jpg") ,
+                            ImageModel(original = "https://m.media-amazon.com/images/M/MV5BMTg0MDgwNjc5N15BMl5BanBnXkFtZTcwNjMxNDY3Mw@@._V1_.jpg") ,
+                            ImageModel(original = "https://m.media-amazon.com/images/M/MV5BMTkzMTY0MjE5MV5BMl5BanBnXkFtZTcwODMxNDY3Mw@@._V1_.jpg") ,
+                            ImageModel(original = "https://m.media-amazon.com/images/M/MV5BNTYxOTYyMzE3NV5BMl5BanBnXkFtZTcwOTMxNDY3Mw@@._V1_.jpg") ,
+                            ImageModel(original = "https://m.media-amazon.com/images/M/MV5BMTgxMTU1MDkwOV5BMl5BanBnXkFtZTcwMDQxNDY3Mw@@._V1_.jpg")
+                        )
+                    )
+
+                    VideoList(
+                        modifier = Modifier.height(with(LocalDensity.current) { heightSize.height.toDp() } / 2 - 8.dp) ,
+                        itemHeightDp = with(LocalDensity.current) { heightSize.height.toDp() } / 2 - 8.dp ,
+                        itemWidthDp = with(LocalDensity.current) { heightSize.height.toDp() } ,
+                        imageList = listOf(
+                            VideoModel(preview = "https://m.media-amazon.com/images/M/MV5BMTM0NjUxMDk5MF5BMl5BanBnXkFtZTcwNDMxNDY3Mw@@._V1_.jpg") ,
+                            VideoModel(preview = "https://m.media-amazon.com/images/M/MV5BMTk3NDE2Nzg3Nl5BMl5BanBnXkFtZTcwNTMxNDY3Mw@@._V1_.jpg") ,
+                            VideoModel(preview = "https://m.media-amazon.com/images/M/MV5BMTg0MDgwNjc5N15BMl5BanBnXkFtZTcwNjMxNDY3Mw@@._V1_.jpg") ,
+                            VideoModel(preview = "https://m.media-amazon.com/images/M/MV5BMTkzMTY0MjE5MV5BMl5BanBnXkFtZTcwODMxNDY3Mw@@._V1_.jpg") ,
+                            VideoModel(preview = "https://m.media-amazon.com/images/M/MV5BNTYxOTYyMzE3NV5BMl5BanBnXkFtZTcwOTMxNDY3Mw@@._V1_.jpg") ,
+                            VideoModel(preview = "https://m.media-amazon.com/images/M/MV5BMTgxMTU1MDkwOV5BMl5BanBnXkFtZTcwMDQxNDY3Mw@@._V1_.jpg")
+                        )
+                    )
+                }
+
+            }
+
         }
 
     }
@@ -188,7 +331,7 @@ fun MovieScreen() {
 }
 
 @Composable
-fun DetailMovieScreen(painter: Painter , title: String , desc: String) {
+private fun DetailMovie(painter: Painter, title: String, desc: String) {
 
     Spacer(modifier = Modifier.size(16.dp))
 
@@ -202,7 +345,9 @@ fun DetailMovieScreen(painter: Painter , title: String , desc: String) {
     )
 
     Box(
-        modifier = Modifier.fillMaxHeight().padding(bottom = 4.dp),
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(bottom = 4.dp),
         contentAlignment = Alignment.Center
     ) {
 
@@ -211,13 +356,12 @@ fun DetailMovieScreen(painter: Painter , title: String , desc: String) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Text(text = title , style = regularFont(14.sp , colorTextGray2))
+            Text(text = title , style = regularFont(14.sp , colorTextGray2) , maxLines = 1 , overflow = TextOverflow.Ellipsis)
             Spacer(modifier = Modifier.size(2.dp))
-            Text(text = desc , style = boldFont(16.sp , colorWhite))
+            Text(text = desc , style = boldFont(16.sp , colorWhite) , maxLines = 1 , overflow = TextOverflow.Ellipsis)
 
         }
 
     }
-
 
 }

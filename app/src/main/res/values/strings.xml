@@ -17,4 +17,5 @@
     <string name="str_genre">Genre</string>
     <string name="str_duration">Duration</string>
     <string name="str_rating">Rating</string>
+    <string name="str_photos_and_videos">Photos And Videos</string>
 </resources>

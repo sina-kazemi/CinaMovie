@@ -27,8 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -37,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.navigation.Navigation
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -45,9 +42,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.sina.cinamovie.R
-import com.sina.cinamovie.model.MovieModel
-import com.sina.cinamovie.model.NewsModel
-import com.sina.cinamovie.model.TrailerModel
+import com.sina.cinamovie.model.*
 import com.sina.cinamovie.ui.theme.*
 import timber.log.Timber
 
@@ -184,11 +179,7 @@ fun TrailerRow(model: TrailerModel , parentWidth: Dp = (-1).dp , horizontalPaddi
 
                     Text(
                         text = model.title ,
-                        style = TextStyle(
-                            color = colorWhite ,
-                            fontSize = 14.sp ,
-                            fontFamily = outfitFont ,
-                            fontWeight = FontWeight.Normal,
+                        style = regularFont().copy(
                             shadow = Shadow(
                                 color = colorBlack ,
                                 offset = Offset(2f , 2f) ,
@@ -203,11 +194,7 @@ fun TrailerRow(model: TrailerModel , parentWidth: Dp = (-1).dp , horizontalPaddi
 
                     Text(
                         text = model.duration ,
-                        style = TextStyle(
-                            color = colorWhite ,
-                            fontSize = 12.sp ,
-                            fontFamily = outfitFont ,
-                            fontWeight = FontWeight.Bold,
+                        style = boldFont(12.sp).copy(
                             shadow = Shadow(
                                 color = colorBlack ,
                                 offset = Offset(2f , 2f) ,
@@ -425,5 +412,144 @@ fun IMDbOriginalsList(trailerList: List<TrailerModel>) {
 
 @Composable
 fun NewsList(newsList: List<NewsModel>) {
+
+}
+
+@Composable
+fun GenreList(genreList: List<GenreModel>) {
+
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp) ,
+        contentPadding = PaddingValues(horizontal = 24.dp)
+    ) {
+
+        items(genreList) { item ->
+
+            Text(
+                modifier = Modifier
+                    .background(
+                        shape = RoundedCornerShape(12.dp),
+                        color = colorGray.copy(alpha = 0.75f)
+                    )
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                text = item.title ,
+                style = regularFont()
+            )
+
+        }
+
+    }
+
+}
+
+@Composable
+fun ImageList(modifier: Modifier , itemSizeDp: Dp ,imageList: List<ImageModel>) {
+
+    Row (
+        modifier = modifier ,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ){
+
+        imageList.forEach {
+
+            AsyncImage(
+                modifier = Modifier
+                    .width(itemSizeDp)
+                    .height(itemSizeDp)
+                    .clip(shape = RoundedCornerShape(16.dp))
+                    .background(
+                        shape = RoundedCornerShape(16.dp),
+                        color = colorGray.copy(alpha = 0.75f)
+                    ),
+                model = ImageRequest
+                    .Builder(LocalContext.current)
+                    .data(it.original)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = "",
+                contentScale = ContentScale.Crop
+            )
+
+        }
+
+        Spacer(modifier = Modifier.size(8.dp))
+
+    }
+
+}
+
+@Composable
+fun VideoList(modifier: Modifier , itemWidthDp: Dp , itemHeightDp: Dp , imageList: List<VideoModel>) {
+
+    Row (
+        modifier = modifier ,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ){
+
+        imageList.forEach {
+
+            Box(modifier = Modifier
+                .fillMaxHeight()
+                .width(itemWidthDp)
+                .height(itemHeightDp)
+                .background(
+                    shape = RoundedCornerShape(16.dp),
+                    color = colorGray.copy(alpha = 0.75f)
+                )
+            ) {
+
+                AsyncImage(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(shape = RoundedCornerShape(16.dp)),
+                    model = ImageRequest
+                        .Builder(LocalContext.current)
+                        .data(it.preview)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop
+                )
+
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(start = 8.dp , bottom = 8.dp)
+                ) {
+
+                    Box(
+                        modifier = Modifier
+                            .width(40.dp)
+                            .height(40.dp)
+                            .align(Alignment.BottomStart)
+                            .background(
+                                shape = RoundedCornerShape(12.dp),
+                                color = colorTextGray
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        Image(
+                            modifier = Modifier
+                                .width(16.dp)
+                                .height(16.dp)
+                                .offset(x = 2.dp) ,
+                            painter = painterResource(id = R.drawable.ic_play),
+                            contentDescription = "",
+                            contentScale = ContentScale.Inside,
+                            colorFilter = ColorFilter.tint(colorWhite)
+                        )
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        Spacer(modifier = Modifier.size(8.dp))
+
+    }
 
 }

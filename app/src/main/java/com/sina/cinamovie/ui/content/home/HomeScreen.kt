@@ -27,6 +27,7 @@ import com.sina.cinamovie.R
 import com.sina.cinamovie.model.MovieModel
 import com.sina.cinamovie.model.TrailerModel
 import com.sina.cinamovie.model.UserModel
+import com.sina.cinamovie.ui.content.common.ListHeader
 import com.sina.cinamovie.ui.content.list.IMDbOriginalsList
 import com.sina.cinamovie.ui.content.list.MovieList
 import com.sina.cinamovie.ui.content.list.TrailerList
@@ -330,42 +331,6 @@ private fun SearchComponent() {
 
         }
 
-    }
-
-}
-
-@Composable
-private fun ListHeader(title: String , showMore: Boolean = false) {
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 32.dp),
-        verticalAlignment = Alignment.CenterVertically ,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = title, style = mediumFont(16.sp))
-
-        Row (
-            verticalAlignment = Alignment.CenterVertically ,
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Text(
-                text = stringResource(R.string.str_more) ,
-                style = regularFont(16.sp , colorYellow)
-            )
-            Spacer(modifier = Modifier.size(4.dp))
-            Image(
-                modifier = Modifier
-                    .width(16.dp)
-                    .height(16.dp)
-                    .offset(y = (1.5).dp),
-                painter = painterResource(id = R.drawable.ic_chevron_right),
-                contentDescription = stringResource(R.string.str_chevron_right),
-                contentScale = ContentScale.FillHeight ,
-                colorFilter = ColorFilter.tint(colorYellow)
-            )
-        }
     }
 
 }
