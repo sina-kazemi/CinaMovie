@@ -18,4 +18,10 @@
     <string name="str_duration">Duration</string>
     <string name="str_rating">Rating</string>
     <string name="str_photos_and_videos">Photos And Videos</string>
+    <string name="str_details">Details</string>
+    <string name="str_released_date">Released Date</string>
+    <string name="str_country">Country</string>
+    <string name="str_locations">Locations</string>
+    <string name="str_languages">Languages</string>
+    <string name="str_companies">Companies</string>
 </resources>

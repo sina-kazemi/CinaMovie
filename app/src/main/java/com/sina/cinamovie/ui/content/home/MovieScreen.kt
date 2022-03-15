@@ -2,19 +2,17 @@ package com.sina.cinamovie.ui.content.home
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -127,7 +125,7 @@ fun MovieScreen() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
-                        DetailMovie(
+                        DetailMovieHeader(
                             painter = painterResource(id = R.drawable.ic_camera_movie),
                             title = stringResource(id = R.string.str_genre),
                             desc = "Action"
@@ -150,7 +148,7 @@ fun MovieScreen() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
-                        DetailMovie(
+                        DetailMovieHeader(
                             painter = painterResource(id = R.drawable.ic_time_five),
                             title = stringResource(R.string.str_duration),
                             desc = "1h 53m"
@@ -173,7 +171,7 @@ fun MovieScreen() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
-                        DetailMovie(
+                        DetailMovieHeader(
                             painter = painterResource(id = R.drawable.ic_star),
                             title = stringResource(R.string.str_rating),
                             desc = "8.2/10"
@@ -323,6 +321,29 @@ fun MovieScreen() {
 
             }
 
+            Spacer(modifier = Modifier.size(48.dp))
+
+            ListHeader(title = stringResource(R.string.str_details) , false)
+
+            Spacer(modifier = Modifier.size(24.dp))
+
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .background(
+                        shape = RoundedCornerShape(16.dp),
+                        color = colorGray.copy(alpha = 0.75f)
+                    )
+            ) {
+
+                DetailMovieColumnItem(title = stringResource(R.string.str_released_date), desc = "May 2, 2017")
+                DetailMovieColumnItem(title = stringResource(R.string.str_country), desc = "Italy")
+                DetailMovieColumnItem(title = stringResource(R.string.str_locations), desc = "Florence, Italy")
+                DetailMovieColumnItem(title = stringResource(R.string.str_languages), desc = "Spanish . Russian . Serbian . English")
+                DetailMovieColumnItem(title = stringResource(R.string.str_companies), desc = "Atresmedia . Vancouver Media" , false)
+
+            }
+
         }
 
     }
@@ -330,7 +351,7 @@ fun MovieScreen() {
 }
 
 @Composable
-private fun DetailMovie(painter: Painter, title: String, desc: String) {
+private fun DetailMovieHeader(painter: Painter, title: String, desc: String) {
 
     Spacer(modifier = Modifier.size(16.dp))
 
@@ -359,6 +380,43 @@ private fun DetailMovie(painter: Painter, title: String, desc: String) {
             Spacer(modifier = Modifier.size(2.dp))
             Text(text = desc , style = boldFont(16.sp , colorWhite) , maxLines = 1 , overflow = TextOverflow.Ellipsis)
 
+        }
+
+    }
+
+}
+
+@Composable
+private fun DetailMovieColumnItem(title: String , desc: String , showDivider: Boolean = true) {
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 18.dp) ,
+            horizontalArrangement = Arrangement.SpaceBetween ,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            
+            Text(text = title, style = regularFont(14.sp))
+
+            Spacer(modifier = Modifier.size(12.dp))
+
+            Text(text = desc, style = regularFont(14.sp, colorTextGray2) , maxLines = 1 , overflow = TextOverflow.Ellipsis)
+            
+        }
+
+        if (showDivider) {
+
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .padding(horizontal = 12.dp),
+                color = colorDivider
+            )
+            
         }
 
     }
