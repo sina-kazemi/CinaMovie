@@ -8,6 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.insets.ProvideWindowInsets
@@ -21,7 +22,7 @@ fun SearchScreen() {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .background(color = colorBlack)
+            .background(Color.Transparent)
     ) {
 
         Text(text = "Search" , textAlign = TextAlign.Center , style = regularFont(16.sp))

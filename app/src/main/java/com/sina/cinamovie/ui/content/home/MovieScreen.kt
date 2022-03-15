@@ -44,7 +44,6 @@ fun MovieScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorBlack)
     ) {
 
         AppBar(

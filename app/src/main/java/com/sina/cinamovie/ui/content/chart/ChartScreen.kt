@@ -21,7 +21,6 @@ fun ChartScreen() {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .background(color = colorBlack)
     ) {
 
         Text(text = "Chart", textAlign = TextAlign.Center, style = regularFont(16.sp))

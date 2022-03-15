@@ -1,18 +1,28 @@
 package com.sina.cinamovie
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -20,7 +30,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import coil.request.ImageRequest
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -30,12 +39,20 @@ import com.sina.cinamovie.ui.content.home.MovieScreen
 import com.sina.cinamovie.ui.content.search.SearchScreen
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.*
+import com.sina.cinamovie.util.stackblur.StackBlurManager
 
 
 class MainActivity : ComponentActivity() {
+
+    lateinit var stackBlurManager: StackBlurManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.money_heist_cover)
+
+        stackBlurManager = StackBlurManager(bitmap)
 
         setContent {
             CinaMovieTheme {
@@ -51,34 +68,78 @@ class MainActivity : ComponentActivity() {
 
         val navController = rememberNavController()
 
+        val blurBitmap =  stackBlurManager.process(100)
+
+        Image(
+            modifier = Modifier.fillMaxSize(),
+            bitmap = blurBitmap.asImageBitmap(),
+            contentDescription = "",
+            contentScale = ContentScale.Crop
+        )
+
         Box(
             modifier = Modifier
-                .background(colorBlack)
+                .fillMaxSize()
+                .background(brush = Brush.horizontalGradient(
+                    listOf(
+                        colorBlurBackground ,
+                        colorBlack.copy(alpha = 0.75f) ,
+                        colorBlurBackground
+                    )
+                ))
+        )
+
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxSize()
                 .systemBarsPadding()
+                .background(Color.Transparent)
         ) {
 
-            Scaffold (
-                bottomBar = { BottomNavigation(navController = navController) }
-            ) {
+            val (bottomNavigation , navigationGraph) = createRefs()
 
-                val systemUiController = rememberSystemUiController()
+            val systemUiController = rememberSystemUiController()
 
-                systemUiController.setSystemBarsColor(
-                    color = Color.Transparent,
-                    darkIcons = false
-                )
+            systemUiController.setSystemBarsColor(
+                color = Color.Transparent,
+                darkIcons = false
+            )
 
-                NavigationGraph(navController = navController)
+            BottomNavigation(
+                modifier = Modifier
+                    .constrainAs(bottomNavigation) {
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        width = Dimension.fillToConstraints
+                    } ,
+                navController = navController
+            )
 
-            }
+            NavigationGraph(
+                modifier = Modifier
+                    .constrainAs(navigationGraph) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(bottomNavigation.top)
+                        width = Dimension.fillToConstraints
+                        height = Dimension.fillToConstraints
+                    } ,
+                navController = navController
+            )
 
         }
 
     }
 
     @Composable
-    fun NavigationGraph(navController: NavHostController) {
-        NavHost(navController, startDestination = BottomNavItem.Home.screen_route) {
+    fun NavigationGraph(modifier: Modifier , navController: NavHostController) {
+        NavHost(
+            modifier = modifier ,
+            navController = navController ,
+            startDestination = BottomNavItem.Home.screen_route
+        ) {
             composable(BottomNavItem.Home.screen_route) {
                 MovieScreen()
             }
@@ -92,7 +153,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BottomNavigation(navController: NavController) {
+    fun BottomNavigation(modifier: Modifier , navController: NavController) {
 
         val items = listOf(
             BottomNavItem.Home ,
@@ -101,6 +162,7 @@ class MainActivity : ComponentActivity() {
         )
 
         com.google.accompanist.insets.ui.BottomNavigation(
+            modifier = modifier ,
             backgroundColor = colorGray,
             contentColor = colorWhite
         ) {
