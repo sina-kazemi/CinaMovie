@@ -80,10 +80,10 @@ class MainActivity : ComponentActivity() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(brush = Brush.horizontalGradient(
+                .background(brush = Brush.verticalGradient(
                     listOf(
                         colorBlurBackground ,
-                        colorBlack.copy(alpha = 0.75f) ,
+                        colorBlack.copy(alpha = 0.8f) ,
                         colorBlurBackground
                     )
                 ))
