@@ -87,26 +87,31 @@ fun ListHeader(title: String , showMore: Boolean = false) {
     ) {
         Text(text = title, style = mediumFont(16.sp))
 
-        Row (
-            verticalAlignment = Alignment.CenterVertically ,
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Text(
-                text = stringResource(R.string.str_more) ,
-                style = regularFont(16.sp , colorYellow)
-            )
-            Spacer(modifier = Modifier.size(4.dp))
-            Image(
-                modifier = Modifier
-                    .width(16.dp)
-                    .height(16.dp)
-                    .offset(y = (1.5).dp),
-                painter = painterResource(id = R.drawable.ic_chevron_right),
-                contentDescription = stringResource(R.string.str_chevron_right),
-                contentScale = ContentScale.FillHeight ,
-                colorFilter = ColorFilter.tint(colorYellow)
-            )
+        if (showMore) {
+
+            Row (
+                verticalAlignment = Alignment.CenterVertically ,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Text(
+                    text = stringResource(R.string.str_more) ,
+                    style = regularFont(16.sp , colorYellow)
+                )
+                Spacer(modifier = Modifier.size(4.dp))
+                Image(
+                    modifier = Modifier
+                        .width(16.dp)
+                        .height(16.dp)
+                        .offset(y = (1.5).dp),
+                    painter = painterResource(id = R.drawable.ic_chevron_right),
+                    contentDescription = stringResource(R.string.str_chevron_right),
+                    contentScale = ContentScale.FillHeight ,
+                    colorFilter = ColorFilter.tint(colorYellow)
+                )
+            }
+
         }
+
     }
 
 }
