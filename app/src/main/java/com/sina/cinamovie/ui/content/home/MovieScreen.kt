@@ -2,6 +2,7 @@ package com.sina.cinamovie.ui.content.home
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -27,10 +28,7 @@ import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.sina.cinamovie.R
-import com.sina.cinamovie.model.AppBarModel
-import com.sina.cinamovie.model.GenreModel
-import com.sina.cinamovie.model.ImageModel
-import com.sina.cinamovie.model.VideoModel
+import com.sina.cinamovie.model.*
 import com.sina.cinamovie.ui.content.common.AppBar
 import com.sina.cinamovie.ui.content.common.ListHeader
 import com.sina.cinamovie.ui.content.list.*
@@ -194,7 +192,7 @@ fun MovieScreen() {
             )
 
             Spacer(modifier = Modifier.size(12.dp))
-            
+
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -322,11 +320,8 @@ fun MovieScreen() {
             }
 
             Spacer(modifier = Modifier.size(48.dp))
-
             ListHeader(title = stringResource(R.string.str_details) , false)
-
             Spacer(modifier = Modifier.size(24.dp))
-
             Column(
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
@@ -343,6 +338,21 @@ fun MovieScreen() {
                 DetailMovieColumnItem(title = stringResource(R.string.str_companies), desc = "Atresmedia . Vancouver Media" , false)
 
             }
+
+            Spacer(modifier = Modifier.size(48.dp))
+            ListHeader(title = stringResource(R.string.str_casts) , true)
+            Spacer(modifier = Modifier.size(24.dp))
+//            CastsList(castList = listOf(
+//                CastModel(realName = "Brad Pit" , movieName = "Joe Hill" , image = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg"),
+//                CastModel(realName = "Brad Pit" , movieName = "Joe Hill" , image = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg"),
+//                CastModel(realName = "Brad Pit" , movieName = "Joe Hill" , image = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg"),
+//                CastModel(realName = "Brad Pit" , movieName = "Joe Hill" , image = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg"),
+//                CastModel(realName = "Brad Pit" , movieName = "Joe Hill" , image = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg"),
+//                CastModel(realName = "Brad Pit" , movieName = "Joe Hill" , image = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg"),
+//                CastModel(realName = "Brad Pit" , movieName = "Joe Hill" , image = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg"),
+//                CastModel(realName = "Brad Pit" , movieName = "Joe Hill" , image = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg"),
+//                CastModel(realName = "Brad Pit" , movieName = "Joe Hill" , image = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg")
+//            ))
 
         }
 

@@ -4,6 +4,7 @@ import android.text.Layout
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
@@ -514,7 +515,7 @@ fun VideoList(modifier: Modifier , itemWidthDp: Dp , itemHeightDp: Dp , imageLis
                 Box(
                     modifier = Modifier
                         .align(Alignment.BottomStart)
-                        .padding(start = 8.dp , bottom = 8.dp)
+                        .padding(start = 8.dp, bottom = 8.dp)
                 ) {
 
                     Box(
@@ -549,6 +550,66 @@ fun VideoList(modifier: Modifier , itemWidthDp: Dp , itemHeightDp: Dp , imageLis
         }
 
         Spacer(modifier = Modifier.size(8.dp))
+
+    }
+
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CastsList(castList: List<CastModel>) {
+
+    LazyVerticalGrid(
+        cells = GridCells.Fixed(3) ,
+        contentPadding = PaddingValues(horizontal = 24.dp) ,
+        verticalArrangement = Arrangement.spacedBy(24.dp) ,
+        horizontalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
+
+        items(castList) { item ->
+
+            Column(
+                modifier = Modifier.fillMaxWidth() ,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                AsyncImage(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f / 1f)
+                        .clip(shape = RoundedCornerShape(16.dp))
+                        .background(
+                            shape = RoundedCornerShape(16.dp),
+                            color = colorGray.copy(alpha = 0.75f)
+                        ),
+                    model = ImageRequest
+                        .Builder(LocalContext.current)
+                        .data(item.image)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = "")
+
+                Spacer(modifier = Modifier.size(8.dp))
+
+                Text(
+                    text = item.realName ,
+                    style = regularFont() ,
+                    maxLines = 1 ,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.size(2.dp))
+
+                Text(
+                    text = "As ${item.movieName}" ,
+                    style = regularFont(12.sp , colorTextGray2) ,
+                    maxLines = 1 ,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+            }
+
+        }
 
     }
 
