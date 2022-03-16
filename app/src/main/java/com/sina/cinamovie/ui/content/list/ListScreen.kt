@@ -559,58 +559,62 @@ fun VideoList(modifier: Modifier , itemWidthDp: Dp , itemHeightDp: Dp , imageLis
 @Composable
 fun CastsList(castList: List<CastModel>) {
 
-    LazyVerticalGrid(
-        cells = GridCells.Fixed(3) ,
-        contentPadding = PaddingValues(horizontal = 24.dp) ,
-        verticalArrangement = Arrangement.spacedBy(24.dp) ,
-        horizontalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
+    LazyColumn() {
+        
+        items(castList.windowed(3 , 3, true)) { subList ->
 
-        items(castList) { item ->
+            Row(modifier = Modifier.fillMaxWidth()) {
 
-            Column(
-                modifier = Modifier.fillMaxWidth() ,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+                subList.forEach {
 
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f / 1f)
-                        .clip(shape = RoundedCornerShape(16.dp))
-                        .background(
-                            shape = RoundedCornerShape(16.dp),
-                            color = colorGray.copy(alpha = 0.75f)
-                        ),
-                    model = ImageRequest
-                        .Builder(LocalContext.current)
-                        .data(item.image)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "")
+                    Column(
+                        modifier = Modifier.fillMaxWidth(0.5f) ,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
 
-                Spacer(modifier = Modifier.size(8.dp))
+                        AsyncImage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(1f / 1f)
+                                .clip(shape = RoundedCornerShape(16.dp))
+                                .background(
+                                    shape = RoundedCornerShape(16.dp),
+                                    color = colorGray.copy(alpha = 0.75f)
+                                ),
+                            model = ImageRequest
+                                .Builder(LocalContext.current)
+                                .data(it.image)
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = "")
 
-                Text(
-                    text = item.realName ,
-                    style = regularFont() ,
-                    maxLines = 1 ,
-                    overflow = TextOverflow.Ellipsis
-                )
+                        Spacer(modifier = Modifier.size(8.dp))
 
-                Spacer(modifier = Modifier.size(2.dp))
+                        Text(
+                            text = it.realName ,
+                            style = regularFont() ,
+                            maxLines = 1 ,
+                            overflow = TextOverflow.Ellipsis
+                        )
 
-                Text(
-                    text = "As ${item.movieName}" ,
-                    style = regularFont(12.sp , colorTextGray2) ,
-                    maxLines = 1 ,
-                    overflow = TextOverflow.Ellipsis
-                )
+                        Spacer(modifier = Modifier.size(2.dp))
+
+                        Text(
+                            text = "As ${it.movieName}" ,
+                            style = regularFont(12.sp , colorTextGray2) ,
+                            maxLines = 1 ,
+                            overflow = TextOverflow.Ellipsis
+                        )
+
+                    }
+
+
+                }
 
             }
-
+            
         }
-
+        
     }
 
 }
