@@ -25,4 +25,5 @@
     <string name="str_languages">Languages</string>
     <string name="str_companies">Companies</string>
     <string name="str_casts">Casts</string>
+    <string name="str_more_like_this">More Like This</string>
 </resources>
