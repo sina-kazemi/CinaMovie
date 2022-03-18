@@ -551,7 +551,7 @@ fun HomeScreen() {
                             if (index < movieList.size - 1) {
                                 Box(
                                     modifier = Modifier
-                                        .padding(start = 10.dp)
+                                        .padding(start = 11.dp)
                                         .size(2.dp, 32.dp)
                                         .background(
                                             shape = RoundedCornerShape(16.dp),
