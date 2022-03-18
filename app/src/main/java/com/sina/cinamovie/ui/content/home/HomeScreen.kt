@@ -380,6 +380,95 @@ fun HomeScreen() {
         }
 
         Spacer(modifier = Modifier.size(48.dp))
+        ListHeader(title = stringResource(R.string.str_burn_today) , true)
+        Spacer(modifier = Modifier.size(24.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp) ,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+
+            listOf(
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24)
+            ).windowed(4 , 4 , true).forEach { subList ->
+
+                Row (
+                    modifier = Modifier.fillMaxWidth() ,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ){
+
+                    subList.forEach {
+
+                        Column(
+                            modifier = Modifier.weight(1f) ,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            AsyncImage(
+                                modifier = Modifier
+                                    .aspectRatio(1f / 1f)
+                                    .clip(RoundedCornerShape(16.dp))
+                                    .background(
+                                        shape = RoundedCornerShape(16.dp),
+                                        color = colorGray
+                                    ),
+                                model = ImageRequest
+                                    .Builder(LocalContext.current)
+                                    .data(it.avatarUrl)
+                                    .crossfade(true)
+                                    .build() ,
+                                contentDescription = "" ,
+                                contentScale = ContentScale.Crop
+                            )
+
+                            Spacer(modifier = Modifier.size(8.dp))
+
+                            Text(
+                                text = "${it.firstName} ${it.lastName}" ,
+                                style = regularFont(),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+
+                            Spacer(modifier = Modifier.size(2.dp))
+
+                            Text(
+                                text = "${it.age} Years Old" ,
+                                style = regularFont(12.sp , colorTextGray2),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+
+                        }
+
+                    }
+
+                    repeat(4 - subList.size) {
+                        Column(
+                            modifier = Modifier.weight(1f) ,
+                            verticalArrangement = Arrangement.spacedBy(16.dp) ,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+        Spacer(modifier = Modifier.size(48.dp))
+
     }
 }
 
