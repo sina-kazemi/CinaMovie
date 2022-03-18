@@ -47,7 +47,7 @@ fun HomeScreen() {
 
         Spacer(modifier = Modifier.size(32.dp))
 
-        HomeAppbar(userModel = UserModel(firstName = "Sina"))
+        HomeAppbar(userModel = UserModel(firstName = "John"))
 
         Spacer(modifier = Modifier.size(24.dp))
 

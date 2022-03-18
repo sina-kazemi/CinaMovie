@@ -80,13 +80,7 @@ class MainActivity : ComponentActivity() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(brush = Brush.verticalGradient(
-                    listOf(
-                        colorBlurBackground ,
-                        colorBlack.copy(alpha = 0.75f) ,
-                        colorBlurBackground
-                    )
-                ))
+                .background(color = colorBlack.copy(alpha = 0.85f))
         )
 
         ConstraintLayout(
