@@ -350,7 +350,7 @@ fun IMDbOriginalsList(trailerList: List<TrailerModel>) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(colorGray)
+            .background(colorBlack.copy(alpha = 0.75f))
     ) {
 
         AnimatedVisibility(
@@ -408,11 +408,6 @@ fun IMDbOriginalsList(trailerList: List<TrailerModel>) {
         }
 
     }
-
-}
-
-@Composable
-fun NewsList(newsList: List<NewsModel>) {
 
 }
 

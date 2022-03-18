@@ -83,7 +83,7 @@ class MainActivity : ComponentActivity() {
                 .background(brush = Brush.verticalGradient(
                     listOf(
                         colorBlurBackground ,
-                        colorBlack.copy(alpha = 0.8f) ,
+                        colorBlack.copy(alpha = 0.75f) ,
                         colorBlurBackground
                     )
                 ))
@@ -141,7 +141,7 @@ class MainActivity : ComponentActivity() {
             startDestination = BottomNavItem.Home.screen_route
         ) {
             composable(BottomNavItem.Home.screen_route) {
-                MovieScreen()
+                HomeScreen()
             }
             composable(BottomNavItem.Search.screen_route) {
                 SearchScreen()
@@ -163,7 +163,7 @@ class MainActivity : ComponentActivity() {
 
         com.google.accompanist.insets.ui.BottomNavigation(
             modifier = modifier ,
-            backgroundColor = colorGray,
+            backgroundColor = colorBlack.copy(alpha = 0.75f),
             contentColor = colorWhite
         ) {
 
