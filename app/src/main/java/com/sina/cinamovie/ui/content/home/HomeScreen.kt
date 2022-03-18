@@ -11,6 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -266,7 +267,7 @@ fun HomeScreen() {
 
                 Column(
                     modifier = Modifier
-                        .width(screenWidth - 32.dp) ,
+                        .width(screenWidth - 48.dp) ,
                     verticalArrangement = Arrangement.spacedBy(16.dp) ,
                 ) {
 
@@ -468,6 +469,107 @@ fun HomeScreen() {
         }
 
         Spacer(modifier = Modifier.size(48.dp))
+
+        Box(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(colorBlack.copy(alpha = 0.75f))
+                    .padding(vertical = 32.dp) ,
+                verticalAlignment = Alignment.CenterVertically ,
+                horizontalArrangement = Arrangement.Start
+            ) {
+
+                Box{
+
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 32.dp),
+                        verticalArrangement = Arrangement.Center ,
+                        horizontalAlignment = Alignment.Start
+                    ) {
+
+                        Text(text = stringResource(R.string.str_box), style = mediumFont(16.sp))
+                        Text(text = stringResource(R.string.str_office), style = extraLightFont(16.sp))
+
+                    }
+
+                }
+
+                Column (
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ){
+
+                    val movieList = listOf(
+                        MovieModel(title = "Death on the Nile" , grossWorldwide = "12.9M"),
+                        MovieModel(title = "Jackass Forever" , grossWorldwide = "10.4M"),
+                        MovieModel(title = "Marry Me" , grossWorldwide = "9.8M"),
+                        MovieModel(title = "Spider-Man: No Way Home" , grossWorldwide = "7.8M"),
+                        MovieModel(title = "Blacklight" , grossWorldwide = "6.2M")
+                    )
+
+                    movieList.forEachIndexed { index, movieModel ->
+
+                        Column(
+                            horizontalAlignment = Alignment.Start ,
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+
+                            Row(
+                                modifier = Modifier.wrapContentWidth() ,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+
+                                Text(
+                                    text = run {
+                                        if (index < 9) {
+                                            "0${(index+1)}"
+                                        }
+                                        else {
+                                            (index+1).toString()
+                                        }
+                                    } ,
+                                    style = boldFont(20.sp)
+                                )
+
+                                Spacer(modifier = Modifier.size(16.dp))
+
+                                Column(
+                                    horizontalAlignment = Alignment.Start
+                                ) {
+
+                                    Text(text = movieModel.title , style = regularFont())
+                                    Text(text = movieModel.grossWorldwide , style = regularFont(12.sp , colorTextGray2))
+
+                                }
+
+                            }
+
+                            if (index < movieList.size - 1) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(start = 10.dp)
+                                        .size(2.dp, 32.dp)
+                                        .background(
+                                            shape = RoundedCornerShape(16.dp),
+                                            color = colorYellow
+                                        )
+                                )
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+
+        }
 
     }
 }

@@ -14,5 +14,9 @@ data class MovieModel(
     var videoId: String? = "",
     var videoName: String? = "",
     var videoPreview: String? = "",
-    var videoRuntime: String? = ""
+    var videoRuntime: String? = "",
+    var budget: String = "",
+    var grossUsAndCanada: String = "",
+    var grossWorldwide: String = "",
+    var openingWeekendUsAndCanada: String = ""
 )

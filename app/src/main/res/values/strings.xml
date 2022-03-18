@@ -27,4 +27,6 @@
     <string name="str_casts">Casts</string>
     <string name="str_more_like_this">More Like This</string>
     <string name="str_burn_today">Burn Today</string>
+    <string name="str_office">Office</string>
+    <string name="str_box">Box</string>
 </resources>
