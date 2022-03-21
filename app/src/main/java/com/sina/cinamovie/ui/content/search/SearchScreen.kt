@@ -35,6 +35,7 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.sina.cinamovie.R
 import com.sina.cinamovie.model.GenreModel
+import com.sina.cinamovie.model.MovieModel
 import com.sina.cinamovie.model.UserModel
 import com.sina.cinamovie.ui.theme.*
 import com.sina.cinamovie.util.toDp
@@ -211,7 +212,7 @@ fun SearchScreen() {
                         UserModel(
                             avatar = "https://m.media-amazon.com/images/M/MV5BMjMwMzE1OTc0OF5BMl5BanBnXkFtZTcwMDU2NTg0Nw@@._V1_UY418_CR0,0,0,0_AL_.jpg" ,
                             name = "Paul Dano" ,
-                            summary = "An actor for all seasons and all kinds of roles (from dark, difficult characters to more loving ones) Paul Dano has an extensive body work that includes working with directors such as Paul Thomas Anderson, Steve McQueen, Dayton & Ferris, Ang Lee, Denis Villenueve and Paolo Sorrentino; acting with ..."
+                            summary = "An actor for all seasons and all kinds of roles (from dark, difficult characters to more loving ones) Paul Dano has an extensive body work that includes working with directors such as Paul Thomas Anderson, Steve McQueen, Dayton & Ferris, Ang Lee, Denis Villenueve and Paolo Sorrentino; acting with ... McQueen, Dayton & Ferris, Ang Lee, Denis Villenueve and Paolo Sorrentino; acting with ..."
                         ) ,
                         UserModel(
                             avatar = "https://m.media-amazon.com/images/M/MV5BMjMwMzE1OTc0OF5BMl5BanBnXkFtZTcwMDU2NTg0Nw@@._V1_UY418_CR0,0,0,0_AL_.jpg" ,
@@ -246,10 +247,75 @@ fun SearchScreen() {
                     ))
                 }
                 2 -> {
-                    Text(text = page.toString(), style = boldFont(24.sp))
+                    TitlesScreen(userList = listOf(
+                        MovieModel(
+                            title = "The Batman" ,
+                            year = "(2022)" ,
+                            cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_UY392_CR0,0,0,0_AL_.jpg" ,
+                            voteCount = 631862 ,
+                            rate = 8.3f ,
+                            summary = "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement"
+                        ) ,
+                        MovieModel(
+                            title = "The Batman" ,
+                            year = "(2022)" ,
+                            cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_UY392_CR0,0,0,0_AL_.jpg" ,
+                            voteCount = 631862 ,
+                            rate = 8.3f ,
+                            summary = "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement"
+                        ) ,
+                        MovieModel(
+                            title = "The Batman" ,
+                            year = "(2022)" ,
+                            cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_UY392_CR0,0,0,0_AL_.jpg" ,
+                            voteCount = 631862 ,
+                            rate = 8.3f ,
+                            summary = "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement"
+                        ) ,
+                        MovieModel(
+                            title = "The Batman" ,
+                            year = "(2022)" ,
+                            cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_UY392_CR0,0,0,0_AL_.jpg" ,
+                            voteCount = 631862 ,
+                            rate = 8.3f ,
+                            summary = "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement"
+                        ) ,
+                        MovieModel(
+                            title = "The Batman" ,
+                            year = "(2022)" ,
+                            cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_UY392_CR0,0,0,0_AL_.jpg" ,
+                            voteCount = 631862 ,
+                            rate = 8.3f ,
+                            summary = "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement"
+                        ) ,
+                        MovieModel(
+                            title = "The Batman" ,
+                            year = "(2022)" ,
+                            cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_UY392_CR0,0,0,0_AL_.jpg" ,
+                            voteCount = 631862 ,
+                            rate = 8.3f ,
+                            summary = "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement"
+                        )
+                    ))
                 }
                 3 -> {
-                    Text(text = page.toString(), style = boldFont(24.sp))
+                    KeyWordsScreen(wordsList = listOf(
+                        "Alternate history 1" ,
+                        "Alternate history 2" ,
+                        "Alternate history 3" ,
+                        "Alternate history 4" ,
+                        "Alternate history 5" ,
+                        "Alternate history 6" ,
+                        "Alternate history 7" ,
+                        "Alternate history 8" ,
+                        "Alternate history 9" ,
+                        "Alternate history 10" ,
+                        "Alternate history 11" ,
+                        "Alternate history 12" ,
+                        "Alternate history 13" ,
+                        "Alternate history 14" ,
+                        "Alternate history 15"
+                    ))
                 }
             }
 
