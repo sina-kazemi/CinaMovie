@@ -34,6 +34,8 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.sina.cinamovie.R
+import com.sina.cinamovie.model.GenreModel
+import com.sina.cinamovie.model.UserModel
 import com.sina.cinamovie.ui.theme.*
 import com.sina.cinamovie.util.toDp
 import kotlinx.coroutines.launch
@@ -45,7 +47,6 @@ fun SearchScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
             .background(Color.Transparent)
     ) {
 
@@ -123,8 +124,6 @@ fun SearchScreen() {
             selectedTabIndex = pagerState.currentPage,
             indicator = { tabPositions ->
 
-                Timber.d("IndicatorPos:: ${tabWidths[pagerState.currentPage]}")
-
                 val currentTabWidth by animateDpAsState(
                     targetValue = tabWidths[pagerState.currentPage],
                     animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
@@ -195,55 +194,66 @@ fun SearchScreen() {
             // TODO: page content
             Timber.d("PAGE_SWIPE:: $page")
 
-            Column(modifier = Modifier.fillMaxSize()) {
-                Text(text = page.toString(), style = boldFont(26.sp))
-            }
-
             when (page) {
+                0 -> {
+                    GenreScreen(genreList = listOf(
+                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
+                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
+                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
+                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
+                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
+                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
+                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg")
+                    ))
+                }
                 1 -> {
-
+                    CelebsScreen(userList = listOf(
+                        UserModel(
+                            avatar = "https://m.media-amazon.com/images/M/MV5BMjMwMzE1OTc0OF5BMl5BanBnXkFtZTcwMDU2NTg0Nw@@._V1_UY418_CR0,0,0,0_AL_.jpg" ,
+                            name = "Paul Dano" ,
+                            summary = "An actor for all seasons and all kinds of roles (from dark, difficult characters to more loving ones) Paul Dano has an extensive body work that includes working with directors such as Paul Thomas Anderson, Steve McQueen, Dayton & Ferris, Ang Lee, Denis Villenueve and Paolo Sorrentino; acting with ..."
+                        ) ,
+                        UserModel(
+                            avatar = "https://m.media-amazon.com/images/M/MV5BMjMwMzE1OTc0OF5BMl5BanBnXkFtZTcwMDU2NTg0Nw@@._V1_UY418_CR0,0,0,0_AL_.jpg" ,
+                            name = "Paul Dano" ,
+                            summary = "An actor for all seasons and all kinds of roles (from dark, difficult characters to more loving ones) Paul Dano has an extensive body work that includes working with directors such as Paul Thomas Anderson, Steve McQueen, Dayton & Ferris, Ang Lee, Denis Villenueve and Paolo Sorrentino; acting with ..."
+                        ) ,
+                        UserModel(
+                            avatar = "https://m.media-amazon.com/images/M/MV5BMjMwMzE1OTc0OF5BMl5BanBnXkFtZTcwMDU2NTg0Nw@@._V1_UY418_CR0,0,0,0_AL_.jpg" ,
+                            name = "Paul Dano" ,
+                            summary = "An actor for all seasons and all kinds of roles (from dark, difficult characters to more loving ones) Paul Dano has an extensive body work that includes working with directors such as Paul Thomas Anderson, Steve McQueen, Dayton & Ferris, Ang Lee, Denis Villenueve and Paolo Sorrentino; acting with ..."
+                        ) ,
+                        UserModel(
+                            avatar = "https://m.media-amazon.com/images/M/MV5BMjMwMzE1OTc0OF5BMl5BanBnXkFtZTcwMDU2NTg0Nw@@._V1_UY418_CR0,0,0,0_AL_.jpg" ,
+                            name = "Paul Dano" ,
+                            summary = "An actor for all seasons and all kinds of roles (from dark, difficult characters to more loving ones) Paul Dano has an extensive body work that includes working with directors such as Paul Thomas Anderson, Steve McQueen, Dayton & Ferris, Ang Lee, Denis Villenueve and Paolo Sorrentino; acting with ..."
+                        ) ,
+                        UserModel(
+                            avatar = "https://m.media-amazon.com/images/M/MV5BMjMwMzE1OTc0OF5BMl5BanBnXkFtZTcwMDU2NTg0Nw@@._V1_UY418_CR0,0,0,0_AL_.jpg" ,
+                            name = "Paul Dano" ,
+                            summary = "An actor for all seasons and all kinds of roles (from dark, difficult characters to more loving ones) Paul Dano has an extensive body work that includes working with directors such as Paul Thomas Anderson, Steve McQueen, Dayton & Ferris, Ang Lee, Denis Villenueve and Paolo Sorrentino; acting with ..."
+                        ) ,
+                        UserModel(
+                            avatar = "https://m.media-amazon.com/images/M/MV5BMjMwMzE1OTc0OF5BMl5BanBnXkFtZTcwMDU2NTg0Nw@@._V1_UY418_CR0,0,0,0_AL_.jpg" ,
+                            name = "Paul Dano" ,
+                            summary = "An actor for all seasons and all kinds of roles (from dark, difficult characters to more loving ones) Paul Dano has an extensive body work that includes working with directors such as Paul Thomas Anderson, Steve McQueen, Dayton & Ferris, Ang Lee, Denis Villenueve and Paolo Sorrentino; acting with ..."
+                        ) ,
+                        UserModel(
+                            avatar = "https://m.media-amazon.com/images/M/MV5BMjMwMzE1OTc0OF5BMl5BanBnXkFtZTcwMDU2NTg0Nw@@._V1_UY418_CR0,0,0,0_AL_.jpg" ,
+                            name = "Paul Dano" ,
+                            summary = "An actor for all seasons and all kinds of roles (from dark, difficult characters to more loving ones) Paul Dano has an extensive body work that includes working with directors such as Paul Thomas Anderson, Steve McQueen, Dayton & Ferris, Ang Lee, Denis Villenueve and Paolo Sorrentino; acting with ..."
+                        )
+                    ))
                 }
                 2 -> {
-
+                    Text(text = page.toString(), style = boldFont(24.sp))
                 }
                 3 -> {
-
-                }
-                4 -> {
-
+                    Text(text = page.toString(), style = boldFont(24.sp))
                 }
             }
 
         }
 
     }
-}
-
-
-fun Modifier.customTabIndicatorOffset(
-    currentTabPosition: TabPosition,
-    tabWidth: Dp
-): Modifier = composed(
-    inspectorInfo = debugInspectorInfo {
-        name = "customTabIndicatorOffset"
-        value = currentTabPosition
-    }
-) {
-    val currentTabWidth by animateDpAsState(
-        targetValue = tabWidth,
-        animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
-    )
-    val indicatorOffset by animateDpAsState(
-        targetValue = ((currentTabPosition.left + currentTabPosition.right - tabWidth) / 2),
-        animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
-    )
-    fillMaxWidth()
-        .wrapContentSize(Alignment.BottomStart)
-        .offset(x = indicatorOffset)
-        .width(currentTabWidth)
-        .height(4.dp)
-        .background(
-            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-            color = colorYellow
-        )
 }

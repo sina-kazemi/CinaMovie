@@ -1,6 +1,5 @@
 package com.sina.cinamovie.ui.content.list
 
-import android.text.Layout
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -19,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
@@ -428,7 +426,7 @@ fun GenreList(genreList: List<GenreModel>) {
                         color = colorGray.copy(alpha = 0.75f)
                     )
                     .padding(horizontal = 24.dp, vertical = 8.dp),
-                text = item.title ,
+                text = item.genre ,
                 style = regularFont()
             )
 

@@ -2,8 +2,6 @@ package com.sina.cinamovie.ui.content.home
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -207,9 +205,9 @@ fun MovieScreen() {
             Spacer(modifier = Modifier.size(16.dp))
 
             GenreList(genreList = listOf(
-                GenreModel(title = "Action") ,
-                GenreModel(title = "Crime") ,
-                GenreModel(title = "Drama")
+                GenreModel(genre = "Action") ,
+                GenreModel(genre = "Crime") ,
+                GenreModel(genre = "Drama")
             ))
 
             val configuration = LocalConfiguration.current

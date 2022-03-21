@@ -11,7 +11,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -391,14 +390,14 @@ fun HomeScreen() {
         ) {
 
             listOf(
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatarUrl = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24)
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24)
             ).windowed(4 , 4 , true).forEach { subList ->
 
                 Row (
@@ -423,7 +422,7 @@ fun HomeScreen() {
                                     ),
                                 model = ImageRequest
                                     .Builder(LocalContext.current)
-                                    .data(it.avatarUrl)
+                                    .data(it.avatar)
                                     .crossfade(true)
                                     .build() ,
                                 contentDescription = "" ,
@@ -609,7 +608,7 @@ private fun HomeAppbar(
                     color = colorGray.copy(alpha = 0.75f)
                 )
         ) {
-            if (userModel.avatarUrl.trim() == "") {
+            if (userModel.avatar.trim() == "") {
                 Image(
                     modifier = Modifier
                         .fillMaxSize()
@@ -622,7 +621,7 @@ private fun HomeAppbar(
             else {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(userModel.avatarUrl)
+                        .data(userModel.avatar)
                         .crossfade(true)
                         .build(),
                     contentDescription = stringResource(R.string.str_avatar),
