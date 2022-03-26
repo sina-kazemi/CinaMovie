@@ -1,5 +1,6 @@
-package com.sina.cinamovie.ui.content.search
+package com.sina.cinamovie.ui.content.main.search
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -7,11 +8,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,22 +22,21 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.sina.cinamovie.model.UserModel
-import com.sina.cinamovie.ui.theme.colorGray
-import com.sina.cinamovie.ui.theme.colorTextGray3
-import com.sina.cinamovie.ui.theme.mediumFont
+import com.sina.cinamovie.R
+import com.sina.cinamovie.model.MovieModel
+import com.sina.cinamovie.ui.theme.*
 import com.sina.cinamovie.util.highResolutionImage
-import timber.log.Timber
+import java.text.DecimalFormat
 
 @Composable
-fun CelebsScreen(userList: List<UserModel>) {
+fun TitlesScreen(userList: List<MovieModel>) {
 
     LazyColumn(
         contentPadding = PaddingValues(16.dp) ,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        items(userList) { userModel ->
+        items(userList) { movieModel ->
 
             ConstraintLayout(
                 modifier = Modifier
@@ -44,8 +46,6 @@ fun CelebsScreen(userList: List<UserModel>) {
             ) {
 
                 val (imageParent , detailParent) = createRefs()
-
-                Timber.d("AvatarImage:: ${userModel.avatar.highResolutionImage()}")
 
                 AsyncImage(
                     modifier = Modifier
@@ -62,7 +62,7 @@ fun CelebsScreen(userList: List<UserModel>) {
                         },
                     model = ImageRequest
                         .Builder(LocalContext.current)
-                        .data(userModel.avatar.highResolutionImage())
+                        .data(movieModel.cover?.highResolutionImage())
                         .crossfade(true)
                         .build(),
                     contentDescription = "" ,
@@ -71,7 +71,7 @@ fun CelebsScreen(userList: List<UserModel>) {
 
                 Column(
                     modifier = Modifier
-                        .padding(start = 12.dp , top = 12.dp , bottom = 12.dp)
+                        .padding(start = 12.dp, top = 12.dp, bottom = 12.dp)
                         .constrainAs(detailParent) {
                             start.linkTo(imageParent.end)
                             end.linkTo(parent.end)
@@ -85,16 +85,58 @@ fun CelebsScreen(userList: List<UserModel>) {
                     Column {
 
                         Text(
-                            text = userModel.name ,
+                            text = "${movieModel.title} ${movieModel.year}" ,
                             style = mediumFont(16.sp) ,
                             maxLines = 1 ,
                             overflow = TextOverflow.Ellipsis
                         )
 
+                        Spacer(modifier = Modifier.size(4.dp))
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically ,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+
+                            Text(
+                                modifier = Modifier.offset(y = (0.75).dp) ,
+                                text = movieModel.rate.toString() ,
+                                style = boldFont(12.sp , colorYellow) ,
+                            )
+
+                            Spacer(modifier = Modifier.size(3.dp))
+
+                            Image(
+                                modifier = Modifier
+                                    .width(12.dp)
+                                    .height(12.dp) ,
+                                painter = painterResource(id = R.drawable.ic_star),
+                                contentDescription = "" ,
+                                colorFilter = ColorFilter.tint(colorYellow),
+                                contentScale = ContentScale.Inside
+                            )
+
+                            Spacer(modifier = Modifier.size(10.dp))
+
+                            Text(
+                                modifier = Modifier.offset(y = (0.75).dp) ,
+                                text = kotlin.run {
+                                    if (movieModel.voteCount < 1000) {
+                                        "${movieModel.voteCount} Votes"
+                                    }
+                                    else {
+                                        "${DecimalFormat("0,000").format(movieModel.voteCount)} Votes"
+                                    }
+                                } ,
+                                style = lightFont(12.sp , colorTextGray2)
+                            )
+
+                        }
+
                         Spacer(modifier = Modifier.size(8.dp))
 
                         Text(
-                            text = userModel.summary ,
+                            text = movieModel.summary ,
                             style = mediumFont(12.sp , colorTextGray3) ,
                             lineHeight = 20.sp ,
                             overflow = TextOverflow.Visible

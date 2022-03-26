@@ -226,7 +226,7 @@ fun MovieList(movieList: List<MovieModel>) {
 
             ConstraintLayout {
 
-                val (imageParent , title , rateParent , spacer1 , spacer2) = createRefs()
+                val (imageParent , title , subTitle , rateParent , spacer1 , spacer2) = createRefs()
 
                 Box(
                     modifier = Modifier
@@ -276,7 +276,33 @@ fun MovieList(movieList: List<MovieModel>) {
                     textAlign = TextAlign.Center
                 )
 
-                if (item.rate != null) {
+                if (item.subTitle != null) {
+
+                    Spacer(
+                        modifier = Modifier
+                            .size(3.dp)
+                            .constrainAs(spacer2) {
+                                top.linkTo(title.bottom)
+                            }
+                    )
+
+                    Text(
+                        modifier = Modifier
+                            .constrainAs(subTitle) {
+                            top.linkTo(spacer2.bottom)
+                            start.linkTo(imageParent.start)
+                            end.linkTo(imageParent.end)
+                            bottom.linkTo(parent.bottom)
+                        } ,
+                        text = item.subTitle!!,
+                        style = regularFont(12.sp , colorTextGray2) ,
+                        maxLines = 1 ,
+                        overflow = TextOverflow.Ellipsis ,
+                        textAlign = TextAlign.Center
+                    )
+
+                }
+                else if (item.rate != null) {
 
                     Spacer(
                         modifier = Modifier

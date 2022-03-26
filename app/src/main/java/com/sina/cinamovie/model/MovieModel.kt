@@ -3,6 +3,7 @@ package com.sina.cinamovie.model
 data class MovieModel(
     var cover: String? = "" ,
     var rate: Float? = null,
+    var subTitle: String? = null,
     var summary: String = "",
     var year: String = "",
     var voteCount: Int = 0,

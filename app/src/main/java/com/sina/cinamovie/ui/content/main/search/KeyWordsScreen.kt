@@ -1,4 +1,4 @@
-package com.sina.cinamovie.ui.content.search
+package com.sina.cinamovie.ui.content.main.search
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

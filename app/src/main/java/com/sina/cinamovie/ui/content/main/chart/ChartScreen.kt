@@ -1,6 +1,5 @@
-package com.sina.cinamovie.ui.content.chart
+package com.sina.cinamovie.ui.content.main.chart
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
@@ -10,9 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.statusBarsPadding
-import com.sina.cinamovie.ui.theme.colorBlack
 import com.sina.cinamovie.ui.theme.regularFont
 
 @Composable

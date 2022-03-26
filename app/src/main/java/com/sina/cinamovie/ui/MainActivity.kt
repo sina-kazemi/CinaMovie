@@ -1,7 +1,5 @@
-package com.sina.cinamovie
+package com.sina.cinamovie.ui
 
-import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,7 +14,6 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -31,12 +28,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.sina.cinamovie.ui.content.chart.ChartScreen
-import com.sina.cinamovie.ui.content.home.HomeScreen
-import com.sina.cinamovie.ui.content.home.MovieScreen
-import com.sina.cinamovie.ui.content.search.SearchScreen
+import com.sina.cinamovie.R
+import com.sina.cinamovie.ui.content.Person.PersonScreen
+import com.sina.cinamovie.ui.content.main.chart.ChartScreen
+import com.sina.cinamovie.ui.content.main.home.HomeScreen
+import com.sina.cinamovie.ui.content.main.search.SearchScreen
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.*
 import com.sina.cinamovie.util.stackblur.StackBlurManager
@@ -135,7 +132,7 @@ class MainActivity : ComponentActivity() {
             startDestination = BottomNavItem.Home.screen_route
         ) {
             composable(BottomNavItem.Home.screen_route) {
-                HomeScreen()
+                PersonScreen()
             }
             composable(BottomNavItem.Search.screen_route) {
                 SearchScreen()

@@ -29,4 +29,9 @@
     <string name="str_burn_today">Burn Today</string>
     <string name="str_office">Office</string>
     <string name="str_box">Box</string>
+    <string name="str_job">Job</string>
+    <string name="str_age">Age</string>
+    <string name="str_photos_and_trailer">Photos And Trailer</string>
+    <string name="str_known_for">Known For</string>
+    <string name="str_filmography">Filmography</string>
 </resources>
