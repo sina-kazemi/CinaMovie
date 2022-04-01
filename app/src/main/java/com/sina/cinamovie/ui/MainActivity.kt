@@ -132,7 +132,7 @@ class MainActivity : ComponentActivity() {
             startDestination = BottomNavItem.Home.screen_route
         ) {
             composable(BottomNavItem.Home.screen_route) {
-                PersonScreen()
+                HomeScreen()
             }
             composable(BottomNavItem.Search.screen_route) {
                 SearchScreen()
