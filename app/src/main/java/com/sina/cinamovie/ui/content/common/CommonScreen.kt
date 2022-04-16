@@ -14,13 +14,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.sina.cinamovie.R
 import com.sina.cinamovie.model.AppBarModel
 import com.sina.cinamovie.model.MenuModel
+import com.sina.cinamovie.ui.navigation.BottomNavItem
+import com.sina.cinamovie.ui.navigation.MainBottomNavItem
 import com.sina.cinamovie.ui.theme.*
+import timber.log.Timber
 
 @Composable
-fun AppBar(model: AppBarModel) {
+fun AppBar(model: AppBarModel , navController: NavHostController) {
 
     Row(
         modifier = Modifier.fillMaxWidth() ,
@@ -34,8 +38,10 @@ fun AppBar(model: AppBarModel) {
         ) {
 
             if (model.backIcon == null) {
-                model.backIcon = MenuModel(painter = painterResource(id = R.drawable.ic_chevron_left)) {
+                Timber.d("BackIconIsNull")
 
+                model.backIcon = MenuModel(painter = painterResource(id = R.drawable.ic_chevron_left)) {
+                    navController.navigateUp()
                 }
             }
 
@@ -125,7 +131,8 @@ private fun MenuIcon(menuModel: MenuModel , offset: Dp = 0.dp) {
             .offset(x = offset)
             .clickable(
                 onClick = {
-                    menuModel.onClick
+                    Timber.d("CLICKED:::!!!!")
+                    menuModel.onClick.invoke()
                 }
             )
             .padding(16.dp),

@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.scrollable
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -42,6 +44,7 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.sina.cinamovie.R
 import com.sina.cinamovie.model.*
+import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.*
 import timber.log.Timber
 
@@ -215,7 +218,7 @@ fun TrailerRow(model: TrailerModel , parentWidth: Dp = (-1).dp , horizontalPaddi
 }
 
 @Composable
-fun MovieList(movieList: List<MovieModel>) {
+fun MovieList(movieList: List<MovieModel> , navController: NavHostController) {
 
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(16.dp) ,
@@ -224,7 +227,7 @@ fun MovieList(movieList: List<MovieModel>) {
 
         items(movieList) { item ->
 
-            ConstraintLayout {
+            ConstraintLayout(modifier = Modifier.clickable { navController.navigate(BottomNavItem.Movie.screen_route + "/" + "123")}) {
 
                 val (imageParent , title , subTitle , rateParent , spacer1 , spacer2) = createRefs()
 

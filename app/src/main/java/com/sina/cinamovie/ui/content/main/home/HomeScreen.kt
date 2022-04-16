@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.sina.cinamovie.R
@@ -36,7 +37,7 @@ import com.sina.cinamovie.ui.content.list.TrailerList
 import com.sina.cinamovie.ui.theme.*
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -132,7 +133,9 @@ fun HomeScreen() {
                 title = "Spider-Man: No way home" ,
                 rate = 7.6f
             ) ,
-        ))
+        ) ,
+            navController = navController
+        )
 
         Spacer(modifier = Modifier.size(48.dp))
 
@@ -171,7 +174,8 @@ fun HomeScreen() {
                 cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
                 title = "Spider-Man: No way home"
             ) ,
-        ))
+        ) ,
+            navController = navController)
 
         Spacer(modifier = Modifier.size(48.dp))
 

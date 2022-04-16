@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.sina.cinamovie.R
@@ -33,9 +34,12 @@ import com.sina.cinamovie.ui.content.common.AppBar
 import com.sina.cinamovie.ui.content.common.ListHeader
 import com.sina.cinamovie.ui.content.list.*
 import com.sina.cinamovie.ui.theme.*
+import timber.log.Timber
 
 @Composable
-fun MovieScreen() {
+fun MovieScreen(itemId: String ,navController: NavHostController) {
+
+    Timber.d("MovieId :: $itemId")
 
     Column(
         modifier = Modifier
@@ -46,7 +50,8 @@ fun MovieScreen() {
             model = AppBarModel(
                 title = "Money Heist" ,
                 subTitle = "2017 - 2022"
-            )
+            ) ,
+            navController = navController
         )
 
         Column(
@@ -467,7 +472,8 @@ fun MovieScreen() {
                     title = "Spider-Man: No way home" ,
                     rate = 7.6f
                 ) ,
-            ))
+            ) ,
+                navController = navController)
             Spacer(modifier = Modifier.size(24.dp))
 
         }

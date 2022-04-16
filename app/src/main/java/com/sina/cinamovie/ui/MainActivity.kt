@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -18,6 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.view.WindowCompat
@@ -34,8 +38,11 @@ import com.sina.cinamovie.ui.content.Person.PersonScreen
 import com.sina.cinamovie.ui.content.main.chart.ChartScreen
 import com.sina.cinamovie.ui.content.main.home.HomeScreen
 import com.sina.cinamovie.ui.content.main.search.SearchScreen
+import com.sina.cinamovie.ui.content.movie.MovieScreen
 import com.sina.cinamovie.ui.navigation.BottomNavItem
+import com.sina.cinamovie.ui.navigation.MainBottomNavItem
 import com.sina.cinamovie.ui.theme.*
+import com.sina.cinamovie.util.ITEM_ID
 import com.sina.cinamovie.util.stackblur.StackBlurManager
 
 
@@ -129,16 +136,24 @@ class MainActivity : ComponentActivity() {
         NavHost(
             modifier = modifier ,
             navController = navController ,
-            startDestination = BottomNavItem.Home.screen_route
+            startDestination = MainBottomNavItem.Home.screen_route
         ) {
-            composable(BottomNavItem.Home.screen_route) {
-                HomeScreen()
+            composable(MainBottomNavItem.Home.screen_route) {
+                HomeScreen(navController = navController)
             }
-            composable(BottomNavItem.Search.screen_route) {
+            composable(MainBottomNavItem.Search.screen_route) {
                 SearchScreen()
             }
-            composable(BottomNavItem.Chart.screen_route) {
+            composable(MainBottomNavItem.Chart.screen_route) {
                 ChartScreen()
+            }
+            composable("${BottomNavItem.Movie.screen_route}/{$ITEM_ID}") { backStackEntry ->
+                val itemId = backStackEntry.arguments?.getString(ITEM_ID)
+                MovieScreen(itemId = itemId?: "" , navController = navController)
+            }
+            composable("${BottomNavItem.Person.screen_route}/{$ITEM_ID}") { backStackEntry ->
+                val itemId = backStackEntry.arguments?.getString(ITEM_ID)
+                PersonScreen(itemId = itemId?: "" , navController = navController)
             }
         }
     }
@@ -147,9 +162,9 @@ class MainActivity : ComponentActivity() {
     fun BottomNavigation(modifier: Modifier , navController: NavController) {
 
         val items = listOf(
-            BottomNavItem.Home ,
-            BottomNavItem.Search ,
-            BottomNavItem.Chart
+            MainBottomNavItem.Home ,
+            MainBottomNavItem.Search ,
+            MainBottomNavItem.Chart
         )
 
         com.google.accompanist.insets.ui.BottomNavigation(
@@ -172,7 +187,16 @@ class MainActivity : ComponentActivity() {
                     selected = currentRoute == item.screen_route,
                     selectedContentColor = colorWhite,
                     unselectedContentColor = colorTextGray,
-                    alwaysShowLabel = false,
+                    alwaysShowLabel = true,
+                    label = {
+                        Text(
+                            text = item.title ,
+                            style = TextStyle(
+                                fontSize = 12.sp ,
+                                fontFamily = outfitFont ,
+                                fontWeight = FontWeight.Normal)
+                        )
+                    } ,
                     onClick = {
                         navController.navigate(item.screen_route) {
 //                            popUpTo(navController.graph.findStartDestination().id) {

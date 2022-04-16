@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -50,7 +51,7 @@ import timber.log.Timber
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun PersonScreen() {
+fun PersonScreen(itemId: String , navController: NavHostController) {
 
     Column(
         modifier = Modifier
@@ -60,7 +61,8 @@ fun PersonScreen() {
         AppBar(
             model = AppBarModel(
                 title = "Matthew McConaughey"
-            )
+            ) ,
+            navController = navController
         )
 
         Column(
@@ -394,7 +396,7 @@ fun PersonScreen() {
                     title = "Spider-Man: No way home" ,
                     subTitle = "Peter Parker"
                 ) ,
-            ))
+            ) , navController = navController)
 
             Spacer(modifier = Modifier.size(48.dp))
             ListHeader(title = stringResource(R.string.str_details) , false)
