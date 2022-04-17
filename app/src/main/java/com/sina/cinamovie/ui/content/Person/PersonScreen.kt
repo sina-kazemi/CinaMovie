@@ -53,6 +53,8 @@ import timber.log.Timber
 @Composable
 fun PersonScreen(itemId: String , navController: NavHostController) {
 
+    Timber.d("PersonId:: $itemId")
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -516,18 +518,21 @@ fun PersonScreen(itemId: String , navController: NavHostController) {
                     // TODO: page content
                     Timber.d("PAGE_SWIPE:: $page")
 
-                    FilmographyScreen(movieList = listOf(
-                        MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
-                        MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
-                        MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
-                        MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
-                        MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
-                        MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
-                        MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
-                        MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
-                        MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
-                        MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine")
-                    ))
+                    FilmographyScreen(
+                        movieList = listOf(
+                            MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
+                            MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
+                            MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
+                            MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
+                            MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
+                            MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
+                            MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
+                            MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
+                            MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine") ,
+                            MovieModel(title = "The Batman" , year = "2022" , subTitle = "Bruce Waine")
+                        ) ,
+                        navController = navController
+                    )
 
                 }
 

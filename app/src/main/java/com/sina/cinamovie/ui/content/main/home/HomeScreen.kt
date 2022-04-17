@@ -34,6 +34,7 @@ import com.sina.cinamovie.ui.content.common.ListHeader
 import com.sina.cinamovie.ui.content.list.IMDbOriginalsList
 import com.sina.cinamovie.ui.content.list.MovieList
 import com.sina.cinamovie.ui.content.list.TrailerList
+import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.*
 
 @Composable
@@ -132,7 +133,7 @@ fun HomeScreen(navController: NavHostController) {
                 cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
                 title = "Spider-Man: No way home" ,
                 rate = 7.6f
-            ) ,
+            )
         ) ,
             navController = navController
         )
@@ -270,8 +271,8 @@ fun HomeScreen(navController: NavHostController) {
 
                 Column(
                     modifier = Modifier
-                        .width(screenWidth - 48.dp) ,
-                    verticalArrangement = Arrangement.spacedBy(16.dp) ,
+                        .width(screenWidth - 48.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
 
                     subList.forEach {
@@ -394,14 +395,14 @@ fun HomeScreen(navController: NavHostController) {
         ) {
 
             listOf(
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24)
+                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
+                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24)
             ).windowed(4 , 4 , true).forEach { subList ->
 
                 Row (
@@ -412,7 +413,11 @@ fun HomeScreen(navController: NavHostController) {
                     subList.forEach {
 
                         Column(
-                            modifier = Modifier.weight(1f) ,
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable {
+                                    navController.navigate("${BottomNavItem.Person.screen_route}/${it.id}")
+                                } ,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
 

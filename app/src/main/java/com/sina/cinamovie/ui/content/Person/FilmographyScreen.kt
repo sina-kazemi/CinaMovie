@@ -2,6 +2,7 @@ package com.sina.cinamovie.ui.content.Person
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,12 +16,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.sina.cinamovie.R
 import com.sina.cinamovie.model.MovieModel
+import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.*
 
 @Composable
-fun FilmographyScreen(movieList: List<MovieModel>) {
+fun FilmographyScreen(movieList: List<MovieModel> , navController: NavHostController) {
 
     Column(
         modifier = Modifier
@@ -39,7 +42,10 @@ fun FilmographyScreen(movieList: List<MovieModel>) {
                     .background(
                         shape = RoundedCornerShape(16.dp),
                         color = colorGray.copy(alpha = 0.75f)
-                    ) ,
+                    )
+                    .clickable {
+                        navController.navigate("${BottomNavItem.Movie.screen_route}/521")
+                    },
                 horizontalArrangement = Arrangement.SpaceBetween ,
                 verticalAlignment = Alignment.CenterVertically
             ) {

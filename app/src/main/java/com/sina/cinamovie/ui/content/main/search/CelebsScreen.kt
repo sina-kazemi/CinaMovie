@@ -1,6 +1,7 @@
 package com.sina.cinamovie.ui.content.main.search
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,9 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.sina.cinamovie.model.UserModel
+import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.colorGray
 import com.sina.cinamovie.ui.theme.colorTextGray3
 import com.sina.cinamovie.ui.theme.mediumFont
@@ -26,7 +29,7 @@ import com.sina.cinamovie.util.highResolutionImage
 import timber.log.Timber
 
 @Composable
-fun CelebsScreen(userList: List<UserModel>) {
+fun CelebsScreen(userList: List<UserModel> , navController: NavHostController) {
 
     LazyColumn(
         contentPadding = PaddingValues(16.dp) ,
@@ -38,6 +41,9 @@ fun CelebsScreen(userList: List<UserModel>) {
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable {
+                        navController.navigate("${BottomNavItem.Person.screen_route}/123")
+                    }
                     .background(shape = RoundedCornerShape(16.dp), color = colorGray.copy(0.75f))
                     .padding(12.dp)
             ) {

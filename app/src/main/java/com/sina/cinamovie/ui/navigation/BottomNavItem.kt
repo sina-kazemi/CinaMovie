@@ -7,4 +7,5 @@ sealed class BottomNavItem(
 ) {
     object Movie : BottomNavItem("movieScreen")
     object Person : BottomNavItem("personScreen")
+    object MovieList : BottomNavItem("movieListScreen")
 }

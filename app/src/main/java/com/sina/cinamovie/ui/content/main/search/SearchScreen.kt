@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -35,7 +37,7 @@ import timber.log.Timber
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun SearchScreen() {
+fun SearchScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -196,7 +198,9 @@ fun SearchScreen() {
                         GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
                         GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
                         GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg")
-                    ))
+                    ) ,
+                        navController = navController
+                    )
                 }
                 1 -> {
                     CelebsScreen(userList = listOf(
@@ -235,7 +239,8 @@ fun SearchScreen() {
                             name = "Paul Dano" ,
                             summary = "An actor for all seasons and all kinds of roles (from dark, difficult characters to more loving ones) Paul Dano has an extensive body work that includes working with directors such as Paul Thomas Anderson, Steve McQueen, Dayton & Ferris, Ang Lee, Denis Villenueve and Paolo Sorrentino; acting with ..."
                         )
-                    ))
+                    ) ,
+                    navController = navController)
                 }
                 2 -> {
                     TitlesScreen(userList = listOf(
@@ -287,7 +292,8 @@ fun SearchScreen() {
                             rate = 8.3f ,
                             summary = "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement"
                         )
-                    ))
+                    ) ,
+                    navController = navController)
                 }
                 3 -> {
                     KeyWordsScreen(wordsList = listOf(

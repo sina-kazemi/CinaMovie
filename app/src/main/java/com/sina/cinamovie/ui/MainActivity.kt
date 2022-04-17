@@ -12,8 +12,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
@@ -34,11 +33,13 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sina.cinamovie.R
+import com.sina.cinamovie.model.MovieModel
 import com.sina.cinamovie.ui.content.Person.PersonScreen
 import com.sina.cinamovie.ui.content.main.chart.ChartScreen
 import com.sina.cinamovie.ui.content.main.home.HomeScreen
 import com.sina.cinamovie.ui.content.main.search.SearchScreen
 import com.sina.cinamovie.ui.content.movie.MovieScreen
+import com.sina.cinamovie.ui.content.movielist.MovieListScreen
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.navigation.MainBottomNavItem
 import com.sina.cinamovie.ui.theme.*
@@ -142,7 +143,7 @@ class MainActivity : ComponentActivity() {
                 HomeScreen(navController = navController)
             }
             composable(MainBottomNavItem.Search.screen_route) {
-                SearchScreen()
+                SearchScreen(navController = navController)
             }
             composable(MainBottomNavItem.Chart.screen_route) {
                 ChartScreen()
@@ -154,6 +155,50 @@ class MainActivity : ComponentActivity() {
             composable("${BottomNavItem.Person.screen_route}/{$ITEM_ID}") { backStackEntry ->
                 val itemId = backStackEntry.arguments?.getString(ITEM_ID)
                 PersonScreen(itemId = itemId?: "" , navController = navController)
+            }
+            composable(BottomNavItem.MovieList.screen_route) {
+                MovieListScreen(title = "TestTitle", items = listOf(
+                    MovieModel(
+                        cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
+                        title = "The Batman" ,
+                        rate = 8.5f
+                    ) ,
+                    MovieModel(
+                        cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
+                        title = "Spider-Man: No way home" ,
+                        rate = 7.6f
+                    ) ,
+                    MovieModel(
+                        cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
+                        title = "The Batman" ,
+                        rate = 8.5f
+                    ) ,
+                    MovieModel(
+                        cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
+                        title = "Spider-Man: No way home" ,
+                        rate = 7.6f
+                    ) ,
+                    MovieModel(
+                        cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
+                        title = "The Batman" ,
+                        rate = 8.5f
+                    ) ,
+                    MovieModel(
+                        cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
+                        title = "Spider-Man: No way home" ,
+                        rate = 7.6f
+                    ) ,
+                    MovieModel(
+                        cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
+                        title = "The Batman" ,
+                        rate = 8.5f
+                    ) ,
+                    MovieModel(
+                        cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
+                        title = "Spider-Man: No way home" ,
+                        rate = 7.6f
+                    )
+                ), navController = navController)
             }
         }
     }
@@ -175,6 +220,13 @@ class MainActivity : ComponentActivity() {
 
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
+            var selectedTab by remember {
+                mutableStateOf("")
+            }
+
+            if (selectedTab == "" && currentRoute != null) {
+                selectedTab = currentRoute
+            }
 
             items.forEach { item ->
                 BottomNavigationItem(
@@ -184,7 +236,7 @@ class MainActivity : ComponentActivity() {
                             contentDescription = item.title
                         )
                     },
-                    selected = currentRoute == item.screen_route,
+                    selected = selectedTab == item.screen_route,
                     selectedContentColor = colorWhite,
                     unselectedContentColor = colorTextGray,
                     alwaysShowLabel = true,
@@ -198,6 +250,7 @@ class MainActivity : ComponentActivity() {
                         )
                     } ,
                     onClick = {
+                        selectedTab = item.screen_route
                         navController.navigate(item.screen_route) {
 //                            popUpTo(navController.graph.findStartDestination().id) {
 //                                saveState = true

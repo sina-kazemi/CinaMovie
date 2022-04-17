@@ -1,6 +1,7 @@
 package com.sina.cinamovie.ui.content.main.search
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,14 +12,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.sina.cinamovie.model.GenreModel
+import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.colorGray
 import com.sina.cinamovie.util.highResolutionImage
 
 @Composable
-fun GenreScreen(genreList: List<GenreModel>) {
+fun GenreScreen(genreList: List<GenreModel> , navController: NavController) {
 
     Column(
         modifier = Modifier
@@ -41,6 +44,9 @@ fun GenreScreen(genreList: List<GenreModel>) {
                     AsyncImage(
                         modifier = Modifier
                             .fillMaxSize()
+                            .clickable {
+                                navController.navigate(BottomNavItem.MovieList.screen_route)
+                            }
                             .weight(1f)
                             .aspectRatio(3f / 2f)
                             .clip(shape = RoundedCornerShape(16.dp))
