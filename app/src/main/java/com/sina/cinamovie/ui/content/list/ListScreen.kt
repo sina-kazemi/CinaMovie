@@ -144,7 +144,7 @@ fun TrailerRow(model: TrailerModel , parentWidth: Dp = (-1).dp , horizontalPaddi
                         }
                         .background(
                             shape = RoundedCornerShape(12.dp),
-                            color = colorTextGray
+                            color = colorBlack.copy(alpha = 0.5f)
                         ) ,
                     contentAlignment = Alignment.Center
                 ) {
@@ -239,7 +239,8 @@ fun MovieItem(item: MovieModel , navController: NavHostController , isGridList: 
 
     Row {
 
-        var modifier = Modifier.clickable { navController.navigate(BottomNavItem.Movie.screen_route + "/" + "123") }
+        var modifier =
+            Modifier.clickable { navController.navigate(BottomNavItem.Movie.screen_route + "/" + "123") }
         if (isGridList) {
             modifier = modifier.then(modifier.weight(1f))
         }
@@ -563,7 +564,7 @@ fun VideoList(modifier: Modifier , itemWidthDp: Dp , itemHeightDp: Dp , imageLis
                             .align(Alignment.BottomStart)
                             .background(
                                 shape = RoundedCornerShape(12.dp),
-                                color = colorTextGray
+                                color = colorBlack.copy(alpha = 0.5f)
                             ),
                         contentAlignment = Alignment.Center
                     ) {
