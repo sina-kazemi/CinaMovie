@@ -235,137 +235,145 @@ fun MovieList(movieList: List<MovieModel> , navController: NavHostController) {
 }
 
 @Composable
-fun MovieItem(item: MovieModel , navController: NavHostController , isGridList: Boolean = false) {
+fun MovieItem(modifier: Modifier? = null , item: MovieModel , navController: NavHostController , isGridList: Boolean = false) {
 
-    Row {
+    var mModifier = Modifier.wrapContentWidth()
+    mModifier = modifier?.clickable { navController.navigate(BottomNavItem.Movie.screen_route + "/" + "123") }
+        ?: Modifier.clickable { navController.navigate(BottomNavItem.Movie.screen_route + "/" + "123") }
 
-        var modifier =
-            Modifier.clickable { navController.navigate(BottomNavItem.Movie.screen_route + "/" + "123") }
-        if (isGridList) {
-            modifier = modifier.then(modifier.weight(1f))
-        }
+    ConstraintLayout(
+        modifier = mModifier
+    ) {
 
-        ConstraintLayout(
-            modifier = modifier
+        val (imageParent , title , subTitle , rateParent , spacer1 , spacer2) = createRefs()
+
+        Box(
+            modifier = kotlin.run {
+                if (isGridList) {
+                    Modifier
+                        .aspectRatio(2f / 3f)
+                        .background(shape = RoundedCornerShape(16.dp), color = colorGray)
+                        .constrainAs(imageParent) {
+
+                        }
+                }
+                else {
+                    Modifier
+                        .width(96.dp)
+                        .aspectRatio(2f / 3f)
+                        .background(shape = RoundedCornerShape(16.dp), color = colorGray)
+                        .constrainAs(imageParent) {
+
+                        }
+                }
+            }
+
+
         ) {
 
-            val (imageParent , title , subTitle , rateParent , spacer1 , spacer2) = createRefs()
-
-            Box(
+            AsyncImage(
                 modifier = Modifier
-                    .width(96.dp)
-                    .aspectRatio(2f / 3f)
-                    .background(shape = RoundedCornerShape(16.dp), color = colorGray)
-                    .constrainAs(imageParent) {
+                    .fillMaxSize()
+                    .clip(shape = RoundedCornerShape(16.dp)),
+                model = ImageRequest
+                    .Builder(LocalContext.current)
+                    .data(item.cover)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = "" ,
+                contentScale = ContentScale.Crop
+            )
 
-                    }
-            ) {
+        }
 
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(shape = RoundedCornerShape(16.dp)),
-                    model = ImageRequest
-                        .Builder(LocalContext.current)
-                        .data(item.cover)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "" ,
-                    contentScale = ContentScale.Crop
-                )
+        Spacer(
+            modifier = Modifier
+                .size(8.dp)
+                .constrainAs(spacer1) {
+                    top.linkTo(imageParent.bottom)
+                }
+        )
 
-            }
+        Text(
+            modifier = Modifier
+                .constrainAs(title) {
+                    top.linkTo(spacer1.bottom)
+                    start.linkTo(imageParent.start)
+                    end.linkTo(imageParent.end)
+                    width = Dimension.fillToConstraints
+                },
+            text = item.title ,
+            style = regularFont(12.sp) ,
+            maxLines = 1 ,
+            overflow = TextOverflow.Ellipsis ,
+            textAlign = TextAlign.Center
+        )
+
+        if (item.subTitle != null) {
 
             Spacer(
                 modifier = Modifier
-                    .size(8.dp)
-                    .constrainAs(spacer1) {
-                        top.linkTo(imageParent.bottom)
+                    .size(3.dp)
+                    .constrainAs(spacer2) {
+                        top.linkTo(title.bottom)
                     }
             )
 
             Text(
                 modifier = Modifier
-                    .constrainAs(title) {
-                        top.linkTo(spacer1.bottom)
+                    .constrainAs(subTitle) {
+                        top.linkTo(spacer2.bottom)
                         start.linkTo(imageParent.start)
                         end.linkTo(imageParent.end)
-                        width = Dimension.fillToConstraints
-                    },
-                text = item.title ,
-                style = regularFont(12.sp) ,
+                        bottom.linkTo(parent.bottom)
+                    } ,
+                text = item.subTitle!!,
+                style = regularFont(12.sp , colorTextGray2) ,
                 maxLines = 1 ,
                 overflow = TextOverflow.Ellipsis ,
                 textAlign = TextAlign.Center
             )
 
-            if (item.subTitle != null) {
+        }
+        else if (item.rate != null) {
 
-                Spacer(
-                    modifier = Modifier
-                        .size(3.dp)
-                        .constrainAs(spacer2) {
-                            top.linkTo(title.bottom)
-                        }
-                )
+            Spacer(
+                modifier = Modifier
+                    .size(4.dp)
+                    .constrainAs(spacer2) {
+                        top.linkTo(title.bottom)
+                    }
+            )
+
+            Row(
+                modifier = Modifier
+                    .constrainAs(rateParent) {
+                        top.linkTo(spacer2.bottom)
+                        start.linkTo(imageParent.start)
+                        end.linkTo(imageParent.end)
+                        bottom.linkTo(parent.bottom)
+                    } ,
+                verticalAlignment = Alignment.CenterVertically ,
+                horizontalArrangement = Arrangement.Center
+            ) {
 
                 Text(
-                    modifier = Modifier
-                        .constrainAs(subTitle) {
-                            top.linkTo(spacer2.bottom)
-                            start.linkTo(imageParent.start)
-                            end.linkTo(imageParent.end)
-                            bottom.linkTo(parent.bottom)
-                        } ,
-                    text = item.subTitle!!,
-                    style = regularFont(12.sp , colorTextGray2) ,
-                    maxLines = 1 ,
-                    overflow = TextOverflow.Ellipsis ,
-                    textAlign = TextAlign.Center
+                    modifier = Modifier.offset(y = (0.75).dp) ,
+                    text = item.rate.toString() ,
+                    style = boldFont(12.sp , colorYellow) ,
                 )
 
-            }
-            else if (item.rate != null) {
+                Spacer(modifier = Modifier.size(3.dp))
 
-                Spacer(
+                Image(
                     modifier = Modifier
-                        .size(4.dp)
-                        .constrainAs(spacer2) {
-                            top.linkTo(title.bottom)
-                        }
+                        .width(12.dp)
+                        .height(12.dp) ,
+                    painter = painterResource(id = R.drawable.ic_star),
+                    contentDescription = "" ,
+                    colorFilter = ColorFilter.tint(colorYellow),
+                    contentScale = ContentScale.Inside
                 )
-
-                Row(
-                    modifier = Modifier
-                        .constrainAs(rateParent) {
-                            top.linkTo(spacer2.bottom)
-                            start.linkTo(imageParent.start)
-                            end.linkTo(imageParent.end)
-                            bottom.linkTo(parent.bottom)
-                        } ,
-                    verticalAlignment = Alignment.CenterVertically ,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-
-                    Text(
-                        modifier = Modifier.offset(y = (0.75).dp) ,
-                        text = item.rate.toString() ,
-                        style = boldFont(12.sp , colorYellow) ,
-                    )
-
-                    Spacer(modifier = Modifier.size(3.dp))
-
-                    Image(
-                        modifier = Modifier
-                            .width(12.dp)
-                            .height(12.dp) ,
-                        painter = painterResource(id = R.drawable.ic_star),
-                        contentDescription = "" ,
-                        colorFilter = ColorFilter.tint(colorYellow),
-                        contentScale = ContentScale.Inside
-                    )
-
-                }
 
             }
 
