@@ -7,9 +7,9 @@ data class Result<out T>(val status: Status , val data: T? , val error: Error? ,
     }
 
     companion object{
-        fun <T> success(data: T?): Result<T> = Result(Status.SUCCESS , data , null , null)
-        fun <T> error(message: String , error: Error): Result<T> = Result(Status.ERROR , null , error , message)
-        fun <T> loading(data: T?): Result<T> = Result(Status.LOADING , data , null ,null)
+        fun <T> success(data: T? = null): Result<T> = Result(Status.SUCCESS , data , null , null)
+        fun <T> error(message: String , error: Error? = null): Result<T> = Result(Status.ERROR , null , error , message)
+        fun <T> loading(data: T? = null): Result<T> = Result(Status.LOADING , data , null ,null)
     }
 
 }

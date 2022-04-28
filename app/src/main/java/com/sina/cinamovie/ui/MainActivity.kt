@@ -4,6 +4,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -24,6 +25,11 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -33,6 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sina.cinamovie.R
+import com.sina.cinamovie.data.Result
 import com.sina.cinamovie.model.MovieModel
 import com.sina.cinamovie.ui.content.Person.PersonScreen
 import com.sina.cinamovie.ui.content.main.chart.ChartScreen
@@ -45,11 +52,18 @@ import com.sina.cinamovie.ui.navigation.MainBottomNavItem
 import com.sina.cinamovie.ui.theme.*
 import com.sina.cinamovie.util.ITEM_ID
 import com.sina.cinamovie.util.stackblur.StackBlurManager
+import com.sina.cinamovie.vm.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     lateinit var stackBlurManager: StackBlurManager
+
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +72,24 @@ class MainActivity : ComponentActivity() {
         val bitmap = BitmapFactory.decodeResource(resources, R.drawable.money_heist_cover)
 
         stackBlurManager = StackBlurManager(bitmap)
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.homeUiState.collect{
+                    when (it.status) {
+                        Result.Status.LOADING -> {
+                            Timber.d("FirstGetData::LOADING")
+                        }
+                        Result.Status.SUCCESS -> {
+                            Timber.d("FirstGetData::SUCCESS ${it.data.toString()}")
+                        }
+                        Result.Status.ERROR -> {
+                            Timber.d("FirstGetData::ERROR")
+                        }
+                    }
+                }
+            }
+        }
 
         setContent {
             CinaMovieTheme {
@@ -140,7 +172,7 @@ class MainActivity : ComponentActivity() {
             startDestination = MainBottomNavItem.Home.screen_route
         ) {
             composable(MainBottomNavItem.Home.screen_route) {
-                HomeScreen(navController = navController)
+                HomeScreen(navController = navController , homeViewModel = homeViewModel)
             }
             composable(MainBottomNavItem.Search.screen_route) {
                 SearchScreen(navController = navController)

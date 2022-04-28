@@ -1,6 +1,6 @@
 package com.sina.cinamovie.data
 
 data class Error(
-    var statusCode: Int = 0,
-    var statusMessage: String = ""
+    var status_code: Int = 0,
+    var status_message: String? = null
 )

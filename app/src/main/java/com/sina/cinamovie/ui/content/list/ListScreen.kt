@@ -43,6 +43,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.sina.cinamovie.R
+import com.sina.cinamovie.data.res.HomeRes
 import com.sina.cinamovie.model.*
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.*
@@ -50,7 +51,7 @@ import timber.log.Timber
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TrailerList(trailerList: List<TrailerModel>) {
+fun TrailerList(trailerList: List<HomeRes.Trailer>) {
 
     val pagerState = rememberPagerState()
 
@@ -84,17 +85,10 @@ fun TrailerList(trailerList: List<TrailerModel>) {
 }
 
 @Composable
-fun TrailerRow(model: TrailerModel , parentWidth: Dp = (-1).dp , horizontalPadding: Dp = 8.dp) {
+fun TrailerRow(model: HomeRes.Trailer) {
 
     ConstraintLayout(
-        modifier = run {
-            if (parentWidth < 0.dp) {
-                Modifier.fillMaxWidth()
-            }
-            else {
-                Modifier.width(parentWidth)
-            }
-        }
+        modifier = Modifier.fillMaxWidth()
     ) {
 
         val (mainParent) = createRefs()
@@ -108,7 +102,7 @@ fun TrailerRow(model: TrailerModel , parentWidth: Dp = (-1).dp , horizontalPaddi
                     width = Dimension.fillToConstraints
                 }
                 .aspectRatio(1f / 0.55f)
-                .padding(horizontal = horizontalPadding)
+                .padding(horizontal = 8.dp)
                 .background(color = colorGray, shape = RoundedCornerShape(16.dp)) ,
             contentAlignment = Alignment.BottomCenter
         ) {
@@ -180,7 +174,7 @@ fun TrailerRow(model: TrailerModel , parentWidth: Dp = (-1).dp , horizontalPaddi
                 ) {
 
                     Text(
-                        text = model.title ,
+                        text = model.title!! ,
                         style = regularFont().copy(
                             shadow = Shadow(
                                 color = colorBlack ,
@@ -195,7 +189,133 @@ fun TrailerRow(model: TrailerModel , parentWidth: Dp = (-1).dp , horizontalPaddi
                     Spacer(modifier = Modifier.size(2.dp))
 
                     Text(
-                        text = model.duration ,
+                        text = model.duration!! ,
+                        style = boldFont(12.sp).copy(
+                            shadow = Shadow(
+                                color = colorBlack ,
+                                offset = Offset(2f , 2f) ,
+                                blurRadius = 6f
+                            )
+                        ) ,
+                        maxLines = 1 ,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                }
+
+            }
+
+        }
+
+    }
+
+}
+
+@Composable
+fun ImdbOriginalRow(model: HomeRes.ImdbOriginal) {
+
+    ConstraintLayout(
+        modifier = Modifier.width(320.dp)
+    ) {
+
+        val (mainParent) = createRefs()
+
+        Box(
+            modifier = Modifier
+                .constrainAs(mainParent) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                    width = Dimension.fillToConstraints
+                }
+                .aspectRatio(1f / 0.55f)
+                .background(color = colorGray, shape = RoundedCornerShape(16.dp)) ,
+            contentAlignment = Alignment.BottomCenter
+        ) {
+
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(shape = RoundedCornerShape(16.dp)) ,
+                model = ImageRequest
+                    .Builder(LocalContext.current)
+                    .data(model.cover)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = "",
+                contentScale = ContentScale.Crop
+            )
+
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
+            ) {
+
+                val (playParent , descriptionParent) = createRefs()
+
+                Box(
+                    modifier = Modifier
+                        .width(44.dp)
+                        .height(44.dp)
+                        .constrainAs(playParent) {
+                            start.linkTo(parent.start)
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .background(
+                            shape = RoundedCornerShape(12.dp),
+                            color = colorBlack.copy(alpha = 0.5f)
+                        ) ,
+                    contentAlignment = Alignment.Center
+                ) {
+
+                    Image(
+                        modifier = Modifier
+                            .width(20.dp)
+                            .height(20.dp)
+                            .offset(x = 2.dp) ,
+                        painter = painterResource(id = R.drawable.ic_play),
+                        contentDescription = "",
+                        contentScale = ContentScale.Inside,
+                        colorFilter = ColorFilter.tint(colorWhite)
+                    )
+
+                }
+
+                Column(
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .constrainAs(descriptionParent) {
+                            linkTo(
+                                start = playParent.end,
+                                end = parent.end,
+                                top = parent.top,
+                                bottom = parent.bottom
+                            )
+                            width = Dimension.fillToConstraints
+                            height = Dimension.fillToConstraints
+                        } ,
+                    horizontalAlignment = Alignment.Start ,
+                    verticalArrangement = Arrangement.Center
+                ) {
+
+                    Text(
+                        text = model.title!! ,
+                        style = regularFont().copy(
+                            shadow = Shadow(
+                                color = colorBlack ,
+                                offset = Offset(2f , 2f) ,
+                                blurRadius = 6f
+                            )
+                        ) ,
+                        maxLines = 1 ,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    Spacer(modifier = Modifier.size(2.dp))
+
+                    Text(
+                        text = model.caption!! ,
                         style = boldFont(12.sp).copy(
                             shadow = Shadow(
                                 color = colorBlack ,
@@ -384,7 +504,7 @@ fun MovieItem(modifier: Modifier? = null , item: MovieModel , navController: Nav
 }
 
 @Composable
-fun IMDbOriginalsList(trailerList: List<TrailerModel>) {
+fun IMDbOriginalsList(imdbOriginalList: List<HomeRes.ImdbOriginal>) {
 
     var titleParentSize by remember {
         mutableStateOf(IntSize.Zero)
@@ -451,9 +571,9 @@ fun IMDbOriginalsList(trailerList: List<TrailerModel>) {
             state = listState
         ) {
 
-            items(trailerList) { item ->
+            items(imdbOriginalList) { item ->
 
-                TrailerRow(model = item , parentWidth = 320.dp, horizontalPadding = 0.dp)
+                ImdbOriginalRow(model = item)
 
             }
 

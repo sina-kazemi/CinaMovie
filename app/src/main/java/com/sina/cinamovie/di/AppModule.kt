@@ -1,10 +1,12 @@
 package com.sina.cinamovie.di
 
+import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.sina.cinamovie.api.ApiService
 import com.sina.cinamovie.util.BASE_URL
+import com.sina.cinamovie.util.TAG
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +22,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(application: Application): SharedPreferences? {
+        return application.getSharedPreferences(TAG, Context.MODE_PRIVATE)
+    }
 
     @Singleton
     @Provides

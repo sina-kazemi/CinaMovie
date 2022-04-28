@@ -26,9 +26,9 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.sina.cinamovie.R
+import com.sina.cinamovie.data.res.HomeRes
 import com.sina.cinamovie.model.MovieModel
 import com.sina.cinamovie.model.NewsModel
-import com.sina.cinamovie.model.TrailerModel
 import com.sina.cinamovie.model.UserModel
 import com.sina.cinamovie.ui.content.common.ListHeader
 import com.sina.cinamovie.ui.content.list.IMDbOriginalsList
@@ -36,9 +36,26 @@ import com.sina.cinamovie.ui.content.list.MovieList
 import com.sina.cinamovie.ui.content.list.TrailerList
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.*
+import com.sina.cinamovie.vm.HomeViewModel
+import com.sina.cinamovie.data.ApiResponse
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import com.sina.cinamovie.data.Result
+import timber.log.Timber
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController , homeViewModel: HomeViewModel) {
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val homeFlowLifecycleAware = remember(homeViewModel.homeUiState, lifecycleOwner) {
+        homeViewModel.homeUiState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    }
+    val homeRes: Result<ApiResponse<HomeRes>> by homeFlowLifecycleAware.collectAsState(initial = Result.loading())
+
+    Timber.d("homeResSTATUS ${homeRes.status}")
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,38 +73,11 @@ fun HomeScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.size(32.dp))
 
-        TrailerList(trailerList = listOf(
-            TrailerModel(
-                preview = "https://m.media-amazon.com/images/M/MV5BMjZlOWNjM2EtYTcwZS00YjAwLTk2ZGMtMDE5MTAwMmY5YTJhXkEyXkFqcGdeQXVyNjY1MTg4Mzc@._CR66,511,4247,2389.jpg" ,
-                title = "How Kristen Stewart Nailed Princess Di's Accent" ,
-                duration = "4:27"
-            ) ,
-            TrailerModel(
-                preview = "https://m.media-amazon.com/images/M/MV5BOTJiYjdiZmUtYmM5Ni00MjhmLWI2ODctZjA3Yjc0M2U4MzhmXkEyXkFqcGdeQWpnYW1i._V1_QL40_.jpg" ,
-                title = "Ana de Armas and Ben Affleck in 'Deep Water'" ,
-                duration = "3:18"
-            ) ,
-            TrailerModel(
-                preview = "https://m.media-amazon.com/images/M/MV5BMjZlOWNjM2EtYTcwZS00YjAwLTk2ZGMtMDE5MTAwMmY5YTJhXkEyXkFqcGdeQXVyNjY1MTg4Mzc@._CR66,511,4247,2389.jpg" ,
-                title = "How Kristen Stewart Nailed Princess Di's Accent" ,
-                duration = "4:27"
-            ) ,
-            TrailerModel(
-                preview = "https://m.media-amazon.com/images/M/MV5BOTJiYjdiZmUtYmM5Ni00MjhmLWI2ODctZjA3Yjc0M2U4MzhmXkEyXkFqcGdeQWpnYW1i._V1_QL40_.jpg" ,
-                title = "Ana de Armas and Ben Affleck in 'Deep Water'" ,
-                duration = "3:18"
-            ) ,
-            TrailerModel(
-                preview = "https://m.media-amazon.com/images/M/MV5BMjZlOWNjM2EtYTcwZS00YjAwLTk2ZGMtMDE5MTAwMmY5YTJhXkEyXkFqcGdeQXVyNjY1MTg4Mzc@._CR66,511,4247,2389.jpg" ,
-                title = "How Kristen Stewart Nailed Princess Di's Accent" ,
-                duration = "4:27"
-            ) ,
-            TrailerModel(
-                preview = "https://m.media-amazon.com/images/M/MV5BOTJiYjdiZmUtYmM5Ni00MjhmLWI2ODctZjA3Yjc0M2U4MzhmXkEyXkFqcGdeQWpnYW1i._V1_QL40_.jpg" ,
-                title = "Ana de Armas and Ben Affleck in 'Deep Water'" ,
-                duration = "3:18"
-            )
-                ))
+        homeRes.data?.data?.trailers.let {
+            if (it != null) {
+                TrailerList(trailerList = it)
+            }
+        }
 
         Spacer(modifier = Modifier.size(40.dp))
 
@@ -180,38 +170,9 @@ fun HomeScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.size(48.dp))
 
-        IMDbOriginalsList(trailerList = listOf(
-            TrailerModel(
-                preview = "https://m.media-amazon.com/images/M/MV5BMjZlOWNjM2EtYTcwZS00YjAwLTk2ZGMtMDE5MTAwMmY5YTJhXkEyXkFqcGdeQXVyNjY1MTg4Mzc@._CR66,511,4247,2389.jpg" ,
-                title = "How Kristen Stewart Nailed Princess Di's Accent" ,
-                duration = "4:27"
-            ) ,
-            TrailerModel(
-                preview = "https://m.media-amazon.com/images/M/MV5BOTJiYjdiZmUtYmM5Ni00MjhmLWI2ODctZjA3Yjc0M2U4MzhmXkEyXkFqcGdeQWpnYW1i._V1_QL40_.jpg" ,
-                title = "Ana de Armas and Ben Affleck in 'Deep Water'" ,
-                duration = "3:18"
-            ) ,
-            TrailerModel(
-                preview = "https://m.media-amazon.com/images/M/MV5BMjZlOWNjM2EtYTcwZS00YjAwLTk2ZGMtMDE5MTAwMmY5YTJhXkEyXkFqcGdeQXVyNjY1MTg4Mzc@._CR66,511,4247,2389.jpg" ,
-                title = "How Kristen Stewart Nailed Princess Di's Accent" ,
-                duration = "4:27"
-            ) ,
-            TrailerModel(
-                preview = "https://m.media-amazon.com/images/M/MV5BOTJiYjdiZmUtYmM5Ni00MjhmLWI2ODctZjA3Yjc0M2U4MzhmXkEyXkFqcGdeQWpnYW1i._V1_QL40_.jpg" ,
-                title = "Ana de Armas and Ben Affleck in 'Deep Water'" ,
-                duration = "3:18"
-            ) ,
-            TrailerModel(
-                preview = "https://m.media-amazon.com/images/M/MV5BMjZlOWNjM2EtYTcwZS00YjAwLTk2ZGMtMDE5MTAwMmY5YTJhXkEyXkFqcGdeQXVyNjY1MTg4Mzc@._CR66,511,4247,2389.jpg" ,
-                title = "How Kristen Stewart Nailed Princess Di's Accent" ,
-                duration = "4:27"
-            ) ,
-            TrailerModel(
-                preview = "https://m.media-amazon.com/images/M/MV5BOTJiYjdiZmUtYmM5Ni00MjhmLWI2ODctZjA3Yjc0M2U4MzhmXkEyXkFqcGdeQWpnYW1i._V1_QL40_.jpg" ,
-                title = "Ana de Armas and Ben Affleck in 'Deep Water'" ,
-                duration = "3:18"
-            )
-        ))
+        homeRes.data?.data?.imdbOriginals?.let {
+            IMDbOriginalsList(imdbOriginalList = it)
+        }
 
         Spacer(modifier = Modifier.size(48.dp))
 
