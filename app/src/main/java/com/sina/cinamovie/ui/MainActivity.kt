@@ -52,6 +52,7 @@ import com.sina.cinamovie.ui.navigation.MainBottomNavItem
 import com.sina.cinamovie.ui.theme.*
 import com.sina.cinamovie.util.ITEM_ID
 import com.sina.cinamovie.util.stackblur.StackBlurManager
+import com.sina.cinamovie.vm.ChartViewModel
 import com.sina.cinamovie.vm.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -64,6 +65,7 @@ class MainActivity : ComponentActivity() {
     lateinit var stackBlurManager: StackBlurManager
 
     private val homeViewModel: HomeViewModel by viewModels()
+    private val chartViewModel: ChartViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -172,7 +174,11 @@ class MainActivity : ComponentActivity() {
             startDestination = MainBottomNavItem.Home.screen_route
         ) {
             composable(MainBottomNavItem.Home.screen_route) {
-                HomeScreen(navController = navController , homeViewModel = homeViewModel)
+                HomeScreen(
+                    navController = navController ,
+                    homeViewModel = homeViewModel ,
+                    chartViewModel = chartViewModel
+                )
             }
             composable(MainBottomNavItem.Search.screen_route) {
                 SearchScreen(navController = navController)

@@ -43,10 +43,18 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.sina.cinamovie.data.Result
+import com.sina.cinamovie.data.res.ChartBoxOfficeRes
+import com.sina.cinamovie.data.res.HomeExtraRes
+import com.sina.cinamovie.util.getAge
+import com.sina.cinamovie.vm.ChartViewModel
 import timber.log.Timber
 
 @Composable
-fun HomeScreen(navController: NavHostController , homeViewModel: HomeViewModel) {
+fun HomeScreen(
+    navController: NavHostController ,
+    homeViewModel: HomeViewModel ,
+    chartViewModel: ChartViewModel
+) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val homeFlowLifecycleAware = remember(homeViewModel.homeUiState, lifecycleOwner) {
@@ -54,7 +62,17 @@ fun HomeScreen(navController: NavHostController , homeViewModel: HomeViewModel) 
     }
     val homeRes: Result<ApiResponse<HomeRes>> by homeFlowLifecycleAware.collectAsState(initial = Result.loading())
 
-    Timber.d("homeResSTATUS ${homeRes.status}")
+    val homeExtraFlowLifecycleAware = remember(homeViewModel.homeExtraUiState, lifecycleOwner) {
+        homeViewModel.homeExtraUiState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    }
+    val homeExtraRes: Result<ApiResponse<HomeExtraRes>> by homeExtraFlowLifecycleAware.collectAsState(initial = Result.loading())
+
+    val chartFlowLifecycleAware = remember(chartViewModel.boxOfficeUiState , lifecycleOwner) {
+        chartViewModel.boxOfficeUiState.flowWithLifecycle(lifecycleOwner.lifecycle , Lifecycle.State.STARTED)
+    }
+    val chartRes: Result<ApiResponse<ChartBoxOfficeRes>> by chartFlowLifecycleAware.collectAsState(
+        initial = Result.loading()
+    )
 
     Column(
         modifier = Modifier
@@ -75,7 +93,7 @@ fun HomeScreen(navController: NavHostController , homeViewModel: HomeViewModel) 
 
         homeRes.data?.data?.trailers.let {
             if (it != null) {
-                TrailerList(trailerList = it)
+                TrailerList(trailerList = it.subList(0 , it.size.coerceAtMost(8)))
             }
         }
 
@@ -83,95 +101,25 @@ fun HomeScreen(navController: NavHostController , homeViewModel: HomeViewModel) 
 
         ListHeader(title = stringResource(R.string.str_fan_favorites) , true)
         Spacer(modifier = Modifier.size(24.dp))
-        MovieList(movieList = listOf(
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-                title = "The Batman" ,
-                rate = 8.5f
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                title = "Spider-Man: No way home" ,
-                rate = 7.6f
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-                title = "The Batman" ,
-                rate = 8.5f
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                title = "Spider-Man: No way home" ,
-                rate = 7.6f
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-                title = "The Batman" ,
-                rate = 8.5f
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                title = "Spider-Man: No way home" ,
-                rate = 7.6f
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-                title = "The Batman" ,
-                rate = 8.5f
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                title = "Spider-Man: No way home" ,
-                rate = 7.6f
+        homeExtraRes.data?.data?.fanPicksTitles?.let {
+            MovieList(movieList = it.subList(0 , it.size.coerceAtMost(12)),
+                navController = navController
             )
-        ) ,
-            navController = navController
-        )
+        }
 
         Spacer(modifier = Modifier.size(48.dp))
 
         ListHeader(title = stringResource(R.string.str_coming_soon) , true)
         Spacer(modifier = Modifier.size(24.dp))
-        MovieList(movieList = listOf(
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-                title = "The Batman"
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                title = "Spider-Man: No way home"
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-                title = "The Batman"
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                title = "Spider-Man: No way home"
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-                title = "The Batman"
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                title = "Spider-Man: No way home"
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-                title = "The Batman"
-            ) ,
-            MovieModel(
-                cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                title = "Spider-Man: No way home"
-            ) ,
-        ) ,
-            navController = navController)
+        homeExtraRes.data?.data?.comingSoonMovies?.let {
+            MovieList(movieList = it.subList(0 , it.size.coerceAtMost(12)) ,
+                navController = navController)
+        }
 
         Spacer(modifier = Modifier.size(48.dp))
 
         homeRes.data?.data?.imdbOriginals?.let {
-            IMDbOriginalsList(imdbOriginalList = it)
+            IMDbOriginalsList(imdbOriginalList = it.subList(0 , it.size.coerceAtMost(8)))
         }
 
         Spacer(modifier = Modifier.size(48.dp))
@@ -191,145 +139,111 @@ fun HomeScreen(navController: NavHostController , homeViewModel: HomeViewModel) 
 
             Spacer(modifier = Modifier.size(0.dp))
 
-            listOf(
-                NewsModel(
-                    date = "14 Feb" ,
-                    image = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                    title = "This is a news for test news This is a news for test news This is a news for test news This is a news for test news" ,
-                    source = "Indipendent"
-                ) ,
-                NewsModel(
-                    date = "14 Feb" ,
-                    image = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                    title = "This is a news for test news" ,
-                    source = "Indipendent"
-                ) ,
-                NewsModel(
-                    date = "14 Feb" ,
-                    image = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                    title = "This is a news for test news" ,
-                    source = "Indipendent"
-                ) ,
-                NewsModel(
-                    date = "14 Feb" ,
-                    image = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                    title = "This is a news for test news" ,
-                    source = "Indipendent"
-                ) ,
-                NewsModel(
-                    date = "14 Feb" ,
-                    image = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                    title = "This is a news for test news" ,
-                    source = "Indipendent"
-                ) ,
-                NewsModel(
-                    date = "14 Feb" ,
-                    image = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                    title = "This is a news for test news" ,
-                    source = "Indipendent"
-                )
-            ).windowed(2 , 2 , true).forEach { subList ->
+            homeRes.data?.data?.news?.let {
+                it.subList(0 , it.size.coerceAtMost(12)).windowed(2 , 2 , true).forEach { subList ->
 
-                Column(
-                    modifier = Modifier
-                        .width(screenWidth - 48.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
+                    Column(
+                        modifier = Modifier
+                            .width(screenWidth - 48.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
 
-                    subList.forEach {
+                        subList.forEach {
 
-                        ConstraintLayout(
-                            modifier = Modifier
-                                .fillMaxWidth() ,
-                        ) {
-
-                            val (imageParent , detailParent) = createRefs()
-
-                            AsyncImage(
+                            ConstraintLayout(
                                 modifier = Modifier
-                                    .aspectRatio(1f / 1f)
-                                    .clip(RoundedCornerShape(16.dp))
-                                    .background(
-                                        shape = RoundedCornerShape(16.dp),
-                                        color = colorGray.copy(alpha = 0.75f)
-                                    )
-                                    .constrainAs(imageParent) {
-                                        top.linkTo(detailParent.top)
-                                        bottom.linkTo(detailParent.bottom)
-//                                        width = Dimension.fillToConstraints
-                                        height = Dimension.fillToConstraints
-                                    },
-                                model = ImageRequest
-                                    .Builder(LocalContext.current)
-                                    .data(it.image)
-                                    .crossfade(true)
-                                    .build(),
-                                contentScale = ContentScale.Crop ,
-                                contentDescription = ""
-                            )
-
-                            Column(
-                                modifier = Modifier
-                                    .padding(start = 16.dp)
-                                    .constrainAs(detailParent) {
-                                        start.linkTo(imageParent.end)
-                                        top.linkTo(parent.top)
-                                        bottom.linkTo(parent.bottom)
-                                        end.linkTo(parent.end)
-                                        width = Dimension.fillToConstraints
-//                                        height = Dimension.fillToConstraints
-                                    },
-                                horizontalAlignment = Alignment.Start ,
-                                verticalArrangement = Arrangement.Center
+                                    .fillMaxWidth() ,
                             ) {
 
-                                Spacer(modifier = Modifier.size(6.dp))
+                                val (imageParent , detailParent) = createRefs()
 
-                                Text(
-                                    text = it.source ,
-                                    style = regularFont(12.sp , colorTextGray2) ,
-                                    maxLines = 1 ,
-                                    overflow = TextOverflow.Ellipsis ,
-                                    textAlign = TextAlign.Start
+                                AsyncImage(
+                                    modifier = Modifier
+                                        .aspectRatio(1f / 1f)
+                                        .clip(RoundedCornerShape(16.dp))
+                                        .background(
+                                            shape = RoundedCornerShape(16.dp),
+                                            color = colorGray.copy(alpha = 0.75f)
+                                        )
+                                        .constrainAs(imageParent) {
+                                            top.linkTo(detailParent.top)
+                                            bottom.linkTo(detailParent.bottom)
+//                                        width = Dimension.fillToConstraints
+                                            height = Dimension.fillToConstraints
+                                        },
+                                    model = ImageRequest
+                                        .Builder(LocalContext.current)
+                                        .data(it.image)
+                                        .crossfade(true)
+                                        .build(),
+                                    contentScale = ContentScale.Crop ,
+                                    contentDescription = ""
                                 )
 
-                                Spacer(modifier = Modifier.size(4.dp))
+                                Column(
+                                    modifier = Modifier
+                                        .padding(start = 16.dp)
+                                        .constrainAs(detailParent) {
+                                            start.linkTo(imageParent.end)
+                                            top.linkTo(parent.top)
+                                            bottom.linkTo(parent.bottom)
+                                            end.linkTo(parent.end)
+                                            width = Dimension.fillToConstraints
+//                                        height = Dimension.fillToConstraints
+                                        },
+                                    horizontalAlignment = Alignment.Start ,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
 
-                                Column {
-
-//                                    var lines by remember { mutableStateOf(0) }
-                                    val lineHeight = 14.sp*4/3
+                                    Spacer(modifier = Modifier.size(6.dp))
 
                                     Text(
-                                        modifier = Modifier
-                                            .sizeIn(minHeight = with(LocalDensity.current) {
-                                                (lineHeight*2).toDp()
-                                            }),
-                                        text = it.title ,
-                                        style = regularFont() ,
-                                        maxLines = 2 ,
+                                        text = it.source.toString() ,
+                                        style = regularFont(12.sp , colorTextGray2) ,
+                                        maxLines = 1 ,
                                         overflow = TextOverflow.Ellipsis ,
-                                        textAlign = TextAlign.Start,
-                                        lineHeight = lineHeight
+                                        textAlign = TextAlign.Start
                                     )
+
+                                    Spacer(modifier = Modifier.size(4.dp))
+
+                                    Column {
+
+//                                    var lines by remember { mutableStateOf(0) }
+                                        val lineHeight = 14.sp*4/3
+
+                                        Text(
+                                            modifier = Modifier
+                                                .sizeIn(minHeight = with(LocalDensity.current) {
+                                                    (lineHeight*2).toDp()
+                                                }),
+                                            text = it.title.toString() ,
+                                            style = regularFont() ,
+                                            maxLines = 2 ,
+                                            overflow = TextOverflow.Ellipsis ,
+                                            textAlign = TextAlign.Start,
+                                            lineHeight = lineHeight
+                                        )
 
 //                                    repeat(2 - lines.coerceAtMost(2)) {
 //                                        Text(text = "", style = regularFont())
 //                                    }
 
+                                    }
+
+                                    Spacer(modifier = Modifier.size(8.dp))
+
+                                    Text(
+                                        text = it.date.toString() ,
+                                        style = regularFont(12.sp , colorTextGray2) ,
+                                        maxLines = 1 ,
+                                        overflow = TextOverflow.Ellipsis ,
+                                        textAlign = TextAlign.Start
+                                    )
+
+                                    Spacer(modifier = Modifier.size(6.dp))
+
                                 }
-
-                                Spacer(modifier = Modifier.size(8.dp))
-
-                                Text(
-                                    text = it.date ,
-                                    style = regularFont(12.sp , colorTextGray2) ,
-                                    maxLines = 1 ,
-                                    overflow = TextOverflow.Ellipsis ,
-                                    textAlign = TextAlign.Start
-                                )
-
-                                Spacer(modifier = Modifier.size(6.dp))
 
                             }
 
@@ -338,7 +252,6 @@ fun HomeScreen(navController: NavHostController , homeViewModel: HomeViewModel) 
                     }
 
                 }
-
             }
 
             Spacer(modifier = Modifier.size(0.dp))
@@ -355,84 +268,77 @@ fun HomeScreen(navController: NavHostController , homeViewModel: HomeViewModel) 
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            listOf(
-                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24),
-                UserModel(id = "543" , firstName = "Tom" , lastName = "Haland" , avatar = "https://m.media-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_.jpg", age = 24)
-            ).windowed(4 , 4 , true).forEach { subList ->
+            homeExtraRes.data?.data?.bornTodayList?.let {
+                it.subList(0 , it.size.coerceAtMost(8)).windowed(4 , 4 , true).forEach { subList ->
 
-                Row (
-                    modifier = Modifier.fillMaxWidth() ,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ){
+                    Row (
+                        modifier = Modifier.fillMaxWidth() ,
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ){
 
-                    subList.forEach {
+                        subList.forEach {
 
-                        Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .clickable {
-                                    navController.navigate("${BottomNavItem.Person.screen_route}/${it.id}")
-                                } ,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-
-                            AsyncImage(
+                            Column(
                                 modifier = Modifier
-                                    .aspectRatio(1f / 1f)
-                                    .clip(RoundedCornerShape(16.dp))
-                                    .background(
-                                        shape = RoundedCornerShape(16.dp),
-                                        color = colorGray
-                                    ),
-                                model = ImageRequest
-                                    .Builder(LocalContext.current)
-                                    .data(it.avatar)
-                                    .crossfade(true)
-                                    .build() ,
-                                contentDescription = "" ,
-                                contentScale = ContentScale.Crop
-                            )
+                                    .weight(1f)
+                                    .clickable {
+                                        navController.navigate("${BottomNavItem.Person.screen_route}/${it.nameId}")
+                                    } ,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
 
-                            Spacer(modifier = Modifier.size(8.dp))
+                                AsyncImage(
+                                    modifier = Modifier
+                                        .aspectRatio(1f / 1f)
+                                        .clip(RoundedCornerShape(16.dp))
+                                        .background(
+                                            shape = RoundedCornerShape(16.dp),
+                                            color = colorGray
+                                        ),
+                                    model = ImageRequest
+                                        .Builder(LocalContext.current)
+                                        .data(it.image)
+                                        .crossfade(true)
+                                        .build() ,
+                                    contentDescription = "" ,
+                                    contentScale = ContentScale.Crop
+                                )
 
-                            Text(
-                                text = "${it.firstName} ${it.lastName}" ,
-                                style = regularFont(),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
+                                Spacer(modifier = Modifier.size(8.dp))
 
-                            Spacer(modifier = Modifier.size(2.dp))
+                                Text(
+                                    text = it.title.toString(),
+                                    style = regularFont(),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
 
-                            Text(
-                                text = "${it.age} Years Old" ,
-                                style = regularFont(12.sp , colorTextGray2),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
+                                Spacer(modifier = Modifier.size(2.dp))
+
+                                Text(
+                                    text = "${it.birth.toString().getAge()} Years Old" ,
+                                    style = regularFont(12.sp , colorTextGray2),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+
+                            }
 
                         }
 
-                    }
+                        repeat(4 - subList.size) {
+                            Column(
+                                modifier = Modifier.weight(1f) ,
+                                verticalArrangement = Arrangement.spacedBy(16.dp) ,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
 
-                    repeat(4 - subList.size) {
-                        Column(
-                            modifier = Modifier.weight(1f) ,
-                            verticalArrangement = Arrangement.spacedBy(16.dp) ,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-
+                            }
                         }
+
                     }
 
                 }
-
             }
 
         }
@@ -472,15 +378,20 @@ fun HomeScreen(navController: NavHostController , homeViewModel: HomeViewModel) 
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ){
 
-                    val movieList = listOf(
-                        MovieModel(title = "Death on the Nile" , grossWorldwide = "12.9M"),
-                        MovieModel(title = "Jackass Forever" , grossWorldwide = "10.4M"),
-                        MovieModel(title = "Marry Me" , grossWorldwide = "9.8M"),
-                        MovieModel(title = "Spider-Man: No Way Home" , grossWorldwide = "7.8M"),
-                        MovieModel(title = "Blacklight" , grossWorldwide = "6.2M")
-                    )
+                    var movieList = listOf<ChartBoxOfficeRes.BoxOfficeTitle>()
+                    chartRes.data?.data?.boxOfficeTitles?.let {
+                        movieList = it.sortedByDescending { item ->
+                            item.gross
+                                .replace("M" , "")
+                                .replace("m" , "")
+                                .replace("$" , "")
+                                .toFloat()
+                        }
+                    }
 
-                    movieList.forEachIndexed { index, movieModel ->
+                    val newMovieList = movieList.subList(0 , movieList.size.coerceAtMost(6))
+
+                    newMovieList.forEachIndexed { index, movieModel ->
 
                         Column(
                             horizontalAlignment = Alignment.Start ,
@@ -510,14 +421,14 @@ fun HomeScreen(navController: NavHostController , homeViewModel: HomeViewModel) 
                                     horizontalAlignment = Alignment.Start
                                 ) {
 
-                                    Text(text = movieModel.title , style = regularFont())
-                                    Text(text = movieModel.grossWorldwide , style = regularFont(12.sp , colorTextGray2))
+                                    Text(text = movieModel.title.toString() , style = regularFont())
+                                    Text(text = movieModel.gross.toString() , style = regularFont(12.sp , colorTextGray2))
 
                                 }
 
                             }
 
-                            if (index < movieList.size - 1) {
+                            if (index < newMovieList.size - 1) {
                                 Box(
                                     modifier = Modifier
                                         .padding(start = 11.dp)

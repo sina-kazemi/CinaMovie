@@ -43,6 +43,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.sina.cinamovie.R
+import com.sina.cinamovie.data.res.HomeExtraRes
 import com.sina.cinamovie.data.res.HomeRes
 import com.sina.cinamovie.model.*
 import com.sina.cinamovie.ui.navigation.BottomNavItem
@@ -338,14 +339,53 @@ fun ImdbOriginalRow(model: HomeRes.ImdbOriginal) {
 }
 
 @Composable
-fun MovieList(movieList: List<MovieModel> , navController: NavHostController) {
+fun <T> MovieList(movieList: List<T> , navController: NavHostController) {
+
+    var newMovieList: List<MovieModel> = listOf()
+
+    when {
+        movieList.first() is HomeExtraRes.FanPicksTitle -> {
+            newMovieList = (movieList as List<HomeExtraRes.FanPicksTitle>).map {
+                MovieModel(
+                    certificate = it.certificate,
+                    cover = it.cover,
+                    rate = it.rate,
+                    releaseDay = it.releaseDay,
+                    releaseMonth = it.releaseMonth,
+                    releaseYear = it.releaseYear,
+                    runtime = it.runtime,
+                    title = it.title,
+                    titleId = it.titleId,
+                    videoId = it.videoId,
+                    voteCount = it.voteCount
+                )
+            }
+        }
+        movieList.first() is HomeExtraRes.ComingSoonMovie -> {
+            newMovieList = (movieList as List<HomeExtraRes.ComingSoonMovie>).map {
+                MovieModel(
+                    certificate = it.certificate,
+                    cover = it.cover,
+                    rate = it.rate,
+                    releaseDay = it.releaseDay,
+                    releaseMonth = it.releaseMonth,
+                    releaseYear = it.releaseYear,
+                    runtime = it.runtime,
+                    title = it.title,
+                    titleId = it.titleId,
+                    videoId = it.videoId,
+                    voteCount = it.voteCount
+                )
+            }
+        }
+    }
 
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(16.dp) ,
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
 
-        items(movieList) { item ->
+        items(newMovieList) { item ->
             MovieItem(item = item, navController = navController)
         }
 
@@ -422,7 +462,7 @@ fun MovieItem(modifier: Modifier? = null , item: MovieModel , navController: Nav
                     end.linkTo(imageParent.end)
                     width = Dimension.fillToConstraints
                 },
-            text = item.title ,
+            text = item.title.toString(),
             style = regularFont(12.sp) ,
             maxLines = 1 ,
             overflow = TextOverflow.Ellipsis ,

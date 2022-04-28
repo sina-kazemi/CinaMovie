@@ -127,7 +127,7 @@ fun TitlesScreen(userList: List<MovieModel> , navController: NavHostController) 
                             Text(
                                 modifier = Modifier.offset(y = (0.75).dp) ,
                                 text = kotlin.run {
-                                    if (movieModel.voteCount < 1000) {
+                                    if (movieModel.voteCount != null && movieModel.voteCount!! < 1000) {
                                         "${movieModel.voteCount} Votes"
                                     }
                                     else {
@@ -142,7 +142,7 @@ fun TitlesScreen(userList: List<MovieModel> , navController: NavHostController) 
                         Spacer(modifier = Modifier.size(8.dp))
 
                         Text(
-                            text = movieModel.summary ,
+                            text = movieModel.summary.toString() ,
                             style = mediumFont(12.sp , colorTextGray3) ,
                             lineHeight = 20.sp ,
                             overflow = TextOverflow.Visible
