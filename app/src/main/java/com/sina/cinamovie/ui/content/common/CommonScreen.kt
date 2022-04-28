@@ -3,6 +3,7 @@ package com.sina.cinamovie.ui.content.common
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,6 +16,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.fade
+import com.google.accompanist.placeholder.placeholder
 import com.sina.cinamovie.R
 import com.sina.cinamovie.model.AppBarModel
 import com.sina.cinamovie.model.MenuModel
@@ -82,12 +86,20 @@ fun AppBar(model: AppBarModel , navController: NavHostController) {
 }
 
 @Composable
-fun ListHeader(title: String , showMore: Boolean = false) {
+fun ListHeader(title: String , showMore: Boolean = false , showPlaceHolder: Boolean = false) {
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 32.dp),
+            .padding(horizontal = 32.dp)
+            .placeholder(
+                visible = showPlaceHolder,
+                color = colorGray,
+                shape = RoundedCornerShape(16.dp),
+                highlight = PlaceholderHighlight.fade(
+                    highlightColor = colorPlaceHolder
+                )
+            ),
         verticalAlignment = Alignment.CenterVertically ,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {

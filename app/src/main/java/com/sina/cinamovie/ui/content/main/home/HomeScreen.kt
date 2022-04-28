@@ -42,6 +42,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.fade
+import com.google.accompanist.placeholder.placeholder
 import com.sina.cinamovie.data.Result
 import com.sina.cinamovie.data.res.ChartBoxOfficeRes
 import com.sina.cinamovie.data.res.HomeExtraRes
@@ -74,6 +77,24 @@ fun HomeScreen(
         initial = Result.loading()
     )
 
+    var homeResShowPlaceHolder by remember {
+        mutableStateOf(true)
+    }
+
+    var homeExtraShowPlaceHolder by remember {
+        mutableStateOf(true)
+    }
+
+    var chartShowPlaceHolder by remember {
+        mutableStateOf(true)
+    }
+
+    Timber.d("HOME_RES::: ${homeRes.status}")
+
+    homeResShowPlaceHolder = homeRes.status == Result.Status.LOADING
+    homeExtraShowPlaceHolder = homeExtraRes.status == Result.Status.LOADING
+    chartShowPlaceHolder = chartRes.status == Result.Status.LOADING
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -91,35 +112,110 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.size(32.dp))
 
-        homeRes.data?.data?.trailers.let {
-            if (it != null) {
-                TrailerList(trailerList = it.subList(0 , it.size.coerceAtMost(8)))
+        if (homeResShowPlaceHolder) {
+            val tempList = listOf(
+                HomeRes.Trailer("" , "" , "" , "" , "" , "" , "") ,
+                HomeRes.Trailer("" , "" , "" , "" , "" , "" , "") ,
+                HomeRes.Trailer("" , "" , "" , "" , "" , "" , "") ,
+                HomeRes.Trailer("" , "" , "" , "" , "" , "" , "") ,
+                HomeRes.Trailer("" , "" , "" , "" , "" , "" , "") ,
+                HomeRes.Trailer("" , "" , "" , "" , "" , "" , "") ,
+                HomeRes.Trailer("" , "" , "" , "" , "" , "" , "") ,
+                HomeRes.Trailer("" , "" , "" , "" , "" , "" , "") ,
+            )
+
+            TrailerList(
+                trailerList = tempList ,
+                showPlaceHolder = true)
+        }
+        else {
+
+            homeRes.data?.data?.trailers.let {
+                if (it != null) {
+                    TrailerList(trailerList = it.subList(0 , it.size.coerceAtMost(8)))
+                }
             }
+
         }
 
         Spacer(modifier = Modifier.size(40.dp))
 
-        ListHeader(title = stringResource(R.string.str_fan_favorites) , true)
+        ListHeader(
+            title = stringResource(R.string.str_fan_favorites) ,
+            showMore = true ,
+            showPlaceHolder = homeExtraShowPlaceHolder)
         Spacer(modifier = Modifier.size(24.dp))
-        homeExtraRes.data?.data?.fanPicksTitles?.let {
-            MovieList(movieList = it.subList(0 , it.size.coerceAtMost(12)),
-                navController = navController
+        if (homeExtraShowPlaceHolder) {
+            val tempMovieList = listOf(
+                HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0)
             )
+            MovieList(movieList = tempMovieList, navController = navController , true)
         }
+        else {
+            homeExtraRes.data?.data?.fanPicksTitles?.let {
+                MovieList(movieList = it.subList(0 , it.size.coerceAtMost(12)),
+                    navController = navController
+                )
+            }
+        }
+
 
         Spacer(modifier = Modifier.size(48.dp))
 
-        ListHeader(title = stringResource(R.string.str_coming_soon) , true)
+        ListHeader(
+            title = stringResource(R.string.str_coming_soon) ,
+            showMore = true ,
+            showPlaceHolder = homeExtraShowPlaceHolder
+        )
         Spacer(modifier = Modifier.size(24.dp))
-        homeExtraRes.data?.data?.comingSoonMovies?.let {
-            MovieList(movieList = it.subList(0 , it.size.coerceAtMost(12)) ,
-                navController = navController)
+        if (homeExtraShowPlaceHolder) {
+            val tempComingSoonMovies = listOf(
+                HomeExtraRes.ComingSoonMovie("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , "" , "" , 0 , 0),
+                HomeExtraRes.ComingSoonMovie("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , "" , "" , 0 , 0),
+                HomeExtraRes.ComingSoonMovie("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , "" , "" , 0 , 0),
+                HomeExtraRes.ComingSoonMovie("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , "" , "" , 0 , 0),
+                HomeExtraRes.ComingSoonMovie("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , "" , "" , 0 , 0),
+                HomeExtraRes.ComingSoonMovie("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , "" , "" , 0 , 0),
+                HomeExtraRes.ComingSoonMovie("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , "" , "" , 0 , 0),
+                HomeExtraRes.ComingSoonMovie("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , "" , "" , 0 , 0)
+            )
+
+            MovieList(movieList = tempComingSoonMovies, navController = navController , showPlaceHolder = true)
+        }
+        else {
+            homeExtraRes.data?.data?.comingSoonMovies?.let {
+                MovieList(movieList = it.subList(0 , it.size.coerceAtMost(12)) ,
+                    navController = navController)
+            }
         }
 
         Spacer(modifier = Modifier.size(48.dp))
 
-        homeRes.data?.data?.imdbOriginals?.let {
-            IMDbOriginalsList(imdbOriginalList = it.subList(0 , it.size.coerceAtMost(8)))
+        if (homeResShowPlaceHolder) {
+            val tempList = listOf(
+                HomeRes.ImdbOriginal("" , "" , "" , false , "" , "" , "" , false),
+                HomeRes.ImdbOriginal("" , "" , "" , false , "" , "" , "" , false),
+                HomeRes.ImdbOriginal("" , "" , "" , false , "" , "" , "" , false),
+                HomeRes.ImdbOriginal("" , "" , "" , false , "" , "" , "" , false),
+                HomeRes.ImdbOriginal("" , "" , "" , false , "" , "" , "" , false),
+                HomeRes.ImdbOriginal("" , "" , "" , false , "" , "" , "" , false),
+                HomeRes.ImdbOriginal("" , "" , "" , false , "" , "" , "" , false),
+                HomeRes.ImdbOriginal("" , "" , "" , false , "" , "" , "" , false)
+            )
+
+            IMDbOriginalsList(imdbOriginalList = tempList , showPlaceHolder = true)
+        }
+        else {
+            homeRes.data?.data?.imdbOriginals?.let {
+                IMDbOriginalsList(imdbOriginalList = it.subList(0 , it.size.coerceAtMost(8)))
+            }
         }
 
         Spacer(modifier = Modifier.size(48.dp))
@@ -127,7 +223,11 @@ fun HomeScreen(
         val configuration = LocalConfiguration.current
         val screenWidth = configuration.screenWidthDp.dp
 
-        ListHeader(title = stringResource(R.string.str_news) , true)
+        ListHeader(
+            title = stringResource(R.string.str_news) ,
+            showMore = true ,
+            showPlaceHolder = homeResShowPlaceHolder
+        )
         Spacer(modifier = Modifier.size(24.dp))
         Row(
             modifier = Modifier
@@ -139,7 +239,29 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.size(0.dp))
 
-            homeRes.data?.data?.news?.let {
+            var tempList = listOf<HomeRes.News>()
+
+            if (homeResShowPlaceHolder) {
+                tempList = listOf(
+                    HomeRes.News("" , "" , "" , "" , ""),
+                    HomeRes.News("" , "" , "" , "" , ""),
+                    HomeRes.News("" , "" , "" , "" , ""),
+                    HomeRes.News("" , "" , "" , "" , ""),
+                    HomeRes.News("" , "" , "" , "" , ""),
+                    HomeRes.News("" , "" , "" , "" , ""),
+                    HomeRes.News("" , "" , "" , "" , ""),
+                    HomeRes.News("" , "" , "" , "" , ""),
+                    HomeRes.News("" , "" , "" , "" , ""),
+                    HomeRes.News("" , "" , "" , "" , "")
+                )
+            }
+            else {
+                homeRes.data?.data?.news?.let {
+                    tempList = it
+                }
+            }
+
+            tempList.let {
                 it.subList(0 , it.size.coerceAtMost(12)).windowed(2 , 2 , true).forEach { subList ->
 
                     Column(
@@ -152,7 +274,15 @@ fun HomeScreen(
 
                             ConstraintLayout(
                                 modifier = Modifier
-                                    .fillMaxWidth() ,
+                                    .fillMaxWidth()
+                                    .placeholder(
+                                        visible = homeResShowPlaceHolder,
+                                        color = colorGray,
+                                        shape = RoundedCornerShape(16.dp),
+                                        highlight = PlaceholderHighlight.fade(
+                                            highlightColor = colorPlaceHolder
+                                        )
+                                    ),
                             ) {
 
                                 val (imageParent , detailParent) = createRefs()
@@ -259,7 +389,11 @@ fun HomeScreen(
         }
 
         Spacer(modifier = Modifier.size(48.dp))
-        ListHeader(title = stringResource(R.string.str_burn_today) , true)
+        ListHeader(
+            title = stringResource(R.string.str_burn_today) ,
+            showMore =  true ,
+            showPlaceHolder =  homeExtraShowPlaceHolder
+        )
         Spacer(modifier = Modifier.size(24.dp))
         Column(
             modifier = Modifier
@@ -268,7 +402,27 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            homeExtraRes.data?.data?.bornTodayList?.let {
+            var tempList = listOf<HomeExtraRes.BornToday>()
+
+            if (homeExtraShowPlaceHolder) {
+                tempList = listOf(
+                    HomeExtraRes.BornToday("" , "" , "" , "" , "testTitle"),
+                    HomeExtraRes.BornToday("" , "" , "" , "" , "testTitle"),
+                    HomeExtraRes.BornToday("" , "" , "" , "" , "testTitle"),
+                    HomeExtraRes.BornToday("" , "" , "" , "" , "testTitle"),
+                    HomeExtraRes.BornToday("" , "" , "" , "" , "testTitle"),
+                    HomeExtraRes.BornToday("" , "" , "" , "" , "testTitle"),
+                    HomeExtraRes.BornToday("" , "" , "" , "" , "testTitle"),
+                    HomeExtraRes.BornToday("" , "" , "" , "" , "testTitle")
+                )
+            }
+            else {
+                homeExtraRes.data?.data?.bornTodayList?.let{
+                    tempList = it
+                }
+            }
+
+            tempList.let {
                 it.subList(0 , it.size.coerceAtMost(8)).windowed(4 , 4 , true).forEach { subList ->
 
                     Row (
@@ -294,6 +448,14 @@ fun HomeScreen(
                                         .background(
                                             shape = RoundedCornerShape(16.dp),
                                             color = colorGray
+                                        )
+                                        .placeholder(
+                                            visible = homeExtraShowPlaceHolder,
+                                            color = colorGray,
+                                            shape = RoundedCornerShape(16.dp),
+                                            highlight = PlaceholderHighlight.fade(
+                                                highlightColor = colorPlaceHolder
+                                            )
                                         ),
                                     model = ImageRequest
                                         .Builder(LocalContext.current)
@@ -307,6 +469,14 @@ fun HomeScreen(
                                 Spacer(modifier = Modifier.size(8.dp))
 
                                 Text(
+                                    modifier = Modifier.placeholder(
+                                        visible = homeExtraShowPlaceHolder,
+                                        color = colorGray,
+                                        shape = RoundedCornerShape(16.dp),
+                                        highlight = PlaceholderHighlight.fade(
+                                            highlightColor = colorPlaceHolder
+                                        )
+                                    ) ,
                                     text = it.title.toString(),
                                     style = regularFont(),
                                     maxLines = 1,
@@ -316,6 +486,14 @@ fun HomeScreen(
                                 Spacer(modifier = Modifier.size(2.dp))
 
                                 Text(
+                                    modifier = Modifier.placeholder(
+                                        visible = homeExtraShowPlaceHolder,
+                                        color = colorGray,
+                                        shape = RoundedCornerShape(16.dp),
+                                        highlight = PlaceholderHighlight.fade(
+                                            highlightColor = colorPlaceHolder
+                                        )
+                                    ),
                                     text = "${it.birth.toString().getAge()} Years Old" ,
                                     style = regularFont(12.sp , colorTextGray2),
                                     maxLines = 1,
@@ -346,7 +524,15 @@ fun HomeScreen(
         Spacer(modifier = Modifier.size(48.dp))
 
         Box(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .placeholder(
+                    visible = chartShowPlaceHolder,
+                    color = colorGray,
+                    highlight = PlaceholderHighlight.fade(
+                        highlightColor = colorPlaceHolder
+                    )
+                )
         ) {
 
             Row(
@@ -361,8 +547,7 @@ fun HomeScreen(
                 Box{
 
                     Column(
-                        modifier = Modifier
-                            .padding(horizontal = 32.dp),
+                        modifier = Modifier.padding(horizontal = 32.dp),
                         verticalArrangement = Arrangement.Center ,
                         horizontalAlignment = Alignment.Start
                     ) {
@@ -389,7 +574,15 @@ fun HomeScreen(
                         }
                     }
 
-                    val newMovieList = movieList.subList(0 , movieList.size.coerceAtMost(6))
+                    val newMovieList = if (chartShowPlaceHolder) {
+                        listOf(
+                            ChartBoxOfficeRes.BoxOfficeTitle("" , "" , "" , "" , "" ,""),
+                            ChartBoxOfficeRes.BoxOfficeTitle("" , "" , "" , "" , "" ,""),
+                            ChartBoxOfficeRes.BoxOfficeTitle("" , "" , "" , "" , "" ,"")
+                        )
+                    } else {
+                        movieList.subList(0 , movieList.size.coerceAtMost(6))
+                    }
 
                     newMovieList.forEachIndexed { index, movieModel ->
 

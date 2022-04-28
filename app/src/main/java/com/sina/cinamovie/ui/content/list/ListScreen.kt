@@ -42,6 +42,10 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.fade
+import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.shimmer
 import com.sina.cinamovie.R
 import com.sina.cinamovie.data.res.HomeExtraRes
 import com.sina.cinamovie.data.res.HomeRes
@@ -52,7 +56,7 @@ import timber.log.Timber
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TrailerList(trailerList: List<HomeRes.Trailer>) {
+fun TrailerList(trailerList: List<HomeRes.Trailer> , showPlaceHolder: Boolean = false) {
 
     val pagerState = rememberPagerState()
 
@@ -66,7 +70,7 @@ fun TrailerList(trailerList: List<HomeRes.Trailer>) {
             contentPadding = PaddingValues(horizontal = 24.dp)
         ) { position ->
 
-            TrailerRow(model = trailerList[position])
+            TrailerRow(model = trailerList[position] , showPlaceHolder)
 
         }
 
@@ -86,10 +90,11 @@ fun TrailerList(trailerList: List<HomeRes.Trailer>) {
 }
 
 @Composable
-fun TrailerRow(model: HomeRes.Trailer) {
+fun TrailerRow(model: HomeRes.Trailer , showPlaceHolder: Boolean = false) {
 
     ConstraintLayout(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
 
         val (mainParent) = createRefs()
@@ -104,7 +109,15 @@ fun TrailerRow(model: HomeRes.Trailer) {
                 }
                 .aspectRatio(1f / 0.55f)
                 .padding(horizontal = 8.dp)
-                .background(color = colorGray, shape = RoundedCornerShape(16.dp)) ,
+                .background(color = colorGray, shape = RoundedCornerShape(16.dp))
+                .placeholder(
+                    visible = showPlaceHolder,
+                    color = colorGray,
+                    shape = RoundedCornerShape(16.dp),
+                    highlight = PlaceholderHighlight.fade(
+                        highlightColor = colorPlaceHolder
+                    )
+                ) ,
             contentAlignment = Alignment.BottomCenter
         ) {
 
@@ -213,7 +226,7 @@ fun TrailerRow(model: HomeRes.Trailer) {
 }
 
 @Composable
-fun ImdbOriginalRow(model: HomeRes.ImdbOriginal) {
+fun ImdbOriginalRow(model: HomeRes.ImdbOriginal , showPlaceHolder: Boolean = false) {
 
     ConstraintLayout(
         modifier = Modifier.width(320.dp)
@@ -230,7 +243,15 @@ fun ImdbOriginalRow(model: HomeRes.ImdbOriginal) {
                     width = Dimension.fillToConstraints
                 }
                 .aspectRatio(1f / 0.55f)
-                .background(color = colorGray, shape = RoundedCornerShape(16.dp)) ,
+                .background(color = colorGray, shape = RoundedCornerShape(16.dp))
+                .placeholder(
+                    visible = showPlaceHolder,
+                    color = colorGray,
+                    shape = RoundedCornerShape(16.dp),
+                    highlight = PlaceholderHighlight.fade(
+                        highlightColor = colorPlaceHolder
+                    )
+                ) ,
             contentAlignment = Alignment.BottomCenter
         ) {
 
@@ -339,7 +360,7 @@ fun ImdbOriginalRow(model: HomeRes.ImdbOriginal) {
 }
 
 @Composable
-fun <T> MovieList(movieList: List<T> , navController: NavHostController) {
+fun <T> MovieList(movieList: List<T> , navController: NavHostController , showPlaceHolder: Boolean = false) {
 
     var newMovieList: List<MovieModel> = listOf()
 
@@ -386,7 +407,7 @@ fun <T> MovieList(movieList: List<T> , navController: NavHostController) {
     ) {
 
         items(newMovieList) { item ->
-            MovieItem(item = item, navController = navController)
+            MovieItem(item = item, navController = navController , showPlaceHolder = showPlaceHolder)
         }
 
     }
@@ -395,7 +416,13 @@ fun <T> MovieList(movieList: List<T> , navController: NavHostController) {
 }
 
 @Composable
-fun MovieItem(modifier: Modifier? = null , item: MovieModel , navController: NavHostController , isGridList: Boolean = false) {
+fun MovieItem(
+    modifier: Modifier? = null ,
+    item: MovieModel ,
+    navController: NavHostController ,
+    isGridList: Boolean = false ,
+    showPlaceHolder: Boolean = false
+) {
 
     var mModifier = Modifier.wrapContentWidth()
     mModifier = modifier?.clickable { navController.navigate(BottomNavItem.Movie.screen_route + "/" + "123") }
@@ -413,6 +440,14 @@ fun MovieItem(modifier: Modifier? = null , item: MovieModel , navController: Nav
                     Modifier
                         .aspectRatio(2f / 3f)
                         .background(shape = RoundedCornerShape(16.dp), color = colorGray)
+                        .placeholder(
+                            visible = showPlaceHolder,
+                            color = colorGray,
+                            shape = RoundedCornerShape(16.dp),
+                            highlight = PlaceholderHighlight.fade(
+                                highlightColor = colorPlaceHolder
+                            )
+                        )
                         .constrainAs(imageParent) {
 
                         }
@@ -422,6 +457,14 @@ fun MovieItem(modifier: Modifier? = null , item: MovieModel , navController: Nav
                         .width(96.dp)
                         .aspectRatio(2f / 3f)
                         .background(shape = RoundedCornerShape(16.dp), color = colorGray)
+                        .placeholder(
+                            visible = showPlaceHolder,
+                            color = colorGray,
+                            shape = RoundedCornerShape(16.dp),
+                            highlight = PlaceholderHighlight.fade(
+                                highlightColor = colorPlaceHolder
+                            )
+                        )
                         .constrainAs(imageParent) {
 
                         }
@@ -456,6 +499,14 @@ fun MovieItem(modifier: Modifier? = null , item: MovieModel , navController: Nav
 
         Text(
             modifier = Modifier
+                .placeholder(
+                    visible = showPlaceHolder,
+                    color = colorGray,
+                    shape = RoundedCornerShape(16.dp),
+                    highlight = PlaceholderHighlight.fade(
+                        highlightColor = colorPlaceHolder
+                    )
+                )
                 .constrainAs(title) {
                     top.linkTo(spacer1.bottom)
                     start.linkTo(imageParent.start)
@@ -481,6 +532,14 @@ fun MovieItem(modifier: Modifier? = null , item: MovieModel , navController: Nav
 
             Text(
                 modifier = Modifier
+                    .placeholder(
+                        visible = showPlaceHolder,
+                        color = colorGray,
+                        shape = RoundedCornerShape(16.dp),
+                        highlight = PlaceholderHighlight.fade(
+                            highlightColor = colorPlaceHolder
+                        )
+                    )
                     .constrainAs(subTitle) {
                         top.linkTo(spacer2.bottom)
                         start.linkTo(imageParent.start)
@@ -507,6 +566,14 @@ fun MovieItem(modifier: Modifier? = null , item: MovieModel , navController: Nav
 
             Row(
                 modifier = Modifier
+                    .placeholder(
+                        visible = showPlaceHolder,
+                        color = colorGray,
+                        shape = RoundedCornerShape(16.dp),
+                        highlight = PlaceholderHighlight.fade(
+                            highlightColor = colorPlaceHolder
+                        )
+                    )
                     .constrainAs(rateParent) {
                         top.linkTo(spacer2.bottom)
                         start.linkTo(imageParent.start)
@@ -544,7 +611,7 @@ fun MovieItem(modifier: Modifier? = null , item: MovieModel , navController: Nav
 }
 
 @Composable
-fun IMDbOriginalsList(imdbOriginalList: List<HomeRes.ImdbOriginal>) {
+fun IMDbOriginalsList(imdbOriginalList: List<HomeRes.ImdbOriginal> , showPlaceHolder: Boolean = false) {
 
     var titleParentSize by remember {
         mutableStateOf(IntSize.Zero)
@@ -563,6 +630,13 @@ fun IMDbOriginalsList(imdbOriginalList: List<HomeRes.ImdbOriginal>) {
         modifier = Modifier
             .fillMaxWidth()
             .background(colorBlack.copy(alpha = 0.75f))
+            .placeholder(
+                visible = showPlaceHolder,
+                color = colorGray,
+                highlight = PlaceholderHighlight.fade(
+                    highlightColor = colorPlaceHolder
+                )
+            )
     ) {
 
         AnimatedVisibility(
@@ -613,7 +687,7 @@ fun IMDbOriginalsList(imdbOriginalList: List<HomeRes.ImdbOriginal>) {
 
             items(imdbOriginalList) { item ->
 
-                ImdbOriginalRow(model = item)
+                ImdbOriginalRow(model = item , showPlaceHolder = showPlaceHolder)
 
             }
 
