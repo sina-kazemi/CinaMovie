@@ -45,7 +45,7 @@ fun TitlesScreen(userList: List<MovieModel> , navController: NavHostController) 
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        navController.navigate("${BottomNavItem.Movie.screen_route}/123")
+                        navController.navigate("${BottomNavItem.Movie.screen_route}/${movieModel.titleId}")
                     }
                     .background(shape = RoundedCornerShape(16.dp), color = colorGray.copy(0.75f))
                     .padding(12.dp)

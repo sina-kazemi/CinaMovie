@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,7 +30,7 @@ import com.sina.cinamovie.ui.theme.*
 import timber.log.Timber
 
 @Composable
-fun AppBar(model: AppBarModel , navController: NavHostController) {
+fun AppBar(model: AppBarModel , navController: NavHostController , showPlaceHolder: Boolean = false) {
 
     Row(
         modifier = Modifier.fillMaxWidth() ,
@@ -45,7 +47,7 @@ fun AppBar(model: AppBarModel , navController: NavHostController) {
                 Timber.d("BackIconIsNull")
 
                 model.backIcon = MenuModel(painter = painterResource(id = R.drawable.ic_chevron_left)) {
-                    navController.navigateUp()
+                    navController.popBackStack()
                 }
             }
 
@@ -53,13 +55,33 @@ fun AppBar(model: AppBarModel , navController: NavHostController) {
 
             Column(
                 modifier = Modifier
-                    .wrapContentWidth() ,
+                    .wrapContentWidth()
+                    .placeholder(
+                        visible = showPlaceHolder,
+                        color = colorGray,
+                        shape = RoundedCornerShape(16.dp),
+                        highlight = PlaceholderHighlight.fade(
+                            highlightColor = colorPlaceHolder
+                        )
+                    ),
                 horizontalAlignment = Alignment.Start
             ) {
 
-                Text(text = model.title, style = mediumFont(16.sp))
+                Text(
+                    text = model.title,
+                    style = mediumFont(16.sp) ,
+                    maxLines = 1 ,
+                    overflow = TextOverflow.Ellipsis ,
+                    textAlign = TextAlign.Left
+                )
                 if (model.subTitle.trim() != "") {
-                    Text(text = model.subTitle, style = lightFont(12.sp , colorTextGray))
+                    Text(
+                        text = model.subTitle,
+                        style = lightFont(12.sp , colorTextGray) ,
+                        maxLines = 1 ,
+                        overflow = TextOverflow.Ellipsis ,
+                        textAlign = TextAlign.Left
+                    )
                 }
 
             }

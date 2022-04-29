@@ -49,6 +49,7 @@ import com.google.accompanist.placeholder.shimmer
 import com.sina.cinamovie.R
 import com.sina.cinamovie.data.res.HomeExtraRes
 import com.sina.cinamovie.data.res.HomeRes
+import com.sina.cinamovie.data.res.TitleDetailsRes
 import com.sina.cinamovie.model.*
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.*
@@ -228,128 +229,115 @@ fun TrailerRow(model: HomeRes.Trailer , showPlaceHolder: Boolean = false) {
 @Composable
 fun ImdbOriginalRow(model: HomeRes.ImdbOriginal , showPlaceHolder: Boolean = false) {
 
-    ConstraintLayout(
-        modifier = Modifier.width(320.dp)
+    Box(
+        modifier = Modifier
+            .width(320.dp)
+            .aspectRatio(1f / 0.55f)
+            .background(color = colorGray, shape = RoundedCornerShape(16.dp))
+            .placeholder(
+                visible = showPlaceHolder,
+                color = colorGray,
+                shape = RoundedCornerShape(16.dp),
+                highlight = PlaceholderHighlight.fade(
+                    highlightColor = colorPlaceHolder
+                )
+            ) ,
+        contentAlignment = Alignment.BottomCenter
     ) {
 
-        val (mainParent) = createRefs()
-
-        Box(
+        AsyncImage(
             modifier = Modifier
-                .constrainAs(mainParent) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                    width = Dimension.fillToConstraints
-                }
-                .aspectRatio(1f / 0.55f)
-                .background(color = colorGray, shape = RoundedCornerShape(16.dp))
-                .placeholder(
-                    visible = showPlaceHolder,
-                    color = colorGray,
-                    shape = RoundedCornerShape(16.dp),
-                    highlight = PlaceholderHighlight.fade(
-                        highlightColor = colorPlaceHolder
-                    )
-                ) ,
-            contentAlignment = Alignment.BottomCenter
+                .fillMaxSize()
+                .clip(shape = RoundedCornerShape(16.dp)) ,
+            model = ImageRequest
+                .Builder(LocalContext.current)
+                .data(model.cover)
+                .crossfade(true)
+                .build(),
+            contentDescription = "",
+            contentScale = ContentScale.Crop
+        )
+
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
         ) {
 
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(shape = RoundedCornerShape(16.dp)) ,
-                model = ImageRequest
-                    .Builder(LocalContext.current)
-                    .data(model.cover)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = "",
-                contentScale = ContentScale.Crop
-            )
+            val (playParent , descriptionParent) = createRefs()
 
-            ConstraintLayout(
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
+                    .width(44.dp)
+                    .height(44.dp)
+                    .constrainAs(playParent) {
+                        start.linkTo(parent.start)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .background(
+                        shape = RoundedCornerShape(12.dp),
+                        color = colorBlack.copy(alpha = 0.5f)
+                    ) ,
+                contentAlignment = Alignment.Center
             ) {
 
-                val (playParent , descriptionParent) = createRefs()
-
-                Box(
+                Image(
                     modifier = Modifier
-                        .width(44.dp)
-                        .height(44.dp)
-                        .constrainAs(playParent) {
-                            start.linkTo(parent.start)
-                            bottom.linkTo(parent.bottom)
-                        }
-                        .background(
-                            shape = RoundedCornerShape(12.dp),
-                            color = colorBlack.copy(alpha = 0.5f)
-                        ) ,
-                    contentAlignment = Alignment.Center
-                ) {
+                        .width(20.dp)
+                        .height(20.dp)
+                        .offset(x = 2.dp) ,
+                    painter = painterResource(id = R.drawable.ic_play),
+                    contentDescription = "",
+                    contentScale = ContentScale.Inside,
+                    colorFilter = ColorFilter.tint(colorWhite)
+                )
 
-                    Image(
-                        modifier = Modifier
-                            .width(20.dp)
-                            .height(20.dp)
-                            .offset(x = 2.dp) ,
-                        painter = painterResource(id = R.drawable.ic_play),
-                        contentDescription = "",
-                        contentScale = ContentScale.Inside,
-                        colorFilter = ColorFilter.tint(colorWhite)
-                    )
+            }
 
-                }
+            Column(
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .constrainAs(descriptionParent) {
+                        linkTo(
+                            start = playParent.end,
+                            end = parent.end,
+                            top = parent.top,
+                            bottom = parent.bottom
+                        )
+                        width = Dimension.fillToConstraints
+                        height = Dimension.fillToConstraints
+                    } ,
+                horizontalAlignment = Alignment.Start ,
+                verticalArrangement = Arrangement.Center
+            ) {
 
-                Column(
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .constrainAs(descriptionParent) {
-                            linkTo(
-                                start = playParent.end,
-                                end = parent.end,
-                                top = parent.top,
-                                bottom = parent.bottom
-                            )
-                            width = Dimension.fillToConstraints
-                            height = Dimension.fillToConstraints
-                        } ,
-                    horizontalAlignment = Alignment.Start ,
-                    verticalArrangement = Arrangement.Center
-                ) {
+                Text(
+                    text = model.title!! ,
+                    style = regularFont().copy(
+                        shadow = Shadow(
+                            color = colorBlack ,
+                            offset = Offset(2f , 2f) ,
+                            blurRadius = 6f
+                        )
+                    ) ,
+                    maxLines = 1 ,
+                    overflow = TextOverflow.Ellipsis
+                )
 
-                    Text(
-                        text = model.title!! ,
-                        style = regularFont().copy(
-                            shadow = Shadow(
-                                color = colorBlack ,
-                                offset = Offset(2f , 2f) ,
-                                blurRadius = 6f
-                            )
-                        ) ,
-                        maxLines = 1 ,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                Spacer(modifier = Modifier.size(2.dp))
 
-                    Spacer(modifier = Modifier.size(2.dp))
-
-                    Text(
-                        text = model.caption!! ,
-                        style = boldFont(12.sp).copy(
-                            shadow = Shadow(
-                                color = colorBlack ,
-                                offset = Offset(2f , 2f) ,
-                                blurRadius = 6f
-                            )
-                        ) ,
-                        maxLines = 1 ,
-                        overflow = TextOverflow.Ellipsis
-                    )
-
-                }
+                Text(
+                    text = model.caption!! ,
+                    style = boldFont(12.sp).copy(
+                        shadow = Shadow(
+                            color = colorBlack ,
+                            offset = Offset(2f , 2f) ,
+                            blurRadius = 6f
+                        )
+                    ) ,
+                    maxLines = 1 ,
+                    overflow = TextOverflow.Ellipsis
+                )
 
             }
 
@@ -425,8 +413,8 @@ fun MovieItem(
 ) {
 
     var mModifier = Modifier.wrapContentWidth()
-    mModifier = modifier?.clickable { navController.navigate(BottomNavItem.Movie.screen_route + "/" + "123") }
-        ?: Modifier.clickable { navController.navigate(BottomNavItem.Movie.screen_route + "/" + "123") }
+    mModifier = modifier?.clickable { navController.navigate("${BottomNavItem.Movie.screen_route}/${item.titleId}") }
+        ?: Modifier.clickable { navController.navigate("${BottomNavItem.Movie.screen_route}/${item.titleId}") }
 
     ConstraintLayout(
         modifier = mModifier
@@ -621,7 +609,8 @@ fun IMDbOriginalsList(imdbOriginalList: List<HomeRes.ImdbOriginal> , showPlaceHo
     val listState = rememberLazyListState()
     val showTitle by remember {
         derivedStateOf {
-            listState.firstVisibleItemIndex == 0
+            true
+//            listState.firstVisibleItemIndex == 0
         }
     }
 
@@ -674,8 +663,6 @@ fun IMDbOriginalsList(imdbOriginalList: List<HomeRes.ImdbOriginal> , showPlaceHo
                 .scrollable(
                     orientation = Orientation.Horizontal,
                     state = ScrollableState {
-                        offset += it
-                        Timber.d("ScrollableState:: $offset")
                         it
                     }
                 )
@@ -698,7 +685,7 @@ fun IMDbOriginalsList(imdbOriginalList: List<HomeRes.ImdbOriginal> , showPlaceHo
 }
 
 @Composable
-fun GenreList(genreList: List<GenreModel>) {
+fun GenreList(genreList: List<TitleDetailsRes.Overview.Genre> , showPlaceHolder: Boolean = false) {
 
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp) ,
@@ -713,8 +700,16 @@ fun GenreList(genreList: List<GenreModel>) {
                         shape = RoundedCornerShape(12.dp),
                         color = colorGray.copy(alpha = 0.75f)
                     )
+                    .placeholder(
+                        visible = showPlaceHolder,
+                        color = colorGray,
+                        shape = RoundedCornerShape(16.dp),
+                        highlight = PlaceholderHighlight.fade(
+                            highlightColor = colorPlaceHolder
+                        )
+                    )
                     .padding(horizontal = 24.dp, vertical = 8.dp),
-                text = item.genre ,
+                text = item.title.toString() ,
                 style = regularFont()
             )
 
@@ -725,7 +720,7 @@ fun GenreList(genreList: List<GenreModel>) {
 }
 
 @Composable
-fun ImageList(modifier: Modifier , itemSizeDp: Dp ,imageList: List<ImageModel>) {
+fun ImageList(modifier: Modifier , itemSizeDp: Dp ,imageList: List<TitleDetailsRes.Photo> , showPlaceHolder: Boolean = false) {
 
     Row (
         modifier = modifier ,
@@ -742,6 +737,14 @@ fun ImageList(modifier: Modifier , itemSizeDp: Dp ,imageList: List<ImageModel>) 
                     .background(
                         shape = RoundedCornerShape(16.dp),
                         color = colorGray.copy(alpha = 0.75f)
+                    )
+                    .placeholder(
+                        visible = showPlaceHolder,
+                        color = colorGray,
+                        shape = RoundedCornerShape(16.dp),
+                        highlight = PlaceholderHighlight.fade(
+                            highlightColor = colorPlaceHolder
+                        )
                     ),
                 model = ImageRequest
                     .Builder(LocalContext.current)
@@ -761,14 +764,14 @@ fun ImageList(modifier: Modifier , itemSizeDp: Dp ,imageList: List<ImageModel>) 
 }
 
 @Composable
-fun VideoList(modifier: Modifier , itemWidthDp: Dp , itemHeightDp: Dp , imageList: List<VideoModel>) {
+fun VideoList(modifier: Modifier , itemWidthDp: Dp , itemHeightDp: Dp , videoList: List<TitleDetailsRes.Video> , showPlaceHolder: Boolean = false) {
 
     Row (
         modifier = modifier ,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ){
 
-        imageList.forEach {
+        videoList.forEach {
 
             Box(modifier = Modifier
                 .fillMaxHeight()
@@ -777,6 +780,14 @@ fun VideoList(modifier: Modifier , itemWidthDp: Dp , itemHeightDp: Dp , imageLis
                 .background(
                     shape = RoundedCornerShape(16.dp),
                     color = colorGray.copy(alpha = 0.75f)
+                )
+                .placeholder(
+                    visible = showPlaceHolder,
+                    color = colorGray,
+                    shape = RoundedCornerShape(16.dp),
+                    highlight = PlaceholderHighlight.fade(
+                        highlightColor = colorPlaceHolder
+                    )
                 )
             ) {
 

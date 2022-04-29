@@ -44,7 +44,7 @@ fun FilmographyScreen(movieList: List<MovieModel> , navController: NavHostContro
                         color = colorGray.copy(alpha = 0.75f)
                     )
                     .clickable {
-                        navController.navigate("${BottomNavItem.Movie.screen_route}/521")
+                        navController.navigate("${BottomNavItem.Movie.screen_route}/${movieModel.titleId}")
                     },
                 horizontalArrangement = Arrangement.SpaceBetween ,
                 verticalAlignment = Alignment.CenterVertically

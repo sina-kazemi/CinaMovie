@@ -54,6 +54,7 @@ import com.sina.cinamovie.util.ITEM_ID
 import com.sina.cinamovie.util.stackblur.StackBlurManager
 import com.sina.cinamovie.vm.ChartViewModel
 import com.sina.cinamovie.vm.HomeViewModel
+import com.sina.cinamovie.vm.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -66,6 +67,7 @@ class MainActivity : ComponentActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val chartViewModel: ChartViewModel by viewModels()
+    private val movieViewModel: MovieViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -188,7 +190,8 @@ class MainActivity : ComponentActivity() {
             }
             composable("${BottomNavItem.Movie.screen_route}/{$ITEM_ID}") { backStackEntry ->
                 val itemId = backStackEntry.arguments?.getString(ITEM_ID)
-                MovieScreen(itemId = itemId?: "" , navController = navController)
+                Timber.d("MOVIE_SCREEN!!! $itemId")
+                MovieScreen(itemId = itemId?: "" , navController = navController , movieViewModel = movieViewModel)
             }
             composable("${BottomNavItem.Person.screen_route}/{$ITEM_ID}") { backStackEntry ->
                 val itemId = backStackEntry.arguments?.getString(ITEM_ID)

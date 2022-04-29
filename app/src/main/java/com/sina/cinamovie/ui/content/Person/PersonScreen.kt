@@ -209,11 +209,7 @@ fun PersonScreen(itemId: String , navController: NavHostController) {
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            GenreList(genreList = listOf(
-                GenreModel(genre = "Actor") ,
-                GenreModel(genre = "Producer") ,
-                GenreModel(genre = "Director")
-            ))
+            GenreList(genreList = listOf())
 
             val screenWidth = LocalConfiguration.current.screenWidthDp.dp
             var heightSize by remember { mutableStateOf(IntSize.Zero) }

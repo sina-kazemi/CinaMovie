@@ -77,23 +77,17 @@ fun HomeScreen(
         initial = Result.loading()
     )
 
-    var homeResShowPlaceHolder by remember {
-        mutableStateOf(true)
+    val homeResShowPlaceHolder by remember {
+        derivedStateOf { homeRes.status == Result.Status.LOADING }
     }
 
-    var homeExtraShowPlaceHolder by remember {
-        mutableStateOf(true)
+    val homeExtraShowPlaceHolder by remember {
+        derivedStateOf { homeExtraRes.status == Result.Status.LOADING }
     }
 
-    var chartShowPlaceHolder by remember {
-        mutableStateOf(true)
+    val chartShowPlaceHolder by remember {
+        derivedStateOf { chartRes.status == Result.Status.LOADING }
     }
-
-    Timber.d("HOME_RES::: ${homeRes.status}")
-
-    homeResShowPlaceHolder = homeRes.status == Result.Status.LOADING
-    homeExtraShowPlaceHolder = homeExtraRes.status == Result.Status.LOADING
-    chartShowPlaceHolder = chartRes.status == Result.Status.LOADING
 
     Column(
         modifier = Modifier
@@ -214,7 +208,8 @@ fun HomeScreen(
         }
         else {
             homeRes.data?.data?.imdbOriginals?.let {
-                IMDbOriginalsList(imdbOriginalList = it.subList(0 , it.size.coerceAtMost(8)))
+                Timber.d("IMDB_ORIGINALS:: ${it.toString()}")
+//                IMDbOriginalsList(imdbOriginalList = it.subList(0 , it.size.coerceAtMost(8)))
             }
         }
 
