@@ -59,6 +59,8 @@ fun HomeScreen(
     chartViewModel: ChartViewModel
 ) {
 
+    Timber.d("HomeScreen!!!")
+
     val lifecycleOwner = LocalLifecycleOwner.current
     val homeFlowLifecycleAware = remember(homeViewModel.homeUiState, lifecycleOwner) {
         homeViewModel.homeUiState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)

@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -722,6 +723,9 @@ fun GenreList(genreList: List<TitleDetailsRes.Overview.Genre> , showPlaceHolder:
 @Composable
 fun ImageList(modifier: Modifier , itemSizeDp: Dp ,imageList: List<TitleDetailsRes.Photo> , showPlaceHolder: Boolean = false) {
 
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val screenWidthPx = with(LocalDensity.current) { screenWidth.toPx() }.toInt()
+
     Row (
         modifier = modifier ,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -750,6 +754,7 @@ fun ImageList(modifier: Modifier , itemSizeDp: Dp ,imageList: List<TitleDetailsR
                     .Builder(LocalContext.current)
                     .data(it.original)
                     .crossfade(true)
+                    .size(screenWidthPx/4 , screenWidthPx/4)
                     .build(),
                 contentDescription = "",
                 contentScale = ContentScale.Crop
@@ -765,6 +770,9 @@ fun ImageList(modifier: Modifier , itemSizeDp: Dp ,imageList: List<TitleDetailsR
 
 @Composable
 fun VideoList(modifier: Modifier , itemWidthDp: Dp , itemHeightDp: Dp , videoList: List<TitleDetailsRes.Video> , showPlaceHolder: Boolean = false) {
+
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val screenWidthPx = with(LocalDensity.current) { screenWidth.toPx() }.toInt()
 
     Row (
         modifier = modifier ,
@@ -799,6 +807,7 @@ fun VideoList(modifier: Modifier , itemWidthDp: Dp , itemHeightDp: Dp , videoLis
                         .Builder(LocalContext.current)
                         .data(it.preview)
                         .crossfade(true)
+                        .size(screenWidthPx/2 , screenWidthPx/4)
                         .build(),
                     contentDescription = "",
                     contentScale = ContentScale.Crop

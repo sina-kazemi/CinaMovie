@@ -31,6 +31,8 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import coil.size.Size
+import coil.size.SizeResolver
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.placeholder
@@ -44,6 +46,7 @@ import com.sina.cinamovie.ui.content.common.AppBar
 import com.sina.cinamovie.ui.content.common.ListHeader
 import com.sina.cinamovie.ui.content.list.*
 import com.sina.cinamovie.ui.theme.*
+import com.sina.cinamovie.util.toDp
 import com.sina.cinamovie.vm.MovieViewModel
 import timber.log.Timber
 import java.lang.Exception
@@ -66,8 +69,12 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
     }
 
     val movieShowPlaceHolder by remember {
-        derivedStateOf { movieRes.status == Result.Status.LOADING }
+//        derivedStateOf { movieRes.status == Result.Status.LOADING }
+        mutableStateOf(false)
     }
+
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val screenWidthPx = with(LocalDensity.current) { screenWidth.toPx() }.toInt()
 
     Column(
         modifier = Modifier
@@ -145,6 +152,7 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
                             .Builder(LocalContext.current)
                             .data(movieRes.data?.data?.overview?.cover.toString())
                             .crossfade(true)
+                            .size(screenWidthPx*2/3 , screenWidthPx)
                             .build(),
                         contentDescription = "",
                         contentScale = ContentScale.Crop
@@ -323,7 +331,6 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
             }
 
             val configuration = LocalConfiguration.current
-            val screenWidth = configuration.screenWidthDp.dp
             var heightSize by remember { mutableStateOf(IntSize.Zero) }
 
             Spacer(modifier = Modifier.size(48.dp))
@@ -379,6 +386,7 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
                                 .Builder(LocalContext.current)
                                 .data(movieRes.data?.data?.overview?.cover)
                                 .crossfade(true)
+                                .size(screenWidthPx/3 , screenWidthPx/2)
                                 .build(),
                             contentDescription = "" ,
                             contentScale = ContentScale.Crop
@@ -609,6 +617,7 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
                                         .Builder(LocalContext.current)
                                         .data(it.image)
                                         .crossfade(true)
+                                        .size(screenWidthPx/3 , screenWidthPx/3)
                                         .build(),
                                     contentDescription = "" ,
                                     contentScale = ContentScale.Crop
