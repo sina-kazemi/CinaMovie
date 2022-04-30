@@ -21,16 +21,16 @@ class MovieViewModel @Inject constructor(
 
     private val _movieUiState = MutableStateFlow<Result<ApiResponse<TitleDetailsRes>>>(Result.loading())
     val movieUiState: StateFlow<Result<ApiResponse<TitleDetailsRes>>> = _movieUiState
-
-    init {
-
-    }
+    private var loadData: Boolean = false
 
     fun fetchMovie(itemId: String) {
-        Timber.d("FETCH_MOVIE:::::::")
-        viewModelScope.launch {
-            movieRepository.fetchMovie(itemId).collect{
-                _movieUiState.value = it
+        if (!loadData) {
+            loadData = true
+            Timber.d("FETCH_MOVIE:::::::")
+            viewModelScope.launch {
+                movieRepository.fetchMovie(itemId).collect{
+                    _movieUiState.value = it
+                }
             }
         }
     }

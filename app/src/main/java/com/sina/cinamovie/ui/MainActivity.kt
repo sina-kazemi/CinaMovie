@@ -189,7 +189,6 @@ class MainActivity : ComponentActivity() {
             }
             composable("${BottomNavItem.Movie.screen_route}/{$ITEM_ID}") { backStackEntry ->
                 val itemId = backStackEntry.arguments?.getString(ITEM_ID)
-                Timber.d("MOVIE_SCREEN!!! $itemId")
                 MovieScreen(itemId = itemId?: "" , navController = navController , movieViewModel = movieViewModel)
             }
             composable("${BottomNavItem.Person.screen_route}/{$ITEM_ID}") { backStackEntry ->

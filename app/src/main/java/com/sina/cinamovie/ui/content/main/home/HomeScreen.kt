@@ -39,7 +39,10 @@ import com.sina.cinamovie.ui.theme.*
 import com.sina.cinamovie.vm.HomeViewModel
 import com.sina.cinamovie.data.ApiResponse
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.placeholder.PlaceholderHighlight
@@ -49,6 +52,7 @@ import com.sina.cinamovie.data.Result
 import com.sina.cinamovie.data.res.ChartBoxOfficeRes
 import com.sina.cinamovie.data.res.HomeExtraRes
 import com.sina.cinamovie.util.getAge
+import com.sina.cinamovie.util.toDp
 import com.sina.cinamovie.vm.ChartViewModel
 import timber.log.Timber
 
@@ -258,6 +262,10 @@ fun HomeScreen(
                 }
             }
 
+            var itemSize by remember {
+                mutableStateOf(IntSize.Zero)
+            }
+
             tempList.let {
                 it.subList(0 , it.size.coerceAtMost(12)).windowed(2 , 2 , true).forEach { subList ->
 
@@ -272,6 +280,9 @@ fun HomeScreen(
                             ConstraintLayout(
                                 modifier = Modifier
                                     .fillMaxWidth()
+                                    .onSizeChanged {
+                                        itemSize = it
+                                    }
                                     .placeholder(
                                         visible = homeResShowPlaceHolder,
                                         color = colorGray,
@@ -373,6 +384,16 @@ fun HomeScreen(
                                 }
 
                             }
+
+                        }
+
+                        repeat(2 - subList.size) {
+
+                            Box(
+                                modifier = Modifier
+                                    .width(with(LocalDensity.current) { itemSize.width.toDp() })
+                                    .height(with(LocalDensity.current) { itemSize.height.toDp() }),
+                            )
 
                         }
 

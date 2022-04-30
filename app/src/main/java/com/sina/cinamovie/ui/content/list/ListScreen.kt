@@ -55,6 +55,7 @@ import com.sina.cinamovie.model.*
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.*
 import timber.log.Timber
+import java.lang.Exception
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -353,39 +354,58 @@ fun <T> MovieList(movieList: List<T> , navController: NavHostController , showPl
 
     var newMovieList: List<MovieModel> = listOf()
 
-    when {
-        movieList.first() is HomeExtraRes.FanPicksTitle -> {
-            newMovieList = (movieList as List<HomeExtraRes.FanPicksTitle>).map {
-                MovieModel(
-                    certificate = it.certificate,
-                    cover = it.cover,
-                    rate = it.rate,
-                    releaseDay = it.releaseDay,
-                    releaseMonth = it.releaseMonth,
-                    releaseYear = it.releaseYear,
-                    runtime = it.runtime,
-                    title = it.title,
-                    titleId = it.titleId,
-                    videoId = it.videoId,
-                    voteCount = it.voteCount
-                )
+    if (movieList.isNotEmpty()) {
+        when {
+            movieList.first() is HomeExtraRes.FanPicksTitle -> {
+                newMovieList = (movieList as List<HomeExtraRes.FanPicksTitle>).map {
+                    MovieModel(
+                        certificate = it.certificate,
+                        cover = it.cover,
+                        rate = it.rate,
+                        releaseDay = it.releaseDay,
+                        releaseMonth = it.releaseMonth,
+                        releaseYear = it.releaseYear,
+                        runtime = it.runtime,
+                        title = it.title,
+                        titleId = it.titleId,
+                        videoId = it.videoId,
+                        voteCount = it.voteCount
+                    )
+                }
             }
-        }
-        movieList.first() is HomeExtraRes.ComingSoonMovie -> {
-            newMovieList = (movieList as List<HomeExtraRes.ComingSoonMovie>).map {
-                MovieModel(
-                    certificate = it.certificate,
-                    cover = it.cover,
-                    rate = it.rate,
-                    releaseDay = it.releaseDay,
-                    releaseMonth = it.releaseMonth,
-                    releaseYear = it.releaseYear,
-                    runtime = it.runtime,
-                    title = it.title,
-                    titleId = it.titleId,
-                    videoId = it.videoId,
-                    voteCount = it.voteCount
-                )
+            movieList.first() is HomeExtraRes.ComingSoonMovie -> {
+                newMovieList = (movieList as List<HomeExtraRes.ComingSoonMovie>).map {
+                    MovieModel(
+                        certificate = it.certificate,
+                        cover = it.cover,
+                        rate = it.rate,
+                        releaseDay = it.releaseDay,
+                        releaseMonth = it.releaseMonth,
+                        releaseYear = it.releaseYear,
+                        runtime = it.runtime,
+                        title = it.title,
+                        titleId = it.titleId,
+                        videoId = it.videoId,
+                        voteCount = it.voteCount
+                    )
+                }
+            }
+            movieList.first() is TitleDetailsRes.RelatedMovie -> {
+                newMovieList = (movieList as List<TitleDetailsRes.RelatedMovie>).map {
+                    MovieModel(
+                        rate = run {
+                            try {
+                                it.rate?.toFloat()
+                            }
+                            catch (e: Exception) {
+                                null
+                            }
+                        },
+                        cover = it.cover,
+                        title = it.title,
+                        titleId = it.id
+                    )
+                }
             }
         }
     }
