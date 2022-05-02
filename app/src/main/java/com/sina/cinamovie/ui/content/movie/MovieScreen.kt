@@ -39,6 +39,7 @@ import com.google.accompanist.placeholder.placeholder
 import com.sina.cinamovie.R
 import com.sina.cinamovie.data.ApiResponse
 import com.sina.cinamovie.data.Result
+import com.sina.cinamovie.data.res.HomeExtraRes
 import com.sina.cinamovie.data.res.HomeRes
 import com.sina.cinamovie.data.res.TitleDetailsRes
 import com.sina.cinamovie.model.*
@@ -678,56 +679,39 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
 
             }
 
-//            Spacer(modifier = Modifier.size(48.dp))
-//            ListHeader(
-//                title = stringResource(R.string.str_more_like_this) ,
-//                showMore =  true ,
-//                showPlaceHolder = movieShowPlaceHolder
-//            )
-//            Spacer(modifier = Modifier.size(24.dp))
-//            MovieList(movieList = listOf(
-//                MovieModel(
-//                    cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-//                    title = "The Batman" ,
-//                    rate = 8.5f
-//                ) ,
-//                MovieModel(
-//                    cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-//                    title = "Spider-Man: No way home" ,
-//                    rate = 7.6f
-//                ) ,
-//                MovieModel(
-//                    cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-//                    title = "The Batman" ,
-//                    rate = 8.5f
-//                ) ,
-//                MovieModel(
-//                    cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-//                    title = "Spider-Man: No way home" ,
-//                    rate = 7.6f
-//                ) ,
-//                MovieModel(
-//                    cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-//                    title = "The Batman" ,
-//                    rate = 8.5f
-//                ) ,
-//                MovieModel(
-//                    cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-//                    title = "Spider-Man: No way home" ,
-//                    rate = 7.6f
-//                ) ,
-//                MovieModel(
-//                    cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-//                    title = "The Batman" ,
-//                    rate = 8.5f
-//                ) ,
-//                MovieModel(
-//                    cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-//                    title = "Spider-Man: No way home" ,
-//                    rate = 7.6f
-//                ) ,
-//            ) ,
-//                navController = navController)
+            Spacer(modifier = Modifier.size(48.dp))
+            ListHeader(
+                title = stringResource(R.string.str_more_like_this) ,
+                showMore =  true ,
+                showPlaceHolder = movieShowPlaceHolder
+            )
+            Spacer(modifier = Modifier.size(24.dp))
+
+            if (movieShowPlaceHolder) {
+                val tempList = listOf(
+                    HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                    HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                    HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                    HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                    HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                    HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                    HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0),
+                    HomeExtraRes.FanPicksTitle("" , "" , 0f , "" , "" , "" , 0 , "" , "" , "" , 0)
+                )
+
+                MovieList(movieList = tempList ,
+                    navController = navController , showPlaceHolder = true)
+
+            }
+            else {
+
+                movieRes.data?.data?.relatedMovies?.let {
+                    MovieList(movieList = it.subList(0 , it.size.coerceAtMost(12)) ,
+                        navController = navController)
+                }
+
+            }
+
             Spacer(modifier = Modifier.size(24.dp))
 
         }
