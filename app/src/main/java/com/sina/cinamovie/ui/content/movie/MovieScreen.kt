@@ -1,5 +1,7 @@
 package com.sina.cinamovie.ui.content.movie
 
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.Lifecycle
@@ -36,6 +39,10 @@ import coil.size.SizeResolver
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.placeholder
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.sina.cinamovie.R
 import com.sina.cinamovie.data.ApiResponse
 import com.sina.cinamovie.data.Result
@@ -379,6 +386,8 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
                             )
                     ) {
 
+                        val context = LocalContext.current
+
                         AsyncImage(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -393,12 +402,56 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
                             contentScale = ContentScale.Crop
                         )
 
+                        val exoPlayer = remember(context) {
+                            ExoPlayer.Builder(context).build().apply {
+                                setMediaItems(
+                                    mutableListOf(
+                                        MediaItem.fromUri("https://videos1.varzeshe3.com/videos-quality/2022/05/02/B/0neh3nks.mp4")
+//                            MediaItem.fromUri("https://www.imdb.com/video/vi3877612057")
+                                    )
+                                )
+                                repeatMode = ExoPlayer.REPEAT_MODE_ALL
+                                volume = 0f
+                                playWhenReady = true
+                            }
+                        }
+
+                        LaunchedEffect(exoPlayer) {
+                            exoPlayer.apply {
+                                prepare()
+                                play()
+                            }
+                        }
+
+                        DisposableEffect(
+                            AndroidView(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(16.dp)),
+                                factory = {
+                                    StyledPlayerView(context).apply {
+                                        player = exoPlayer
+                                        useController = false
+                                        resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+                                        FrameLayout.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            ViewGroup.LayoutParams.MATCH_PARENT
+                                        )
+                                    }
+                                }
+                            )
+                        ) {
+                            onDispose {
+                                exoPlayer.release()
+                            }
+                        }
+
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .background(
                                     shape = RoundedCornerShape(16.dp),
-                                    color = colorBlack.copy(alpha = 0.75f)
+                                    color = colorBlack.copy(alpha = 0.8f)
                                 ) ,
                             contentAlignment = Alignment.Center
                         ) {

@@ -1,5 +1,9 @@
 package com.sina.cinamovie.ui.content.main.home
 
+import android.media.MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,15 +43,21 @@ import com.sina.cinamovie.ui.theme.*
 import com.sina.cinamovie.vm.HomeViewModel
 import com.sina.cinamovie.data.ApiResponse
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.placeholder
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.ui.*
 import com.sina.cinamovie.data.Result
 import com.sina.cinamovie.data.res.ChartBoxOfficeRes
 import com.sina.cinamovie.data.res.HomeExtraRes
@@ -553,10 +563,58 @@ fun HomeScreen(
                 )
         ) {
 
+            val context = LocalContext.current
+            var heightSize by remember { mutableStateOf(IntSize.Zero) }
+
+            val exoPlayer = remember(context) {
+                ExoPlayer.Builder(context).build().apply {
+                    setMediaItems(
+                        mutableListOf(
+                            MediaItem.fromUri("https://videos1.varzeshe3.com/videos-quality/2022/05/02/B/0neh3nks.mp4")
+//                            MediaItem.fromUri("https://www.imdb.com/video/vi3877612057")
+                        )
+                    )
+                    repeatMode = ExoPlayer.REPEAT_MODE_ALL
+                    volume = 0f
+                    playWhenReady = true
+                }
+            }
+
+            LaunchedEffect(exoPlayer) {
+                exoPlayer.apply {
+                    prepare()
+                    play()
+                }
+            }
+
+            DisposableEffect(
+                AndroidView(
+                    modifier = Modifier.fillMaxSize().height(with(LocalDensity.current) { heightSize.height.toDp() }),
+                    factory = {
+                        StyledPlayerView(context).apply {
+                            player = exoPlayer
+                            useController = false
+                            resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+                            FrameLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.MATCH_PARENT
+                            )
+                        }
+                    }
+                )
+            ) {
+                onDispose {
+                    exoPlayer.release()
+                }
+            }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(colorBlack.copy(alpha = 0.75f))
+                    .background(colorBlack.copy(alpha = 0.85f))
+                    .onSizeChanged {
+                        heightSize = it
+                    }
                     .padding(vertical = 32.dp) ,
                 verticalAlignment = Alignment.CenterVertically ,
                 horizontalArrangement = Arrangement.Start

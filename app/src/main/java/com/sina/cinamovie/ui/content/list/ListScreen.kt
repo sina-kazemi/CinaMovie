@@ -1,5 +1,7 @@
 package com.sina.cinamovie.ui.content.list
 
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
@@ -47,6 +50,10 @@ import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.placeholder.shimmer
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.sina.cinamovie.R
 import com.sina.cinamovie.data.res.HomeExtraRes
 import com.sina.cinamovie.data.res.HomeRes
@@ -634,67 +641,120 @@ fun IMDbOriginalsList(imdbOriginalList: List<HomeRes.ImdbOriginal> , showPlaceHo
         }
     }
 
+    Box(modifier = Modifier.fillMaxWidth()) {
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(colorBlack.copy(alpha = 0.75f))
-            .placeholder(
-                visible = showPlaceHolder,
-                color = colorGray,
-                highlight = PlaceholderHighlight.fade(
-                    highlightColor = colorPlaceHolder
+        val context = LocalContext.current
+        var heightSize by remember { mutableStateOf(IntSize.Zero) }
+
+        val exoPlayer = remember(context) {
+            ExoPlayer.Builder(context).build().apply {
+                setMediaItems(
+                    mutableListOf(
+                        MediaItem.fromUri("https://videos1.varzeshe3.com/videos-quality/2022/05/02/B/0neh3nks.mp4")
+//                            MediaItem.fromUri("https://www.imdb.com/video/vi3877612057")
+                    )
                 )
-            )
-    ) {
+                repeatMode = ExoPlayer.REPEAT_MODE_ALL
+                volume = 0f
+                playWhenReady = true
+            }
+        }
 
-        AnimatedVisibility(
+        LaunchedEffect(exoPlayer) {
+            exoPlayer.apply {
+                prepare()
+                play()
+            }
+        }
+
+        DisposableEffect(
+            AndroidView(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .height(with(LocalDensity.current) { heightSize.height.toDp() }),
+                factory = {
+                    StyledPlayerView(context).apply {
+                        player = exoPlayer
+                        useController = false
+                        resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+                        FrameLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
+                        )
+                    }
+                }
+            )
+        ) {
+            onDispose {
+                exoPlayer.release()
+            }
+        }
+
+        Box(
             modifier = Modifier
-                .align(Alignment.CenterStart),
-            visible = showTitle ,
-            enter = fadeIn() ,
-            exit = fadeOut()
+                .fillMaxWidth()
+                .onSizeChanged {
+                    heightSize = it
+                }
+                .background(colorBlack.copy(alpha = 0.8f))
+                .placeholder(
+                    visible = showPlaceHolder,
+                    color = colorGray,
+                    highlight = PlaceholderHighlight.fade(
+                        highlightColor = colorPlaceHolder
+                    )
+                )
         ) {
 
-            Box(
+            AnimatedVisibility(
                 modifier = Modifier
-                    .onSizeChanged { titleParentSize = it }
-                    .align(Alignment.CenterStart) ,
+                    .align(Alignment.CenterStart),
+                visible = showTitle ,
+                enter = fadeIn() ,
+                exit = fadeOut()
             ) {
 
-                Column(
+                Box(
                     modifier = Modifier
-                        .padding(horizontal = 32.dp),
-                    verticalArrangement = Arrangement.Center ,
-                    horizontalAlignment = Alignment.Start
+                        .onSizeChanged { titleParentSize = it }
+                        .align(Alignment.CenterStart) ,
                 ) {
 
-                    Text(text = stringResource(R.string.str_imdb), style = mediumFont(16.sp))
-                    Text(text = stringResource(R.string.str_originals), style = extraLightFont(16.sp))
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 32.dp),
+                        verticalArrangement = Arrangement.Center ,
+                        horizontalAlignment = Alignment.Start
+                    ) {
+
+                        Text(text = stringResource(R.string.str_imdb), style = mediumFont(16.sp))
+                        Text(text = stringResource(R.string.str_originals), style = extraLightFont(16.sp))
+
+                    }
 
                 }
 
             }
 
-        }
+            LazyRow(
+                modifier = Modifier
+                    .scrollable(
+                        orientation = Orientation.Horizontal,
+                        state = ScrollableState {
+                            it
+                        }
+                    )
+                    .padding(vertical = 24.dp) ,
+                horizontalArrangement = Arrangement.spacedBy(16.dp) ,
+                contentPadding = PaddingValues(start = widthInDp , end = 16.dp) ,
+                state = listState
+            ) {
 
-        LazyRow(
-            modifier = Modifier
-                .scrollable(
-                    orientation = Orientation.Horizontal,
-                    state = ScrollableState {
-                        it
-                    }
-                )
-                .padding(vertical = 24.dp) ,
-            horizontalArrangement = Arrangement.spacedBy(16.dp) ,
-            contentPadding = PaddingValues(start = widthInDp , end = 16.dp) ,
-            state = listState
-        ) {
+                items(imdbOriginalList) { item ->
 
-            items(imdbOriginalList) { item ->
+                    ImdbOriginalRow(model = item , showPlaceHolder = showPlaceHolder)
 
-                ImdbOriginalRow(model = item , showPlaceHolder = showPlaceHolder)
+                }
 
             }
 
