@@ -64,9 +64,6 @@ class MainActivity : ComponentActivity() {
 
     lateinit var stackBlurManager: StackBlurManager
 
-    private val homeViewModel: HomeViewModel by viewModels()
-    private val chartViewModel: ChartViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -74,24 +71,6 @@ class MainActivity : ComponentActivity() {
         val bitmap = BitmapFactory.decodeResource(resources, R.drawable.money_heist_cover)
 
         stackBlurManager = StackBlurManager(bitmap)
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                homeViewModel.homeUiState.collect{
-                    when (it.status) {
-                        Result.Status.LOADING -> {
-                            Timber.d("FirstGetData::LOADING")
-                        }
-                        Result.Status.SUCCESS -> {
-                            Timber.d("FirstGetData::SUCCESS ${it.data.toString()}")
-                        }
-                        Result.Status.ERROR -> {
-                            Timber.d("FirstGetData::ERROR")
-                        }
-                    }
-                }
-            }
-        }
 
         setContent {
             CinaMovieTheme {
@@ -174,6 +153,8 @@ class MainActivity : ComponentActivity() {
             startDestination = MainBottomNavItem.Home.screen_route
         ) {
             composable(MainBottomNavItem.Home.screen_route) {
+                val homeViewModel: HomeViewModel by viewModels()
+                val chartViewModel: ChartViewModel by viewModels()
                 HomeScreen(
                     navController = navController ,
                     homeViewModel = homeViewModel ,
@@ -187,8 +168,9 @@ class MainActivity : ComponentActivity() {
                 ChartScreen()
             }
             composable("${BottomNavItem.Movie.screen_route}/{$ITEM_ID}") { backStackEntry ->
-                val movieViewModel: MovieViewModel by viewModels()
                 val itemId = backStackEntry.arguments?.getString(ITEM_ID)
+                val movieViewModel: MovieViewModel by viewModels()
+                movieViewModel.clearState()
                 MovieScreen(itemId = itemId?: "" , navController = navController , movieViewModel = movieViewModel)
             }
             composable("${BottomNavItem.Person.screen_route}/{$ITEM_ID}") { backStackEntry ->

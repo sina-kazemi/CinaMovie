@@ -630,8 +630,7 @@ fun IMDbOriginalsList(imdbOriginalList: List<HomeRes.ImdbOriginal> , showPlaceHo
     val listState = rememberLazyListState()
     val showTitle by remember {
         derivedStateOf {
-            true
-//            listState.firstVisibleItemIndex == 0
+            listState.firstVisibleItemIndex == 0
         }
     }
 

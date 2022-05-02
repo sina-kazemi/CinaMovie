@@ -215,7 +215,7 @@ fun HomeScreen(
         else {
             homeRes.data?.data?.imdbOriginals?.let {
                 Timber.d("IMDB_ORIGINALS:: ${it.toString()}")
-//                IMDbOriginalsList(imdbOriginalList = it.subList(0 , it.size.coerceAtMost(8)))
+                IMDbOriginalsList(imdbOriginalList = it.subList(0 , it.size.coerceAtMost(8)))
             }
         }
 

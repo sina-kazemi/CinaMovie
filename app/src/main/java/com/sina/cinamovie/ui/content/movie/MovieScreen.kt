@@ -49,6 +49,7 @@ import com.sina.cinamovie.ui.content.list.*
 import com.sina.cinamovie.ui.theme.*
 import com.sina.cinamovie.util.toDp
 import com.sina.cinamovie.vm.MovieViewModel
+import kotlinx.coroutines.delay
 import timber.log.Timber
 import java.lang.Exception
 
@@ -529,14 +530,7 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
 
                 var language by remember { mutableStateOf("") }
                 movieRes.data?.data?.details?.language?.let {
-                    language = ""
-                    it.forEachIndexed { index, item ->
-                        language += item.title
-                        if (index < it.size - 1) {
-                            language += " . "
-                        }
-                        Timber.d("LANGUAGE:::: ${language} :::: ${item.title}")
-                    }
+                    language = it.joinToString(separator = ".") { item -> item.title.toString() }
                 }
 
                 var company by remember { mutableStateOf("") }
