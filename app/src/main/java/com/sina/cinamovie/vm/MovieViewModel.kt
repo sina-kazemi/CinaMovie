@@ -27,7 +27,7 @@ class MovieViewModel @Inject constructor(
     }
 
     fun fetchMovie(itemId: String) {
-        Timber.d("FETCH_MOVIE:::::::")
+        Timber.d("FETCH_MOVIE::::::: $itemId")
         viewModelScope.launch {
             movieRepository.fetchMovie(itemId).collect{
                 _movieUiState.value = it

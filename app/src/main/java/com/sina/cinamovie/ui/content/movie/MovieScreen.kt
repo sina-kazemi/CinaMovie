@@ -56,7 +56,9 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
 
     Timber.d("MovieId :: $itemId")
 
-    movieViewModel.fetchMovie(itemId)
+    LaunchedEffect(true) {
+        movieViewModel.fetchMovie(itemId)
+    }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val movieFlowLifecycleAware = remember(movieViewModel.movieUiState , lifecycleOwner) {
@@ -64,13 +66,10 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
     }
     val movieRes: Result<ApiResponse<TitleDetailsRes>> by movieFlowLifecycleAware.collectAsState(initial = Result.loading())
 
-    if (movieRes.status == Result.Status.SUCCESS) {
-        Timber.d("MovieRes::::: ${movieRes.data?.data?.toString()}")
-    }
+    Timber.d("movieRes:::: ${movieRes.status}")
 
     val movieShowPlaceHolder by remember {
-//        derivedStateOf { movieRes.status == Result.Status.LOADING }
-        mutableStateOf(false)
+        derivedStateOf { movieRes.status == Result.Status.LOADING }
     }
 
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp

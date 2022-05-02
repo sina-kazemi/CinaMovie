@@ -66,7 +66,6 @@ class MainActivity : ComponentActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val chartViewModel: ChartViewModel by viewModels()
-    private val movieViewModel: MovieViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -188,8 +187,8 @@ class MainActivity : ComponentActivity() {
                 ChartScreen()
             }
             composable("${BottomNavItem.Movie.screen_route}/{$ITEM_ID}") { backStackEntry ->
+                val movieViewModel: MovieViewModel by viewModels()
                 val itemId = backStackEntry.arguments?.getString(ITEM_ID)
-                Timber.d("MOVIE_SCREEN!!! $itemId")
                 MovieScreen(itemId = itemId?: "" , navController = navController , movieViewModel = movieViewModel)
             }
             composable("${BottomNavItem.Person.screen_route}/{$ITEM_ID}") { backStackEntry ->
