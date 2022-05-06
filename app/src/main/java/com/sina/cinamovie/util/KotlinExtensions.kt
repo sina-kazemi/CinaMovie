@@ -45,18 +45,6 @@ fun String.standardDateFormat(): String {
     }
 }
 
-//fun String.getOriginalImageSizeUrl():String {
-//
-//    val indexList = Regex("\\.", RegexOption.IGNORE_CASE).findAll(this).map { it.range.first }.toList()
-//
-//    return try {
-//        this.replaceRange(indexList[indexList.size - 2] , indexList[indexList.size - 1], "")
-//    } catch (e: Exception) {
-//        this
-//    }
-//
-//}
-
 fun String.getOriginalImageSizeUrl(): String {
 
     if (this.isNotEmpty()) {
