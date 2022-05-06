@@ -3,7 +3,6 @@ package com.sina.cinamovie.util
 import android.content.Context
 import android.util.TypedValue
 import java.lang.Exception
-import java.security.AccessController.getContext
 import java.text.SimpleDateFormat
 import java.util.*
 

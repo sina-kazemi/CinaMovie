@@ -21,8 +21,6 @@ import coil.request.ImageRequest
 import com.sina.cinamovie.data.ApiResponse
 import com.sina.cinamovie.data.Result
 import com.sina.cinamovie.data.res.GenresRes
-import com.sina.cinamovie.data.res.HomeRes
-import com.sina.cinamovie.model.GenreModel
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.colorGray
 import com.sina.cinamovie.util.getOriginalImageSizeUrl
