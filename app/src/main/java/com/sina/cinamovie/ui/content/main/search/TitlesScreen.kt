@@ -28,7 +28,7 @@ import com.sina.cinamovie.R
 import com.sina.cinamovie.model.MovieModel
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.*
-import com.sina.cinamovie.util.highResolutionImage
+import com.sina.cinamovie.util.getOriginalImageSizeUrl
 import java.text.DecimalFormat
 
 @Composable
@@ -68,7 +68,7 @@ fun TitlesScreen(userList: List<MovieModel> , navController: NavHostController) 
                         },
                     model = ImageRequest
                         .Builder(LocalContext.current)
-                        .data(movieModel.cover?.highResolutionImage())
+                        .data(movieModel.cover?.getOriginalImageSizeUrl())
                         .crossfade(true)
                         .build(),
                     contentDescription = "" ,

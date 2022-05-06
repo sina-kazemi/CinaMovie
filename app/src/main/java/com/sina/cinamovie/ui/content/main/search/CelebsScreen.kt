@@ -25,7 +25,7 @@ import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.colorGray
 import com.sina.cinamovie.ui.theme.colorTextGray3
 import com.sina.cinamovie.ui.theme.mediumFont
-import com.sina.cinamovie.util.highResolutionImage
+import com.sina.cinamovie.util.getOriginalImageSizeUrl
 import timber.log.Timber
 
 @Composable
@@ -50,7 +50,7 @@ fun CelebsScreen(userList: List<UserModel> , navController: NavHostController) {
 
                 val (imageParent , detailParent) = createRefs()
 
-                Timber.d("AvatarImage:: ${userModel.avatar.highResolutionImage()}")
+                Timber.d("AvatarImage:: ${userModel.avatar.getOriginalImageSizeUrl()}")
 
                 AsyncImage(
                     modifier = Modifier
@@ -67,7 +67,7 @@ fun CelebsScreen(userList: List<UserModel> , navController: NavHostController) {
                         },
                     model = ImageRequest
                         .Builder(LocalContext.current)
-                        .data(userModel.avatar.highResolutionImage())
+                        .data(userModel.avatar.getOriginalImageSizeUrl())
                         .crossfade(true)
                         .build(),
                     contentDescription = "" ,

@@ -25,7 +25,7 @@ import com.sina.cinamovie.data.res.HomeRes
 import com.sina.cinamovie.model.GenreModel
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.colorGray
-import com.sina.cinamovie.util.highResolutionImage
+import com.sina.cinamovie.util.getOriginalImageSizeUrl
 import com.sina.cinamovie.vm.SearchViewModel
 
 @Composable
@@ -96,7 +96,7 @@ fun GenreScreen(navController: NavController , searchViewModel: SearchViewModel)
                             ),
                         model = ImageRequest
                             .Builder(LocalContext.current)
-                            .data(genreModel.image.highResolutionImage())
+                            .data(genreModel.image.getOriginalImageSizeUrl())
                             .crossfade(true)
                             .build() ,
                         contentScale = ContentScale.Crop ,
