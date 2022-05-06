@@ -2,6 +2,7 @@ package com.sina.cinamovie.ui
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.widget.SearchView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -54,6 +55,7 @@ import com.sina.cinamovie.util.stackblur.StackBlurManager
 import com.sina.cinamovie.vm.ChartViewModel
 import com.sina.cinamovie.vm.HomeViewModel
 import com.sina.cinamovie.vm.MovieViewModel
+import com.sina.cinamovie.vm.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -162,7 +164,8 @@ class MainActivity : ComponentActivity() {
                 )
             }
             composable(MainBottomNavItem.Search.screen_route) {
-                SearchScreen(navController = navController)
+                val searchViewModel: SearchViewModel by viewModels()
+                SearchScreen(navController = navController , searchViewModel = searchViewModel)
             }
             composable(MainBottomNavItem.Chart.screen_route) {
                 ChartScreen()

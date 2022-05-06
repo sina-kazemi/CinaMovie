@@ -6,22 +6,44 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.sina.cinamovie.data.ApiResponse
+import com.sina.cinamovie.data.Result
+import com.sina.cinamovie.data.res.GenresRes
+import com.sina.cinamovie.data.res.HomeRes
 import com.sina.cinamovie.model.GenreModel
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.colorGray
 import com.sina.cinamovie.util.highResolutionImage
+import com.sina.cinamovie.vm.SearchViewModel
 
 @Composable
-fun GenreScreen(genreList: List<GenreModel> , navController: NavController) {
+fun GenreScreen(navController: NavController , searchViewModel: SearchViewModel) {
+
+    LaunchedEffect(true) {
+        searchViewModel.fetchGenres()
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val genreFlowLifecycleAware = remember(searchViewModel.genresUiState, lifecycleOwner) {
+        searchViewModel.genresUiState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    }
+    val genresRes: Result<ApiResponse<List<GenresRes>>> by genreFlowLifecycleAware.collectAsState(initial = Result.loading())
+
+    val showPlaceHolder by remember {
+        derivedStateOf { genresRes.status == Result.Status.LOADING }
+    }
 
     Column(
         modifier = Modifier
@@ -32,6 +54,24 @@ fun GenreScreen(genreList: List<GenreModel> , navController: NavController) {
     ) {
 
         Spacer(modifier = Modifier.size(0.dp))
+
+        val genreList: MutableList<GenresRes> = mutableListOf()
+
+        if (showPlaceHolder) {
+            genreList.add(GenresRes("" , ""))
+            genreList.add(GenresRes("" , ""))
+            genreList.add(GenresRes("" , ""))
+            genreList.add(GenresRes("" , ""))
+            genreList.add(GenresRes("" , ""))
+            genreList.add(GenresRes("" , ""))
+            genreList.add(GenresRes("" , ""))
+            genreList.add(GenresRes("" , ""))
+        }
+        else {
+            genresRes.data?.data?.let {
+                genreList.addAll(it)
+            }
+        }
 
         genreList.windowed(2 , 2 , true).forEach { subList ->
 

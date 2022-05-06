@@ -62,6 +62,7 @@ import com.sina.cinamovie.data.Result
 import com.sina.cinamovie.data.res.ChartBoxOfficeRes
 import com.sina.cinamovie.data.res.HomeExtraRes
 import com.sina.cinamovie.util.getAge
+import com.sina.cinamovie.util.standardDateFormat
 import com.sina.cinamovie.util.toDp
 import com.sina.cinamovie.vm.ChartViewModel
 import timber.log.Timber
@@ -382,7 +383,7 @@ fun HomeScreen(
                                     Spacer(modifier = Modifier.size(8.dp))
 
                                     Text(
-                                        text = it.date.toString() ,
+                                        text = it.date.toString().standardDateFormat() ,
                                         style = regularFont(12.sp , colorTextGray2) ,
                                         maxLines = 1 ,
                                         overflow = TextOverflow.Ellipsis ,

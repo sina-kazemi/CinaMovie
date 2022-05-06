@@ -1,10 +1,7 @@
 package com.sina.cinamovie.api
 
 import com.sina.cinamovie.data.ApiResponse
-import com.sina.cinamovie.data.res.ChartBoxOfficeRes
-import com.sina.cinamovie.data.res.HomeExtraRes
-import com.sina.cinamovie.data.res.HomeRes
-import com.sina.cinamovie.data.res.TitleDetailsRes
+import com.sina.cinamovie.data.res.*
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -22,5 +19,8 @@ interface ApiService {
 
     @GET("titles/{titleId}")
     suspend fun getTitleDetails(@Path("titleId") titleId: String): Response<ApiResponse<TitleDetailsRes>>
+
+    @GET("genres/")
+    suspend fun getGenres(): Response<ApiResponse<List<GenresRes>>>
 
 }

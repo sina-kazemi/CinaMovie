@@ -32,12 +32,13 @@ import com.sina.cinamovie.model.GenreModel
 import com.sina.cinamovie.model.MovieModel
 import com.sina.cinamovie.model.UserModel
 import com.sina.cinamovie.ui.theme.*
+import com.sina.cinamovie.vm.SearchViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun SearchScreen(navController: NavHostController) {
+fun SearchScreen(navController: NavHostController , searchViewModel: SearchViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -190,16 +191,9 @@ fun SearchScreen(navController: NavHostController) {
 
             when (page) {
                 0 -> {
-                    GenreScreen(genreList = listOf(
-                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
-                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
-                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
-                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
-                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
-                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg") ,
-                        GenreModel(image = "https://m.media-amazon.com/images/G/01/IMDb/genres/Comedy._CB1513316167_SX233_CR0,0,233,131_AL_.jpg")
-                    ) ,
-                        navController = navController
+                    GenreScreen(
+                        navController = navController ,
+                        searchViewModel = searchViewModel
                     )
                 }
                 1 -> {
