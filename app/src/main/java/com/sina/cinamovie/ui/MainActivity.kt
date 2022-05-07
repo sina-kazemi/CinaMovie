@@ -51,6 +51,7 @@ import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.navigation.MainBottomNavItem
 import com.sina.cinamovie.ui.theme.*
 import com.sina.cinamovie.util.ITEM_ID
+import com.sina.cinamovie.util.orDefault
 import com.sina.cinamovie.util.stackblur.StackBlurManager
 import com.sina.cinamovie.vm.ChartViewModel
 import com.sina.cinamovie.vm.HomeViewModel
@@ -174,55 +175,16 @@ class MainActivity : ComponentActivity() {
                 val itemId = backStackEntry.arguments?.getString(ITEM_ID)
                 val movieViewModel: MovieViewModel by viewModels()
                 movieViewModel.clearState()
-                MovieScreen(itemId = itemId?: "" , navController = navController , movieViewModel = movieViewModel)
+                MovieScreen(itemId = itemId.orDefault() , navController = navController , movieViewModel = movieViewModel)
             }
             composable("${BottomNavItem.Person.screen_route}/{$ITEM_ID}") { backStackEntry ->
                 val itemId = backStackEntry.arguments?.getString(ITEM_ID)
-                PersonScreen(itemId = itemId?: "" , navController = navController)
+                PersonScreen(itemId = itemId.orDefault() , navController = navController)
             }
-            composable(BottomNavItem.MovieList.screen_route) {
-                MovieListScreen(title = "TestTitle", items = listOf(
-                    MovieModel(
-                        cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-                        title = "The Batman" ,
-                        rate = 8.5f
-                    ) ,
-                    MovieModel(
-                        cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                        title = "Spider-Man: No way home" ,
-                        rate = 7.6f
-                    ) ,
-                    MovieModel(
-                        cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-                        title = "The Batman" ,
-                        rate = 8.5f
-                    ) ,
-                    MovieModel(
-                        cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                        title = "Spider-Man: No way home" ,
-                        rate = 7.6f
-                    ) ,
-                    MovieModel(
-                        cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-                        title = "The Batman" ,
-                        rate = 8.5f
-                    ) ,
-                    MovieModel(
-                        cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                        title = "Spider-Man: No way home" ,
-                        rate = 7.6f
-                    ) ,
-                    MovieModel(
-                        cover = "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg" ,
-                        title = "The Batman" ,
-                        rate = 8.5f
-                    ) ,
-                    MovieModel(
-                        cover = "https://m.media-amazon.com/images/M/MV5BZWMyYzFjYTYtNTRjYi00OGExLWE2YzgtOGRmYjAxZTU3NzBiXkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg" ,
-                        title = "Spider-Man: No way home" ,
-                        rate = 7.6f
-                    )
-                ), navController = navController)
+            composable("${BottomNavItem.MovieList.screen_route}/{$ITEM_ID}") { backStackEntry ->
+                val itemId = backStackEntry.arguments?.getString(ITEM_ID)
+                val searchViewModel: SearchViewModel by viewModels()
+                MovieListScreen(genres = itemId.orDefault() , searchViewModel = searchViewModel , navController = navController)
             }
         }
     }

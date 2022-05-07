@@ -6,7 +6,7 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -21,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -31,24 +34,69 @@ import com.sina.cinamovie.ui.content.list.MovieItem
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.*
 import com.sina.cinamovie.R
+import com.sina.cinamovie.data.ApiResponse
+import com.sina.cinamovie.data.Result
+import com.sina.cinamovie.data.res.GenresRes
+import com.sina.cinamovie.data.res.SearchTitlesRes
+import com.sina.cinamovie.vm.SearchViewModel
+import timber.log.Timber
+import java.lang.Exception
 
 @Composable
-fun MovieListScreen(title: String , items: List<MovieModel> , navController: NavHostController) {
+fun MovieListScreen(genres: String , navController: NavHostController , searchViewModel: SearchViewModel) {
+
+    LaunchedEffect(true) {
+        searchViewModel.advancedSearchTitle(genres = genres)
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val advancedSearchFlowLifecycleAware = remember(searchViewModel.advancedSearchTitleUiState, lifecycleOwner) {
+        searchViewModel.advancedSearchTitleUiState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    }
+    val advancedSearchRes: Result<ApiResponse<List<SearchTitlesRes>>> by advancedSearchFlowLifecycleAware.collectAsState(initial = Result.loading())
+
+    val showPlaceHolder by remember {
+        derivedStateOf { advancedSearchRes.status == Result.Status.LOADING }
+    }
+
+    Timber.d("advancedSearchResStatus:: ${advancedSearchRes.status}")
+    advancedSearchRes.data?.data?.let {
+        Timber.d("advancedSearchRes:: $it")
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        AppBar(model = AppBarModel(title = title), navController = navController)
+        AppBar(model = AppBarModel(title = genres), navController = navController)
 
-        GridList(items = items, navController = navController)
+        var tempList = listOf<SearchTitlesRes>()
+        if (showPlaceHolder) {
+            tempList = listOf(
+                SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
+                SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
+                SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
+                SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
+                SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
+                SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
+                SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
+                SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , "")
+            )
+        }
+        else {
+            advancedSearchRes.data?.data?.let {
+                tempList = it
+            }
+        }
+
+        GridList(items = tempList, navController = navController , showPlaceHolder = showPlaceHolder)
 
     }
 
 }
 
 @Composable
-fun GridList(items: List<MovieModel> , navController: NavHostController) {
+fun GridList(items: List<SearchTitlesRes> , navController: NavHostController , showPlaceHolder: Boolean) {
 
     Column(
         modifier = Modifier
@@ -59,7 +107,11 @@ fun GridList(items: List<MovieModel> , navController: NavHostController) {
 
         Spacer(modifier = Modifier.size(0.dp))
 
-        items.windowed(3 , 3 , true).forEach { subList ->
+        val movieList: List<MovieModel> = items.map {
+            MovieModel(title = it.title , titleId = it.titleId , cover = it.cover , rate = kotlin.run { try { it.imdbRating?.toFloat() } catch (e: Exception) { 0f } } )
+        }
+
+        movieList.windowed(3 , 3 , true).forEach { subList ->
 
             Row(
                 modifier = Modifier
@@ -70,7 +122,7 @@ fun GridList(items: List<MovieModel> , navController: NavHostController) {
 
                 subList.forEach { item ->
 
-                    MovieItem(item = item, navController = navController , isGridList = true , modifier = Modifier.weight(1f))
+                    MovieItem(item = item, navController = navController , isGridList = true , modifier = Modifier.weight(1f) , showPlaceHolder = showPlaceHolder)
 
 //                    ConstraintLayout(
 //                        modifier = Modifier
