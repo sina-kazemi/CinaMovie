@@ -23,6 +23,10 @@ class SearchViewModel @Inject constructor(private val searchRepository: SearchRe
     private var _advancedSearchTitleUiState = MutableStateFlow<Result<ApiResponse<List<SearchTitlesRes>>>>(Result.loading())
     val advancedSearchTitleUiState: StateFlow<Result<ApiResponse<List<SearchTitlesRes>>>> = _advancedSearchTitleUiState
 
+    fun clearState() {
+        _advancedSearchTitleUiState.value = Result.loading()
+    }
+
     fun fetchGenres() {
         viewModelScope.launch {
             searchRepository.fetchGenres().collect{

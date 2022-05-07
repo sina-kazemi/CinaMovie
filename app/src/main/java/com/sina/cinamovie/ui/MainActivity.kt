@@ -184,6 +184,7 @@ class MainActivity : ComponentActivity() {
             composable("${BottomNavItem.MovieList.screen_route}/{$ITEM_ID}") { backStackEntry ->
                 val itemId = backStackEntry.arguments?.getString(ITEM_ID)
                 val searchViewModel: SearchViewModel by viewModels()
+                searchViewModel.clearState()
                 MovieListScreen(genres = itemId.orDefault() , searchViewModel = searchViewModel , navController = navController)
             }
         }
