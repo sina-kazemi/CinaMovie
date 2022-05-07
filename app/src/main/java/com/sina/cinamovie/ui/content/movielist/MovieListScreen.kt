@@ -80,6 +80,10 @@ fun MovieListScreen(genres: String , navController: NavHostController , searchVi
                 SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
                 SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
                 SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
+                SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
+                SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
+                SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
+                SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , ""),
                 SearchTitlesRes("" , "" , listOf() , "" , "9.9" , "" , "" , "" , listOf() , "" , "" , "" , "")
             )
         }
