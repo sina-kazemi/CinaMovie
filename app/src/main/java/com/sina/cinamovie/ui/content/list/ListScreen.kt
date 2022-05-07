@@ -61,6 +61,9 @@ import com.sina.cinamovie.data.res.TitleDetailsRes
 import com.sina.cinamovie.model.*
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.*
+import com.sina.cinamovie.util.GetWidthPx
+import com.sina.cinamovie.util.getCustomImageWidthUrl
+import com.sina.cinamovie.util.getOriginalImageSizeUrl
 import timber.log.Timber
 import java.lang.Exception
 
@@ -137,7 +140,7 @@ fun TrailerRow(model: HomeRes.Trailer , showPlaceHolder: Boolean = false) {
                     .clip(shape = RoundedCornerShape(16.dp)) ,
                 model = ImageRequest
                     .Builder(LocalContext.current)
-                    .data(model.preview)
+                    .data(model.preview?.getCustomImageWidthUrl(GetWidthPx()))
                     .crossfade(true)
                     .build(),
                 contentDescription = "",
@@ -496,7 +499,7 @@ fun MovieItem(
                     .clip(shape = RoundedCornerShape(16.dp)),
                 model = ImageRequest
                     .Builder(LocalContext.current)
-                    .data(item.cover)
+                    .data(item.cover?.getCustomImageWidthUrl(GetWidthPx()/3))
                     .crossfade(true)
                     .build(),
                 contentDescription = "" ,
@@ -802,9 +805,6 @@ fun GenreList(genreList: List<TitleDetailsRes.Overview.Genre> , showPlaceHolder:
 @Composable
 fun ImageList(modifier: Modifier , itemSizeDp: Dp ,imageList: List<TitleDetailsRes.Photo> , showPlaceHolder: Boolean = false) {
 
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val screenWidthPx = with(LocalDensity.current) { screenWidth.toPx() }.toInt()
-
     Row (
         modifier = modifier ,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -831,9 +831,9 @@ fun ImageList(modifier: Modifier , itemSizeDp: Dp ,imageList: List<TitleDetailsR
                     ),
                 model = ImageRequest
                     .Builder(LocalContext.current)
-                    .data(it.original)
+                    .data(it.original?.getCustomImageWidthUrl(GetWidthPx()/4))
                     .crossfade(true)
-                    .size(screenWidthPx/4 , screenWidthPx/4)
+                    .size(GetWidthPx()/4 , GetWidthPx()/4)
                     .build(),
                 contentDescription = "",
                 contentScale = ContentScale.Crop
@@ -849,9 +849,6 @@ fun ImageList(modifier: Modifier , itemSizeDp: Dp ,imageList: List<TitleDetailsR
 
 @Composable
 fun VideoList(modifier: Modifier , itemWidthDp: Dp , itemHeightDp: Dp , videoList: List<TitleDetailsRes.Video> , showPlaceHolder: Boolean = false) {
-
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val screenWidthPx = with(LocalDensity.current) { screenWidth.toPx() }.toInt()
 
     Row (
         modifier = modifier ,
@@ -884,9 +881,9 @@ fun VideoList(modifier: Modifier , itemWidthDp: Dp , itemHeightDp: Dp , videoLis
                         .clip(shape = RoundedCornerShape(16.dp)),
                     model = ImageRequest
                         .Builder(LocalContext.current)
-                        .data(it.preview)
+                        .data(it.preview?.getCustomImageWidthUrl(GetWidthPx()/2))
                         .crossfade(true)
-                        .size(screenWidthPx/2 , screenWidthPx/4)
+                        .size(GetWidthPx()/2 , GetWidthPx()/4)
                         .build(),
                     contentDescription = "",
                     contentScale = ContentScale.Crop

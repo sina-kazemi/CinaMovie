@@ -2,6 +2,7 @@ package com.sina.cinamovie.util
 
 import android.content.Context
 import android.util.TypedValue
+import timber.log.Timber
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -67,6 +68,8 @@ fun String.getCustomImageWidthUrl(width: Int): String {
         val originalUrl = this.getOriginalImageSizeUrl()
 
         val urlWithoutJPG = originalUrl.replace(".jpg", "")
+
+        Timber.d("CUSTOM_PREVIEW:: $urlWithoutJPG.UX$width.jpg")
 
         return "$urlWithoutJPG.UX$width.jpg"
     }

@@ -54,6 +54,8 @@ import com.sina.cinamovie.ui.content.common.AppBar
 import com.sina.cinamovie.ui.content.common.ListHeader
 import com.sina.cinamovie.ui.content.list.*
 import com.sina.cinamovie.ui.theme.*
+import com.sina.cinamovie.util.GetWidthPx
+import com.sina.cinamovie.util.getCustomImageWidthUrl
 import com.sina.cinamovie.util.toDp
 import com.sina.cinamovie.vm.MovieViewModel
 import kotlinx.coroutines.delay
@@ -158,7 +160,8 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
                             ) ,
                         model = ImageRequest
                             .Builder(LocalContext.current)
-                            .data(movieRes.data?.data?.overview?.cover.toString())
+                            .data(movieRes.data?.data?.overview?.cover.toString()
+                                .getCustomImageWidthUrl(GetWidthPx()*2/3))
                             .crossfade(true)
                             .size(screenWidthPx*2/3 , screenWidthPx)
                             .build(),
@@ -394,7 +397,7 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
                                 .clip(shape = RoundedCornerShape(16.dp)) ,
                             model = ImageRequest
                                 .Builder(LocalContext.current)
-                                .data(movieRes.data?.data?.overview?.cover)
+                                .data(movieRes.data?.data?.overview?.cover?.getCustomImageWidthUrl(GetWidthPx()/3))
                                 .crossfade(true)
                                 .size(screenWidthPx/3 , screenWidthPx/2)
                                 .build(),
@@ -662,7 +665,7 @@ fun MovieScreen(itemId: String ,navController: NavHostController , movieViewMode
                                         ),
                                     model = ImageRequest
                                         .Builder(LocalContext.current)
-                                        .data(it.image)
+                                        .data(it.image?.getCustomImageWidthUrl(GetWidthPx()/3))
                                         .crossfade(true)
                                         .size(screenWidthPx/3 , screenWidthPx/3)
                                         .build(),

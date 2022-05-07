@@ -23,7 +23,9 @@ import com.sina.cinamovie.data.Result
 import com.sina.cinamovie.data.res.GenresRes
 import com.sina.cinamovie.ui.navigation.BottomNavItem
 import com.sina.cinamovie.ui.theme.colorGray
+import com.sina.cinamovie.util.GetWidthPx
 import com.sina.cinamovie.util.ITEM_ID
+import com.sina.cinamovie.util.getCustomImageWidthUrl
 import com.sina.cinamovie.util.getOriginalImageSizeUrl
 import com.sina.cinamovie.vm.SearchViewModel
 
