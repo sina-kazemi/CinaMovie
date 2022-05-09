@@ -68,7 +68,7 @@ fun AppBar(model: AppBarModel , navController: NavHostController , showPlaceHold
             ) {
 
                 Text(
-                    text = model.title,
+                    text = kotlin.run { if (showPlaceHolder) "TitleText" else model.title },
                     style = mediumFont(16.sp) ,
                     maxLines = 1 ,
                     overflow = TextOverflow.Ellipsis ,

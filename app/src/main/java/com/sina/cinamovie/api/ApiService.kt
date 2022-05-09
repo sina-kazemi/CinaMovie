@@ -46,4 +46,7 @@ interface ApiService {
         @Query("userRating") userRating: String? = ""
     ): Response<ApiResponse<List<SearchTitlesRes>>>
 
+    @GET("names/{nameId}")
+    suspend fun getNameDetails(@Path("nameId") nameId: String): Response<ApiResponse<NameDetailRes>>
+
 }

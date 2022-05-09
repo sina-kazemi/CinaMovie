@@ -1,9 +1,7 @@
 package com.sina.cinamovie.ui.content.main.home
 
-import android.media.MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.TextView
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,8 +29,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.sina.cinamovie.R
 import com.sina.cinamovie.data.res.HomeRes
-import com.sina.cinamovie.model.MovieModel
-import com.sina.cinamovie.model.NewsModel
 import com.sina.cinamovie.model.UserModel
 import com.sina.cinamovie.ui.content.common.ListHeader
 import com.sina.cinamovie.ui.content.list.IMDbOriginalsList
@@ -43,8 +39,6 @@ import com.sina.cinamovie.ui.theme.*
 import com.sina.cinamovie.vm.HomeViewModel
 import com.sina.cinamovie.data.ApiResponse
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.IntSize
@@ -56,14 +50,12 @@ import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.placeholder
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.*
 import com.sina.cinamovie.data.Result
 import com.sina.cinamovie.data.res.ChartBoxOfficeRes
 import com.sina.cinamovie.data.res.HomeExtraRes
 import com.sina.cinamovie.util.getAge
 import com.sina.cinamovie.util.standardDateFormat
-import com.sina.cinamovie.util.toDp
 import com.sina.cinamovie.vm.ChartViewModel
 import timber.log.Timber
 

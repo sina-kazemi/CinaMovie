@@ -22,6 +22,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -34,37 +35,66 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.fade
+import com.google.accompanist.placeholder.placeholder
 import com.sina.cinamovie.R
+import com.sina.cinamovie.data.ApiResponse
+import com.sina.cinamovie.data.Result
+import com.sina.cinamovie.data.res.NameDetailRes
+import com.sina.cinamovie.data.res.SearchTitlesRes
+import com.sina.cinamovie.data.res.TitleDetailsRes
 import com.sina.cinamovie.model.*
 import com.sina.cinamovie.ui.content.common.AppBar
 import com.sina.cinamovie.ui.content.common.ListHeader
 import com.sina.cinamovie.ui.content.list.*
 import com.sina.cinamovie.ui.theme.*
+import com.sina.cinamovie.vm.NameViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.Exception
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun PersonScreen(itemId: String , navController: NavHostController) {
+fun PersonScreen(itemId: String , navController: NavHostController , nameViewModel: NameViewModel) {
 
-    Timber.d("PersonId:: $itemId")
+    LaunchedEffect(true) {
+        nameViewModel.fetchName(itemId = itemId)
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val nameFlowLifecycleAware = remember(nameViewModel.nameUiState, lifecycleOwner) {
+        nameViewModel.nameUiState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    }
+    val nameRes: Result<ApiResponse<NameDetailRes>> by nameFlowLifecycleAware.collectAsState(initial = Result.loading())
+
+    val showPlaceHolder by remember {
+        derivedStateOf { nameRes.status == Result.Status.LOADING }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
 
+        val nameStr by remember {
+            derivedStateOf { nameRes.data?.data?.name.toString() }
+        }
+
         AppBar(
             model = AppBarModel(
-                title = "Matthew McConaughey"
+                title = nameStr
             ) ,
-            navController = navController
+            navController = navController ,
+            showPlaceHolder = showPlaceHolder
         )
 
         Column(
@@ -99,10 +129,19 @@ fun PersonScreen(itemId: String , navController: NavHostController) {
                 ) {
 
                     AsyncImage(
-                        modifier = Modifier.clip(shape = RoundedCornerShape(16.dp)) ,
+                        modifier = Modifier
+                            .clip(shape = RoundedCornerShape(16.dp))
+                            .placeholder(
+                                visible = showPlaceHolder,
+                                color = colorGray,
+                                shape = RoundedCornerShape(16.dp),
+                                highlight = PlaceholderHighlight.fade(
+                                    highlightColor = colorPlaceHolder
+                                )
+                            ),
                         model = ImageRequest
                             .Builder(LocalContext.current)
-                            .data("https://m.media-amazon.com/images/M/MV5BMTg0MDc3ODUwOV5BMl5BanBnXkFtZTcwMTk2NjY4Nw@@._V1_.jpg")
+                            .data(nameRes.data?.data?.avatar?.toString())
                             .crossfade(true)
                             .build(),
                         contentDescription = "",
@@ -141,6 +180,14 @@ fun PersonScreen(itemId: String , navController: NavHostController) {
                             .background(
                                 shape = RoundedCornerShape(16.dp),
                                 color = colorGray.copy(alpha = 0.75f)
+                            )
+                            .placeholder(
+                                visible = showPlaceHolder,
+                                color = colorGray,
+                                shape = RoundedCornerShape(16.dp),
+                                highlight = PlaceholderHighlight.fade(
+                                    highlightColor = colorPlaceHolder
+                                )
                             ) ,
                         horizontalAlignment = Alignment.CenterHorizontally ,
                         verticalArrangement = Arrangement.Center
@@ -149,7 +196,10 @@ fun PersonScreen(itemId: String , navController: NavHostController) {
                         DetailPersonHeader(
                             painter = painterResource(id = R.drawable.ic_camera_movie),
                             title = stringResource(R.string.str_job),
-                            desc = "Actor"
+                            desc = nameRes.data?.data?.jobTitles?.let {
+                                try { it[0] }
+                                catch (e: Exception) {""}
+                            }.toString()
                         )
 
                     }
@@ -168,6 +218,14 @@ fun PersonScreen(itemId: String , navController: NavHostController) {
                             .background(
                                 shape = RoundedCornerShape(16.dp),
                                 color = colorGray.copy(alpha = 0.75f)
+                            )
+                            .placeholder(
+                                visible = showPlaceHolder,
+                                color = colorGray,
+                                shape = RoundedCornerShape(16.dp),
+                                highlight = PlaceholderHighlight.fade(
+                                    highlightColor = colorPlaceHolder
+                                )
                             ) ,
                         horizontalAlignment = Alignment.CenterHorizontally ,
                         verticalArrangement = Arrangement.Center
@@ -189,8 +247,16 @@ fun PersonScreen(itemId: String , navController: NavHostController) {
 
             Text(
                 modifier = Modifier
-                    .padding(horizontal = 24.dp) ,
-                text = "Matthew McConaughey" ,
+                    .padding(horizontal = 24.dp)
+                    .placeholder(
+                        visible = showPlaceHolder,
+                        color = colorGray,
+                        shape = RoundedCornerShape(16.dp),
+                        highlight = PlaceholderHighlight.fade(
+                            highlightColor = colorPlaceHolder
+                        )
+                    ) ,
+                text = kotlin.run { if (showPlaceHolder) "Title Test" else nameStr} ,
                 style = mediumFont(24.sp) ,
                 textAlign = TextAlign.Start
             )
@@ -200,8 +266,16 @@ fun PersonScreen(itemId: String , navController: NavHostController) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp) ,
-                text = "An unusual group of robbers attempt to carry out the most perfect robbery in Spanish history - stealing 2.4 billion euros from the Royal Mint of Spain.An unusual group of robbers attempt to carry out the most perfect robbery in Spanish history - stealing 2.4 billion euros from the Royal Mint of Spain.An unusual group of robbers attempt to carry out the most perfect robbery in Spanish history - stealing 2.4 billion euros from the Royal Mint of Spain." ,
+                    .padding(horizontal = 24.dp)
+                    .placeholder(
+                        visible = showPlaceHolder,
+                        color = colorGray,
+                        shape = RoundedCornerShape(16.dp),
+                        highlight = PlaceholderHighlight.fade(
+                            highlightColor = colorPlaceHolder
+                        )
+                    ),
+                text = nameRes.data?.data?.bioSummary.toString() ,
                 style = regularFont(textColor = colorTextGray3) ,
                 lineHeight = 24.sp ,
                 textAlign = TextAlign.Start
@@ -209,7 +283,31 @@ fun PersonScreen(itemId: String , navController: NavHostController) {
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            GenreList(genreList = listOf())
+            var genreList: List<TitleDetailsRes.Overview.Genre> = listOf()
+
+            nameRes.data?.data?.jobTitles?.let {
+                genreList = it.map { title ->
+                    TitleDetailsRes.Overview.Genre(title = title , link = "")
+                }
+            }
+
+            if (showPlaceHolder) {
+
+                GenreList(
+                    genreList = listOf(
+                    TitleDetailsRes.Overview.Genre("" , ""),
+                    TitleDetailsRes.Overview.Genre("" , ""),
+                    TitleDetailsRes.Overview.Genre("" , "")
+                    ) ,
+                    showPlaceHolder = showPlaceHolder
+                )
+
+            }
+            else {
+
+                GenreList(genreList = genreList)
+
+            }
 
             val screenWidth = LocalConfiguration.current.screenWidthDp.dp
             var heightSize by remember { mutableStateOf(IntSize.Zero) }
