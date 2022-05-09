@@ -1,6 +1,10 @@
 package com.sina.cinamovie.util
 
 import android.graphics.Bitmap
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -217,3 +221,16 @@ fun fastBlur(sentBitmap: Bitmap, scale: Float, radius: Int): Bitmap? {
     bitmap.setPixels(pix, 0, w, 0, 0, w, h)
     return bitmap
 }
+
+@Composable
+fun GetWidthPx(): Int {
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    return with(LocalDensity.current) { screenWidth.toPx() }.toInt()
+}
+
+@Composable
+fun GetHeightPx(): Int {
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+    return with(LocalDensity.current) { screenHeight.toPx() }.toInt()
+}
+

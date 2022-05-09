@@ -56,6 +56,8 @@ import com.sina.cinamovie.data.res.ChartBoxOfficeRes
 import com.sina.cinamovie.data.res.HomeExtraRes
 import com.sina.cinamovie.util.getAge
 import com.sina.cinamovie.util.standardDateFormat
+import com.sina.cinamovie.util.toDp
+import com.sina.cinamovie.util.*
 import com.sina.cinamovie.vm.ChartViewModel
 import timber.log.Timber
 
@@ -314,7 +316,7 @@ fun HomeScreen(
                                         },
                                     model = ImageRequest
                                         .Builder(LocalContext.current)
-                                        .data(it.image)
+                                        .data(it.image?.getCustomImageWidthUrl(GetWidthPx()/4))
                                         .crossfade(true)
                                         .build(),
                                     contentScale = ContentScale.Crop ,
@@ -480,7 +482,7 @@ fun HomeScreen(
                                         ),
                                     model = ImageRequest
                                         .Builder(LocalContext.current)
-                                        .data(it.image)
+                                        .data(it.image?.getCustomImageWidthUrl(GetWidthPx()/4))
                                         .crossfade(true)
                                         .build() ,
                                     contentDescription = "" ,
@@ -582,7 +584,9 @@ fun HomeScreen(
 
             DisposableEffect(
                 AndroidView(
-                    modifier = Modifier.fillMaxSize().height(with(LocalDensity.current) { heightSize.height.toDp() }),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .height(with(LocalDensity.current) { heightSize.height.toDp() }),
                     factory = {
                         StyledPlayerView(context).apply {
                             player = exoPlayer
