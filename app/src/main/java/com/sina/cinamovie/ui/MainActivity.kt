@@ -76,14 +76,14 @@ class MainActivity : ComponentActivity() {
 
         val navController = rememberNavController()
 
-        val blurBitmap =  stackBlurManager.process(100)
-
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            bitmap = blurBitmap.asImageBitmap(),
-            contentDescription = "",
-            contentScale = ContentScale.Crop
-        )
+//        val blurBitmap =  stackBlurManager.process(100)
+//
+//        Image(
+//            modifier = Modifier.fillMaxSize(),
+//            bitmap = blurBitmap.asImageBitmap(),
+//            contentDescription = "",
+//            contentScale = ContentScale.Crop
+//        )
 
         Box(
             modifier = Modifier
